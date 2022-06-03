@@ -1,0 +1,58 @@
+                                    SCL                                                                                                                             x6
+                                          SDA
+
+                                                                                                           cfgs                                                  /
+                                                                                                                                                                      cfgs
+                                     I2C                                               DDR                 4th order                                                     /                  14       SCLK
+                                                                                         cfgs              IIR Filter                                                                                 SDI
+                                      /                                                                                                                                                    /
+                                          cfgs                                  gp adc:A       /                                                                                                SPI
+                                    x6                                          gp adc:B                                                                                                 @2.5
+                                                                                                                                                                                                 /
+                                                                                       adc0                                                                                              MSPS
+                                                                                       adc1
+                                                                                       adc2
+                                                                                       adc3
+
+                                                                                        cfgs
+
+                       OK           cfgs                                         5 MHz pulse               pipes in
+                       Wires                                                    2.5 MHz pulse
+                                     /                                                                               /
+                                                                                 1 MHz pulse
+                                                  200 MHz clk       Timing          cycle cnt              dac data                                                      Buffer A                           Buffer A
+                                                                    Generator
+                                    addr                                             i2c                             /                                                                                      DDR3
+                                                                         Self                                                                                                                               1 GiB
+              USB 3.0  OK            /                                   Test       /                                                                                    DDR3                   Xilinx
+Host / 340 MiB/s       Reg. Bridge                                                                                                                                       User Interface         DDR         Buffer B
+                                    data                                                                                                                                                        Controller
+                                                                                                                                                                             Buffer B
+                                     /
+
+                                    WE
+
+                       OK            pipes in                 cfgs                             {adc[3..0], gp adc}
+                       Pipes
+                                        /                      /                                               /
+
+                                    pipes out                                                          pipes out
+
+                                        /                                                                      /
+
+                                        / 32gp adc                  adc0
+                                              @ 1MSPS                                            adc1
+                                                                                                                              adc2
+                                    GP ADC                                                                                                                 adc3
+                                    SPI                             / 16        / 16           / 16                                                              / 16
+
+                       cfgs                                         16-bit ADC  16-bit ADC     16-bit ADC  16-bit ADC
+                                                                    controller  controller     controller  controller
+                        /
+
+                                    SCLK                            / LVDS      / LVDS         / LVDS                                                            / LVDS
+                                          SDI
+
+                                                 SDOA
+                                                        SDOB
+
