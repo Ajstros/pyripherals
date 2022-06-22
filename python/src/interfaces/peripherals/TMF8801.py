@@ -180,7 +180,7 @@ class TMF8801(I2CController):
                                   data_length=num_bytes)
 
     def read_data(self):
-        """ For correctly updating of these registers by TMF8801, an I┬▓C block read starting from address 0x1D
+        """ For correctly updating of these registers by TMF8801, an I2C block read starting from address 0x1D
         until 0x27 shall be done.
         0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27"""
 
