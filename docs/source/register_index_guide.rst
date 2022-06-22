@@ -17,7 +17,7 @@ The name of the chip is used to access this sheet of registers as a group. Our c
 2. Enter register name
 ------------------------------
 
-Names are used to access each register within a group on a sheet. We will start with WRITE_IN. In the first open row (row 2) enter WRITE_IN in the ΓÇ£NameΓÇ¥ column. Do not change the column labels.
+Names are used to access each register within a group on a sheet. We will start with WRITE_IN. In the first open row (row 2) enter WRITE_IN in the “Name” column. Do not change the column labels.
 
 - Note: any valid Excel string is allowed for register names
 - Note: since the chip name is already available in the sheet name, adding the chip name to register names is redundant
@@ -26,17 +26,17 @@ Names are used to access each register within a group on a sheet. We will start 
 3. Enter hex address and default value
 --------------------------------------
 
-The address and default value for the register should be taken from the chipΓÇÖs datasheet and entered in hexadecimal. WRITE_IN is located at address 0x00 with default value 0x0000. Enter these values in the ΓÇ£Hex AddressΓÇ¥ and ΓÇ£Default ValueΓÇ¥ columns.
+The address and default value for the register should be taken from the chip’s datasheet and entered in hexadecimal. WRITE_IN is located at address 0x00 with default value 0x0000. Enter these values in the “Hex Address” and “Default Value” columns.
 
 - Note: the extra zeros are for readability only. (0x00 == 0x0)
-- Note: the ΓÇ£0xΓÇ¥ prefix on hexadecimal values is for readability only, it is recommended, but not required (0x10 == 10┬¡). The ΓÇ£Hex AddressΓÇ¥ and ΓÇ£Default ValueΓÇ¥ columns MUST be given as hexadecimal values.
+- Note: the “0x” prefix on hexadecimal values is for readability only, it is recommended, but not required (0x10 == 10­). The “Hex Address” and “Default Value” columns MUST be given as hexadecimal values.
     
     16
     
 4. Enter bit width, upper bit index, and lower index
 ----------------------------------------------------
 
-The bit width, upper index, and lower index should be taken from the chipΓÇÖs datasheet and entered in decimal. WRITE_IN has the following values concerning bit indices. Enter these values in their corresponding columns.
+The bit width, upper index, and lower index should be taken from the chip’s datasheet and entered in decimal. WRITE_IN has the following values concerning bit indices. Enter these values in their corresponding columns.
 
     Bit Width: 16
 

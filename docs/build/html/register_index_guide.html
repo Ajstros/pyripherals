@@ -175,19 +175,19 @@
            <div itemprop="articleBody">
             
   <div class="section" id="register-index-guide">
-<span id="id1"></span><h1>Register Index Guide<a class="headerlink" href="#register-index-guide" title="Permalink to this headline">┬╢</a></h1>
+<span id="id1"></span><h1>Register Index Guide<a class="headerlink" href="#register-index-guide" title="Permalink to this headline">¶</a></h1>
 <p>The register index holds the name, address, lower bit index, upper bit index, and bit width of registers so they can be read in by pypanel and stored in a Register object. Here is a <a class="reference external" href="https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/register_index_template.xlsx">template</a> for the register index. Start with the template and follow the example below.</p>
 <p>For this example, our peripheral/chip is called GUIDE and has 4 internal registers: WRITE_IN, READ_OUT, CONFIG, and ID.</p>
 <div class="section" id="enter-the-chip-name">
-<h2>1. Enter the chip name<a class="headerlink" href="#enter-the-chip-name" title="Permalink to this headline">┬╢</a></h2>
+<h2>1. Enter the chip name<a class="headerlink" href="#enter-the-chip-name" title="Permalink to this headline">¶</a></h2>
 <p>The name of the chip is used to access this sheet of registers as a group. Our chip is GUIDE, so replace the sheet title CHIP with GUIDE.</p>
 <ul class="simple">
 <li><p>Note: any valid Excel sheet name is allowed for CHIP, but a one word uppercase name is recommended so it can match the chip name in the endpoints definitions Verilog file (see <a class="reference internal" href="endpoint_definitions_guide.html#endpoint-definitions-guide"><span class="std std-ref">endpoint definitions guide</span></a>), which cannot contain underscores.</p></li>
 </ul>
 </div>
 <div class="section" id="enter-register-name">
-<h2>2. Enter register name<a class="headerlink" href="#enter-register-name" title="Permalink to this headline">┬╢</a></h2>
-<p>Names are used to access each register within a group on a sheet. We will start with WRITE_IN. In the first open row (row 2) enter WRITE_IN in the ΓÇ£NameΓÇ¥ column. Do not change the column labels.</p>
+<h2>2. Enter register name<a class="headerlink" href="#enter-register-name" title="Permalink to this headline">¶</a></h2>
+<p>Names are used to access each register within a group on a sheet. We will start with WRITE_IN. In the first open row (row 2) enter WRITE_IN in the “Name” column. Do not change the column labels.</p>
 <ul class="simple">
 <li><p>Note: any valid Excel string is allowed for register names</p></li>
 <li><p>Note: since the chip name is already available in the sheet name, adding the chip name to register names is redundant</p></li>
@@ -195,11 +195,11 @@
 </ul>
 </div>
 <div class="section" id="enter-hex-address-and-default-value">
-<h2>3. Enter hex address and default value<a class="headerlink" href="#enter-hex-address-and-default-value" title="Permalink to this headline">┬╢</a></h2>
-<p>The address and default value for the register should be taken from the chipΓÇÖs datasheet and entered in hexadecimal. WRITE_IN is located at address 0x00 with default value 0x0000. Enter these values in the ΓÇ£Hex AddressΓÇ¥ and ΓÇ£Default ValueΓÇ¥ columns.</p>
+<h2>3. Enter hex address and default value<a class="headerlink" href="#enter-hex-address-and-default-value" title="Permalink to this headline">¶</a></h2>
+<p>The address and default value for the register should be taken from the chip’s datasheet and entered in hexadecimal. WRITE_IN is located at address 0x00 with default value 0x0000. Enter these values in the “Hex Address” and “Default Value” columns.</p>
 <ul>
 <li><p>Note: the extra zeros are for readability only. (0x00 == 0x0)</p></li>
-<li><p>Note: the ΓÇ£0xΓÇ¥ prefix on hexadecimal values is for readability only, it is recommended, but not required (0x10 == 10┬¡). The ΓÇ£Hex AddressΓÇ¥ and ΓÇ£Default ValueΓÇ¥ columns MUST be given as hexadecimal values.</p>
+<li><p>Note: the “0x” prefix on hexadecimal values is for readability only, it is recommended, but not required (0x10 == 10­). The “Hex Address” and “Default Value” columns MUST be given as hexadecimal values.</p>
 <blockquote>
 <div><p>16</p>
 </div></blockquote>
@@ -207,8 +207,8 @@
 </ul>
 </div>
 <div class="section" id="enter-bit-width-upper-bit-index-and-lower-index">
-<h2>4. Enter bit width, upper bit index, and lower index<a class="headerlink" href="#enter-bit-width-upper-bit-index-and-lower-index" title="Permalink to this headline">┬╢</a></h2>
-<p>The bit width, upper index, and lower index should be taken from the chipΓÇÖs datasheet and entered in decimal. WRITE_IN has the following values concerning bit indices. Enter these values in their corresponding columns.</p>
+<h2>4. Enter bit width, upper bit index, and lower index<a class="headerlink" href="#enter-bit-width-upper-bit-index-and-lower-index" title="Permalink to this headline">¶</a></h2>
+<p>The bit width, upper index, and lower index should be taken from the chip’s datasheet and entered in decimal. WRITE_IN has the following values concerning bit indices. Enter these values in their corresponding columns.</p>
 <blockquote>
 <div><p>Bit Width: 16</p>
 <p>Bit Index (High): 15</p>
@@ -219,7 +219,7 @@
 </ul>
 </div>
 <div class="section" id="repeat-for-remaining-registers">
-<h2>5. Repeat for remaining registers<a class="headerlink" href="#repeat-for-remaining-registers" title="Permalink to this headline">┬╢</a></h2>
+<h2>5. Repeat for remaining registers<a class="headerlink" href="#repeat-for-remaining-registers" title="Permalink to this headline">¶</a></h2>
 <p>Repeat steps 2-5 for any remaining registers. Values for the remaining registers in this example are listed below.</p>
 <blockquote>
 <div><p>READ_OUT</p>
@@ -252,7 +252,7 @@
 </ul>
 </div>
 <div class="section" id="repeat-for-remaining-chips">
-<h2>6. Repeat for remaining chips<a class="headerlink" href="#repeat-for-remaining-chips" title="Permalink to this headline">┬╢</a></h2>
+<h2>6. Repeat for remaining chips<a class="headerlink" href="#repeat-for-remaining-chips" title="Permalink to this headline">¶</a></h2>
 <p>Repeat steps 1-5 for any remaining chips in your project. Be sure to create a new sheet for each chip. Example values are listed below.</p>
 <blockquote>
 <div><p>CHIP: MEMORY</p>

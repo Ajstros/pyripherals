@@ -175,30 +175,30 @@
            <div itemprop="articleBody">
             
   <div class="section" id="new-peripheral-guide">
-<span id="id1"></span><h1>New Peripheral Guide<a class="headerlink" href="#new-peripheral-guide" title="Permalink to this headline">┬╢</a></h1>
+<span id="id1"></span><h1>New Peripheral Guide<a class="headerlink" href="#new-peripheral-guide" title="Permalink to this headline">¶</a></h1>
 <p>Adding a new peripheral is a great way to contribute. The steps below will guide you through the process. For more information on community contributions, see the <a class="reference external" href="https://github.com/lucask07/covg_fpga/blob/daq_v2/CONTRIBUTING.md">contributions guide</a>.</p>
 <div class="section" id="before-you-begin">
-<h2>Before You Begin<a class="headerlink" href="#before-you-begin" title="Permalink to this headline">┬╢</a></h2>
+<h2>Before You Begin<a class="headerlink" href="#before-you-begin" title="Permalink to this headline">¶</a></h2>
 <p>To get set up, first <a class="reference external" href="https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue">create a new issue</a> for the peripheral you want to add. Include the name, a short description, and a link to the datasheet. To avoidi duplicates, check if there are any open issues with the same peripheral before creating a new issue. With this done, <a class="reference external" href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">fork the repo</a> and begin working on your addition. Be sure to keep your branch up to date with the main branch of the repository.</p>
 </div>
 <div class="section" id="registers">
-<h2>Registers<a class="headerlink" href="#registers" title="Permalink to this headline">┬╢</a></h2>
+<h2>Registers<a class="headerlink" href="#registers" title="Permalink to this headline">¶</a></h2>
 <p>The first step is to add your peripheral to the <a class="reference external" href="https://github.com/lucask07/covg_fpga/blob/daq_v2/python/Registers.xlsx">main registers spreadsheet</a>. Add a new page to the spreadsheet with the name of your peripheral and fill in the information for its internal registers. For more information, see the <a class="reference internal" href="register_index_guide.html#register-index-guide"><span class="std std-ref">register index guide</span></a>.</p>
 </div>
 <div class="section" id="interfaces">
-<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">┬╢</a></h2>
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h2>
 <p>Add a class for your peripheral to the <a class="reference internal" href="interfaces.html#module-interfaces.interfaces" title="interfaces.interfaces"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interfaces</span></code></a> module. If your peripheral uses an I2C or SPI interface, you may consider extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">I2CController</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SPIController</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">SPIFifoDriven</span></code> class. Your class should include a <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_chips()</span></code> method for creating several instances of the new peripheral at once. Write and read commands are commonly useful methods that, if applicable, should be included, but remaining functionality will likely be specific to your peripheral. Add what will be useful.</p>
 </div>
 <div class="section" id="sandbox-test-file">
-<h2>Sandbox/Test File<a class="headerlink" href="#sandbox-test-file" title="Permalink to this headline">┬╢</a></h2>
+<h2>Sandbox/Test File<a class="headerlink" href="#sandbox-test-file" title="Permalink to this headline">¶</a></h2>
 <p>Once your peripheral is functional, create an example script or test file to show its use. Any test files should be written using <a class="reference external" href="https://docs.pytest.org/en/7.1.x/contents.html">pytest</a>.</p>
 </div>
 <div class="section" id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">┬╢</a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 <p>The last requirement of your addition is documentation. Please add class and method docstrings to your code in <a class="reference external" href="https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard">numpy format</a>. See the <code class="xref py py-class docutils literal notranslate"><span class="pre">DAC80508</span></code> class for an example. Please also add a docstring to your exampe/test file explaining what it does.</p>
 </div>
 <div class="section" id="pull-request">
-<h2>Pull Request<a class="headerlink" href="#pull-request" title="Permalink to this headline">┬╢</a></h2>
+<h2>Pull Request<a class="headerlink" href="#pull-request" title="Permalink to this headline">¶</a></h2>
 <p>With the above steps complete, <a class="reference external" href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request">create a pull request</a>, linking the issue you created, for your peripheral. Be sure to watch your pull request for any comments on questions or additions that may be needed.</p>
 </div>
 </div>

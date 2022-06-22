@@ -169,10 +169,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="endpoint-class">
-<h1>Endpoint Class<a class="headerlink" href="#endpoint-class" title="Permalink to this headline">┬╢</a></h1>
+<h1>Endpoint Class<a class="headerlink" href="#endpoint-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="interfaces.interfaces.Endpoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.interfaces.</span></span><span class="sig-name descname"><span class="pre">Endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_index_low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_bit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_address</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint" title="Permalink to this definition">┬╢</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.interfaces.</span></span><span class="sig-name descname"><span class="pre">Endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_index_low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_bit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_address</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for Opal Kelly endpoints on the FPGA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -201,12 +201,12 @@ of endpoint names to Endpoint objects, starts empty.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="interfaces.interfaces.Endpoint.advance_endpoints">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">advance_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoints_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advance_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.advance_endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.advance_endpoints" title="Permalink to this definition">┬╢</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">advance_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoints_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advance_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.advance_endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.advance_endpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Advances Endpoints in a dict in place by advance_num. Checks each
-EndpointΓÇÖs gen_bit and gen_address attributes to see whether to
+Endpoint’s gen_bit and gen_address attributes to see whether to
 increment the bit or the address or both.</p>
 <dl class="simple">
-<dt>Example usage:</dt><dd><p>endpoints=Endpoint.advance_endpoints(Endpoint.get_chip_endpoints(ΓÇÿI2CDAQΓÇÖ),1)</p>
+<dt>Example usage:</dt><dd><p>endpoints=Endpoint.advance_endpoints(Endpoint.get_chip_endpoints(‘I2CDAQ’),1)</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -228,7 +228,7 @@ increment the bit or the address or both.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfaces.interfaces.Endpoint.excel_to_defines">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">excel_to_defines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defines_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.excel_to_defines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.excel_to_defines" title="Permalink to this definition">┬╢</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">excel_to_defines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defines_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.excel_to_defines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.excel_to_defines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an Excel spreadsheet of endpoint definitions to Verilog.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -252,13 +252,13 @@ spreadsheet, or the str sheet name.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfaces.interfaces.Endpoint.get_chip_endpoints">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_chip_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chip_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.get_chip_endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.get_chip_endpoints" title="Permalink to this definition">┬╢</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_chip_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chip_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.get_chip_endpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.get_chip_endpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a copy of the dictionary of Endpoints for a specific chip or group.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfaces.interfaces.Endpoint.update_endpoints_from_defines">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_endpoints_from_defines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ep_defines_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.update_endpoints_from_defines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.update_endpoints_from_defines" title="Permalink to this definition">┬╢</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_endpoints_from_defines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ep_defines_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/interfaces.html#Endpoint.update_endpoints_from_defines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.interfaces.Endpoint.update_endpoints_from_defines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store and return a dictionary of Endpoints for each chip in ep_defines.v.</p>
 <p>Returns -1 if there is a naming collision in ep_defines.v</p>
 </dd></dl>
