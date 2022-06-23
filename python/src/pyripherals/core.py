@@ -11,7 +11,7 @@ Abe Stroschein, ajstroschein@stthomas.edu
 import pandas as pd
 import os
 import sys
-from interfaces.utils import gen_mask
+from .utils import gen_mask
 import copy
 import yaml
 
