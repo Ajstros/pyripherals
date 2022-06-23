@@ -20,9 +20,9 @@ ADS8686
 
 * SDOB - N2
 
-Also download the `top_level_module.bit <https://github.com/lucask07/covg_fpga/blob/daq_v2/fpga_XEM7310/fpga_XEM7310.runs/impl_1/top_level_module.bit>`_
-bitfile and `impedance_analyzer.py <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/impedance_analyzer.py>`_
-file from the GitHub. Change the BITFILE_PATH constant in impedance_analyzer.py to the path of
+Also download the `top_level_module.bit <https://github.com/Ajstros/pyripherals/blob/main/examples/top_level_module.bit>`_
+bitfile, `ep_defines <https://github.com/Ajstros/pyripherals/blob/main/examples/ep_defines.v>`_, `Registers.xlsx <https://github.com/Ajstros/pyripherals/blob/main/python/Registers.xlsx>`_, and the `impedance_analyzer.py <https://github.com/Ajstros/pyripherals/blob/main/examples/impedance_analyzer.py>`_
+Python file from the GitHub. Change the BITFILE_PATH constant in impedance_analyzer.py to the path of
 top_level_module.bit on your computer. Read through the documentation included in impedance_analyzer.py
 to understand the other constants you can change as well as the setup of the circuit. You can then run
 impedance_analyzer.py.

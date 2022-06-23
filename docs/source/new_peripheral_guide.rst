@@ -3,7 +3,7 @@
 New Peripheral Guide
 ===========================
 
-Adding a new peripheral is a great way to contribute. The steps below will guide you through the process. For more information on community contributions, see the `contributions guide <https://github.com/lucask07/covg_fpga/blob/daq_v2/CONTRIBUTING.md>`_.
+Adding a new peripheral is a great way to contribute. The steps below will guide you through the process. For more information on community contributions, see the `contributions guide <https://github.com/Ajstros/pyripherals/blob/main/CONTRIBUTING.md>`_.
 
 Before You Begin
 ----------------
@@ -11,7 +11,7 @@ To get set up, first `create a new issue <https://docs.github.com/en/issues/trac
 
 Registers
 ---------
-The first step is to add your peripheral to the `main registers spreadsheet <https://github.com/lucask07/covg_fpga/blob/daq_v2/python/Registers.xlsx>`_. Add a new page to the spreadsheet with the name of your peripheral and fill in the information for its internal registers. For more information, see the :ref:`register index guide <register-index-guide>`.
+The first step is to add your peripheral to the `main registers spreadsheet <https://github.com/Ajstros/pyripherals/blob/main/python/Registers.xlsx>`_. Add a new page to the spreadsheet with the name of your peripheral and fill in the information for its internal registers. For more information, see the :ref:`register index guide <register-index-guide>`.
 
 Interfaces
 ----------

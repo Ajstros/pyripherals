@@ -10,7 +10,7 @@ To use an FPGA and peripherals:
 
 2. Download `FrontPanel <https://pins.opalkelly.com/downloads>`_ from OpalKelly (see :ref:`installation_fpga` section)
 
-3. Download `Registers.xlsx <https://github.com/lucask07/covg_fpga/blob/daq_v2/python/Registers.xlsx>`_ and add unsupported peripherals (see :ref:`installation_peripherals` section)
+3. Download `Registers.xlsx <https://github.com/Ajstros/pyripherals/blob/main/python/Registers.xlsx>`_ and add unsupported peripherals (see :ref:`installation_peripherals` section)
 
 4. Create config.yaml with :py:meth:`pyripherals.utils.create_yaml` and edit (see :ref:`installation_yaml` section)
 
@@ -37,8 +37,8 @@ You will also need to update the config.yaml file. See the :ref:`installation_ya
 
 Peripherals
 --------------------
-To use peripherals, you will need FrontPanel (see :ref:`installation_fpga` section) as well as the `Registers.xlsx <https://github.com/lucask07/covg_fpga/blob/daq_v2/python/Registers.xlsx>`_ spreadsheet with register information for all supported peripherals, available on the `GitHub <https://github.com/lucask07/covg_fpga>`_.
-Update the config.yaml file with the path to `Registers.xlsx <https://github.com/lucask07/covg_fpga/blob/daq_v2/python/Registers.xlsx>`_ (see :ref:`installation_yaml` section).
+To use peripherals, you will need FrontPanel (see :ref:`installation_fpga` section) as well as the `Registers.xlsx <https://github.com/Ajstros/pyripherals/blob/main/python/Registers.xlsx>`_ spreadsheet with register information for all supported peripherals, available on the `GitHub <https://github.com/Ajstros/pyripherals>`_.
+Update the config.yaml file with the path to `Registers.xlsx <https://github.com/Ajstros/pyripherals/blob/main/python/Registers.xlsx>`_ (see :ref:`installation_yaml` section).
 If you are using a peripheral not currently supported by :py:mod:`pyripherals`, see the :ref:`New Peripheral Guide <new_peripheral_guide>`.
 
 .. _installation_yaml:

@@ -7,7 +7,7 @@ Tests
 
     >>> pip install pytest
 
-All tests are available in the `tests folder on the GitHub <https://github.com/lucask07/covg_fpga/tree/daq_v2/python/tests>`_
+All tests are available in the `tests folder on the GitHub <https://github.com/Ajstros/pyripherals/tree/main/python/tests>`_
 All automated and working tests can be run with the "usable" marker.
 
 .. code-block:: python
