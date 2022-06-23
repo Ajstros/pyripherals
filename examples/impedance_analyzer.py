@@ -77,7 +77,7 @@ RESISTANCE = 10000  # Resistance of the known resistance in Ohms
 FREQUENCY = 200     # Desired frequency of the output sine wave in Hertz
 AMPLITUDE = 1.0     # Desired amplitude of the output sine wave in Volts
 BITFILE_PATH = 'default'    # Path to top_level_module.bit. Leave as default if configured in config.yaml
-DATA_DIR = os.path.expanduser('~'), '.pyripherals/data/{}{:02d}{:02d}'  # Folder where data will be saved
+DATA_DIR = os.path.join(os.path.expanduser('~'), '.pyripherals/data/{}{:02d}{:02d}')  # Folder where data will be saved
 PLOT = False        # True to create a graph of ADS8686 readings, False otherwise
 
 # Other constants
