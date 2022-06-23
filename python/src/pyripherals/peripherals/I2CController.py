@@ -1,4 +1,3 @@
-from ..interfaces import Endpoint
 import numpy as np
 import time
 

@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint
+from ..core import Endpoint
 from ..utils import test_bit, gen_mask, twos_comp
 import numpy as np
 import time

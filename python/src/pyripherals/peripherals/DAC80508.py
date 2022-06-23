@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint, Register
+from ..core import Endpoint, Register
 from ..utils import from_voltage
 from .SPIFifoDriven import SPIFifoDriven
 

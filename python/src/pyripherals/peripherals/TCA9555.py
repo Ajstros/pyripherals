@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint, Register
+from ..core import Register
 from .I2CController import I2CController
 
 

@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint, Register
+from ..core import Endpoint, Register
 from ..utils import twos_comp
 from .SPIController import SPIController
 from .ADCDATA import ADCDATA

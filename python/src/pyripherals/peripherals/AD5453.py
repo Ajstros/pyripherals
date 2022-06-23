@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint
+from ..core import Endpoint
 from .SPIFifoDriven import SPIFifoDriven
 import numpy as np
 

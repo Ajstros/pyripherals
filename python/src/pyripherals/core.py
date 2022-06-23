@@ -11,11 +11,11 @@ Abe Stroschein, ajstroschein@stthomas.edu
 import pandas as pd
 import os
 import sys
-from .utils import gen_mask
 import copy
 import yaml
+from .utils import gen_mask
 
-home_dir = os.path.join(os.path.expanduser('~'), '.packagename')
+home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
 with open(os.path.join(home_dir, 'config.yaml'), 'r') as file:
     configs = yaml.safe_load(file)
 

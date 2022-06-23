@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint
+from ..core import Endpoint
 from ..utils import gen_mask
 from .ADCDATA import ADCDATA
 import copy

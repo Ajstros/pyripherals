@@ -1,4 +1,4 @@
-from ..interfaces import Endpoint, Register
+from ..core import Endpoint, Register
 import copy
 
 

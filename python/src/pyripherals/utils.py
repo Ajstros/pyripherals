@@ -14,7 +14,7 @@ import yaml
 import os
 import h5py
 
-home_dir = os.path.join(os.path.expanduser('~'), '.packagename')
+home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
 
 
 def create_yaml(overwrite=False):
