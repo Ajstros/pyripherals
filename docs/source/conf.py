@@ -99,3 +99,5 @@ html_static_path = ['_static']
 
 # Show syntax color for code snippets
 pygments_style = 'sphinx'
+
+root_doc = 'index'
