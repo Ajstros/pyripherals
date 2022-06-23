@@ -1,4 +1,4 @@
-"""Example application of the package as an impedance analyzer.
+"""Example application of pyripherals with an impedance analyzer.
 
 Uses an Opal Kelly XEM7310 board, a DAC80508 Digital-Analog converter, a
 ADS8686 Analog-Digital converter and a circuit containing a known resistance
@@ -43,6 +43,9 @@ since the DAC80508 cannot output negative voltages.
 BITFILE_PATH: Change this to the string path to your top_level_module.bit
 file. This will be loaded onto the FPGA and contains all the Opal Kelly
 endpoints that allow us to communicate with the DDR, DAC80508, and ADS8686.
+Leave as default if the path is already configured in config.yaml.
+
+DATA_DIR: the folder where data will be saved.
 
 PLOT: To make sure the DAC80508 and ADS8686 are sending and receiving the sine
 wave correctly, you can set this to True to create a graph of the voltages the
@@ -52,35 +55,20 @@ ADS8686 reads.
 Abe Stroschein, ajstroschein@stthomas.edu
 May 2022
 """
-# TODO: include package name in script docstring above
-# TODO: remove this comment when in new repo -> MUST TURN ON POWER SUPPLY YOURSELF (7V, 16.5V, -15V)
 
+
+import os
 import numpy as np
 from scipy.fft import rfftfreq
 import matplotlib.pyplot as plt
 import time
 from datetime import datetime
-# TODO: replace with package import when this script is moved to the package repo
-import sys, os
-# The interfaces.py file is located in the covg_fpga folder so we need to find that folder. If it is not above the current directory, the program fails.
-cwd = os.getcwd()
-if 'covg_fpga' in cwd:
-    covg_fpga_index = cwd.index('covg_fpga')
-    covg_fpga_path = cwd[:covg_fpga_index + len('covg_fpga') + 1]
-else:
-    print('covg_fpga folder not found. Please navigate to the covg_fpga folder.')
-    assert False
-interfaces_path = os.path.join(covg_fpga_path, 'python')
-sys.path.append(interfaces_path)
-
-top_level_module_bitfile = os.path.join(covg_fpga_path, 'fpga_XEM7310',
-                                        'fpga_XEM7310.runs', 'impl_1',
-                                        'top_level_module.bit')
-from pyripherals.interfaces import FPGA, Endpoint
+from pyripherals.core import FPGA, Endpoint
 from pyripherals.peripherals.DDR3 import DDR3
 from pyripherals.peripherals.DAC80508 import DAC80508
 from pyripherals.peripherals.ADS8686 import ADS8686
 from pyripherals.peripherals.AD7961 import AD7961
+from pyripherals.peripherals.AD5453 import AD5453
 from pyripherals.utils import calc_impedance, from_voltage, to_voltage, read_h5
 
 
@@ -88,7 +76,8 @@ from pyripherals.utils import calc_impedance, from_voltage, to_voltage, read_h5
 RESISTANCE = 10000  # Resistance of the known resistance in Ohms
 FREQUENCY = 200     # Desired frequency of the output sine wave in Hertz
 AMPLITUDE = 1.0     # Desired amplitude of the output sine wave in Volts
-BITFILE_PATH = top_level_module_bitfile   # Path to top_level_module.bit
+BITFILE_PATH = 'default'    # Path to top_level_module.bit. Leave as default if configured in config.yaml
+DATA_DIR = os.path.expanduser('~'), '.pyripherals/data/{}{:02d}{:02d}'  # Folder where data will be saved
 PLOT = False        # True to create a graph of ADS8686 readings, False otherwise
 
 # Other constants
@@ -116,7 +105,7 @@ def ddr_write_finish():
 
 
 # --- Set up FPGA, DDR3, DAC80508, ADS8686 ---
-f = FPGA(bitfile=BITFILE_PATH)
+f = FPGA()
 f.init_device()
 time.sleep(2)
 Endpoint.update_endpoints_from_defines()
@@ -136,7 +125,6 @@ dac.set_ctrl_reg(0x3218)
 dac.set_config_bin(0x00)
 
 # TODO: switch this from AD5453 to DDR3 method
-from interfaces.interfaces import AD5453
 ad5453 = AD5453(fpga=f)
 # Need in order to set frequency of input wave correctly
 ad5453.set_clk_divider(divide_value=0x50)
@@ -211,9 +199,8 @@ time.sleep(0.01)
 # chan_data = ddr.deswizzle(ddr.read_adc(blk_multiples=40)[0])
 # ddr_data_from_names = ddr.data_to_names(chan_data)
 # adc_data, timestamp, dac_data, ads, read_check = ddr_data_from_names
-data_dir = os.path.join(covg_fpga_path, 'python/tests/data/{}{:02d}{:02d}')
 today = datetime.today()
-data_dir = data_dir.format(
+data_dir = DATA_DIR.format(
     today.year, today.month, today.day
 )
 if not os.path.exists(data_dir):
