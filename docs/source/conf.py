@@ -38,6 +38,7 @@ release = '0.0.1'
 extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel'
     'sphinx.ext.autosummary',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
@@ -49,7 +50,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'numpydoc',
     'sphinx.ext.napoleon',
-    # 'sphinx.ext.autosectionlabel'
     ]
 
 # Configuration options for plot_directive. See:
@@ -99,5 +99,3 @@ html_static_path = ['_static']
 
 # Show syntax color for code snippets
 pygments_style = 'sphinx'
-
-master_doc = 'index'
