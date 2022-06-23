@@ -38,7 +38,7 @@ release = '0.0.1'
 extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
