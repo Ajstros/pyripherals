@@ -76,9 +76,12 @@ sys.path.append(interfaces_path)
 top_level_module_bitfile = os.path.join(covg_fpga_path, 'fpga_XEM7310',
                                         'fpga_XEM7310.runs', 'impl_1',
                                         'top_level_module.bit')
-from interfaces.interfaces import FPGA, DDR3, DAC80508, ADS8686, Endpoint, AD7961
-from interfaces.utils import calc_impedance, from_voltage, to_voltage
-from analysis.adc_data import read_h5
+from pyripherals.interfaces import FPGA, Endpoint
+from pyripherals.peripherals.DDR3 import DDR3
+from pyripherals.peripherals.DAC80508 import DAC80508
+from pyripherals.peripherals.ADS8686 import ADS8686
+from pyripherals.peripherals.AD7961 import AD7961
+from pyripherals.utils import calc_impedance, from_voltage, to_voltage, read_h5
 
 
 # USER SET CONSTANTS
@@ -118,16 +121,6 @@ f.init_device()
 time.sleep(2)
 Endpoint.update_endpoints_from_defines()
 f.send_trig(Endpoint.endpoints_from_defines["GP"]["SYSTEM_RESET"])  # system reset
-
-# TODO:remove power part when in package repository?
-import time
-from interfaces.boards import Daq
-# Turn on DAQ board Power
-pwr = Daq.Power(f)
-pwr.all_off()
-for name in ['1V8', '5V', '3V3']:
-    pwr.supply_on(name)
-    time.sleep(0.05)
 
 ddr = DDR3(fpga=f, data_version='TIMESTAMPS')
 dac = DAC80508(fpga=f)

@@ -12,6 +12,7 @@ import datetime
 import sys
 import yaml
 import os
+import h5py
 
 home_dir = os.path.join(os.path.expanduser('~'), '.packagename')
 
@@ -358,3 +359,29 @@ def create_filter_coefficients(fc, output_scale=0x2000,
     coeffs[15] = Integer((output_offset << 14) + output_scale)
 
     return coeffs
+
+
+def read_h5(data_dir, file_name, chan_list=[0]):
+    """ Read in h5 data and return the time and adc_data for the channels in
+        input list
+    Arguments
+    ---------
+    data_dir (string): directory of h5 file
+    file_name (string): file name (must include extension)
+    chan_list (list of ints): adc channels to return
+    Returns
+    -------
+    (numpy.ndarray) time
+    (dicionary of numpy.ndarrays) adc data
+    """
+
+    SAMPLE_PERIOD = 1 / 5e6
+
+    data_name = os.path.join(data_dir, file_name)
+    adc_data = {}
+    with h5py.File(data_name, "r") as file:
+        dset = file["adc"]
+        t = np.arange(len(dset[0, :])) * SAMPLE_PERIOD
+        for ch in chan_list:
+            adc_data[ch] = dset[ch, :].astype(np.uint16)
+    return t, adc_data
