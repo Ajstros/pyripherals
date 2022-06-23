@@ -13,7 +13,6 @@ import os
 import sys
 import copy
 import yaml
-import warnings
 from .utils import gen_mask
 
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
@@ -21,19 +20,22 @@ config_path = os.path.join(home_dir, 'config.yaml')
 if os.path.exists(config_path):
     with open(os.path.join(home_dir, 'config.yaml'), 'r') as file:
         configs = yaml.safe_load(file)
-else:
-    warnings.warn(message=f'No config.yaml file found at {config_path}. Use pyripherals.utils.create_yaml to create one.', category=UserWarning)
 
-# TODO: make sure this path works for Windows, Mac, and Linux: https://docs.opalkelly.com/fpsdk/frontpanel-api/programming-languages/
-if sys.platform == 'win32':
-    sys.path.append(os.path.join(configs['frontpanel_path'], 'API/Python/3.7/x64')) # Add path to ok.py to PATH for import
-    dll_dir = os.path.join(configs['frontpanel_path'], 'API/lib/x64')
-    os.add_dll_directory(dll_dir)   # Make DLL (okFrontPanel.dll) available
-    os.environ.setdefault('PATH', '')
-    os.environ['PATH'] += os.pathsep + dll_dir
-elif sys.platform == 'darwin':
-    sys.path.append(os.path.join(configs['frontpanel_path'], 'API/Python3/')) # Add _ok.so to PATH for import
-import ok
+    # TODO: make sure this path works for Windows, Mac, and Linux: https://docs.opalkelly.com/fpsdk/frontpanel-api/programming-languages/
+    if sys.platform == 'win32':
+        sys.path.append(os.path.join(configs['frontpanel_path'], 'API/Python/3.7/x64')) # Add path to ok.py to PATH for import
+        dll_dir = os.path.join(configs['frontpanel_path'], 'API/lib/x64')
+        os.add_dll_directory(dll_dir)   # Make DLL (okFrontPanel.dll) available
+        os.environ.setdefault('PATH', '')
+        os.environ['PATH'] += os.pathsep + dll_dir
+    elif sys.platform == 'darwin':
+        sys.path.append(os.path.join(configs['frontpanel_path'], 'API/Python3/')) # Add _ok.so to PATH for import
+    import ok
+else:
+    from warnings import warn
+    warn(message=f'No config.yaml file found at {config_path}. Use pyripherals.utils.create_yaml to create one.', category=UserWarning)
+    from .utils import DEFAULT_CONFIGS
+    configs = DEFAULT_CONFIGS
 
 
 class Register:

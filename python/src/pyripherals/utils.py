@@ -15,18 +15,17 @@ import os
 import h5py
 
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
+DEFAULT_CONFIGS = {
+    'endpoint_max_width': 32,
+    'fpga_bitfile_path': None,
+    'ep_defines_path': None,
+    'registers_path': None,
+    'frontpanel_path': 'C:/Program Files/Opal Kelly/FrontPanelUSB',
+}
 
 
 def create_yaml(overwrite=False):
     """Create a default config.yaml file."""
-    
-    default_configs = {
-        'endpoint_max_width': 32,
-        'fpga_bitfile_path': None,
-        'ep_defines_path': None,
-        'registers_path': None,
-        'frontpanel_path': 'C:/Program Files/Opal Kelly/FrontPanelUSB',
-    }
 
     if not os.path.exists(home_dir):
         os.mkdir(home_dir)
@@ -38,10 +37,10 @@ def create_yaml(overwrite=False):
         return None
 
     with open(file_path, mode='w') as file:
-        yaml.dump(default_configs, file)
+        yaml.dump(DEFAULT_CONFIGS, file)
     
     print(f'YAML created at {file_path}')
-    return default_configs
+    return DEFAULT_CONFIGS
 
 
 def rev_lookup(dd, val):
@@ -363,12 +362,14 @@ def create_filter_coefficients(fc, output_scale=0x2000,
 
 def read_h5(data_dir, file_name, chan_list=[0]):
     """ Read in h5 data and return the time and adc_data for the channels in
-        input list
+    input list
+
     Arguments
     ---------
     data_dir (string): directory of h5 file
     file_name (string): file name (must include extension)
     chan_list (list of ints): adc channels to return
+    
     Returns
     -------
     (numpy.ndarray) time
