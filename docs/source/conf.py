@@ -46,7 +46,7 @@ extensions = [
     'sphinx.ext.githubpages',
     # 'IPython.sphinxext.ipython_directive',
     # 'IPython.sphinxext.ipython_console_highlighting',
-    'matplotlib.sphinxext.plot_directive',
+    # 'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.intersphinx',
     'numpydoc',
     'sphinx.ext.napoleon',
