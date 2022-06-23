@@ -24,11 +24,11 @@ Each piece of this definition is explained below.
 
     `define: The macro used to declare a parameter in Verilog
 
-CHIPNAME: the name of the chip this endpoint belongs to. This is the chip the endpoint will be found under when using the :py:meth:`~interfaces.interfaces.Endpoint.get_chip_endpoints` method. This name MUST NOT have any underscores in it because pypanel uses the first underscore in this line to separate the chip name from the endpoint name.
+CHIPNAME: the name of the chip this endpoint belongs to. This is the chip the endpoint will be found under when using the :py:meth:`~pyripherals.core.Endpoint.get_chip_endpoints` method. This name MUST NOT have any underscores in it because pypanel uses the first underscore in this line to separate the chip name from the endpoint name.
 
 ENDPOINT_NAME: the name of the endpoint. This will be the dictionary key paired with the Endpoint object holding the data defined on this line. Underscores are allowed in this name.
 
-_GEN_ADDR: an optional phrase added after the endpoint name that tells pypanel to increment this endpoint’s address when :py:meth:`~interfaces.interfaces.Endpoint.advance_endpoints` is called on a group containing this endpoint.
+_GEN_ADDR: an optional phrase added after the endpoint name that tells pypanel to increment this endpoint’s address when :py:meth:`~pyripherals.core.Endpoint.advance_endpoints` is called on a group containing this endpoint.
 
 8’h: declaration of an 8 bit hexadecimal value before the address. If your address is more than 8 bits, change the 8 to that value. Ex. 16 bit address would be 16’h.
 
@@ -57,11 +57,11 @@ Each piece of this definition is explained below.
 
     `define: The macro used to declare a parameter in Verilog
 
-CHIPNAME: the name of the chip this endpoint belongs to. This is the chip the endpoint will be found under when using the :py:meth:`~interfaces.interfaces.Endpoint.get_chip_endpoints` method. This name MUST NOT have any underscores in it because pypanel uses the first underscore in this line to separate the chip name from the endpoint name.
+CHIPNAME: the name of the chip this endpoint belongs to. This is the chip the endpoint will be found under when using the :py:meth:`~pyripherals.core.Endpoint.get_chip_endpoints` method. This name MUST NOT have any underscores in it because pypanel uses the first underscore in this line to separate the chip name from the endpoint name.
 
 ENDPOINT_NAME: the name of the endpoint. This will be the dictionary key paired with the Endpoint object holding the data defined on this line. Underscores are allowed in this name.
 
-_GEN_BIT: an optional phrase added after the endpoint name that tells pypanel to increment this endpoint’s lower bit index by its bit width when :py:meth:`~interfaces.interfaces.Endpoint.advance_endpoints` is called on a group containing this endpoint.
+_GEN_BIT: an optional phrase added after the endpoint name that tells pypanel to increment this endpoint’s lower bit index by its bit width when :py:meth:`~pyripherals.core.Endpoint.advance_endpoints` is called on a group containing this endpoint.
 
 BIT: the decimal lower bit index for this endpoint. This is the value the parameter will hold in the Verilog.
 
@@ -80,7 +80,7 @@ File
 
 Using the above formats, enter the endpoints each on separate lines in a Verilog file. The order of the endpoints does not matter. Endpoints can have the same name if they have different chip names. For example, “GP_WIRE_IN” and “MEM_WIRE_IN” both have the endpoint name “WIRE_IN” but have different chip names “GP” and “MEM,” which is allowed. Because pypanel uses comments to extract extra information about the endpoints, any other comments must be put on their own line, which pypanel will ignore.
 
-Alternatively, enter the information in an Excel spreadsheet copy of this `template <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/ep_defines_sheet_template.xlsx>`_. Each row should be a different endpoint. Each column is explained below. Check the “Generated Line” column for any possible errors, then use the :py:meth:`~interfaces.interfaces.Endpoint.excel_to_defines` method to create a Verilog file from the spreadsheet. For reference, here is an `example spreadsheet <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/ep_defines_sheet_example.xlsx>`_ and an example of the `Verilog file <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/ep_defines_example.v>`_ generated from it.
+Alternatively, enter the information in an Excel spreadsheet copy of this `template <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/ep_defines_sheet_template.xlsx>`_. Each row should be a different endpoint. Each column is explained below. Check the “Generated Line” column for any possible errors, then use the :py:meth:`~pyripherals.core.Endpoint.excel_to_defines` method to create a Verilog file from the spreadsheet. For reference, here is an `example spreadsheet <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/ep_defines_sheet_example.xlsx>`_ and an example of the `Verilog file <https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/ep_defines_example.v>`_ generated from it.
 
 Chip Name: CHIPNAME (see :ref:`ep-defines-guide-bit-indices` section) from above.
 
@@ -100,7 +100,7 @@ GEN_ADDR: _GEN_ADDR (see :ref:`ep-defines-guide-bit-indices` section) from above
 
 Generated Name: automatically generated chip name with endpoint name. Since this is the name the “Address (hex)” column needs when referencing another endpoint, referencing this cell allows you to have any future name changes to the address endpoint reflected in the “Address (hex)” column of any endpoint referencing it.
 
-Generated Line: the line that will be written for this endpoint in the endpoint definitions Verilog file when :py:meth:`~interfaces.interfaces.Endpoint.excel_to_defines` is called.
+Generated Line: the line that will be written for this endpoint in the endpoint definitions Verilog file when :py:meth:`~pyripherals.core.Endpoint.excel_to_defines` is called.
 
 Usage
 ------------------------------
@@ -111,4 +111,4 @@ Once your endpoint definitions file is complete, you can include the parameters 
 
     `include “ep_defines.v”
 
-To retrieve the endpoints through pypanel, use the :py:meth:`~interfaces.interfaces.Endpoint.get_chip_endpoints` method.
+To retrieve the endpoints through pypanel, use the :py:meth:`~pyripherals.core.Endpoint.get_chip_endpoints` method.

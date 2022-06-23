@@ -1,9 +1,9 @@
-.. covgDAQ documentation master file, created by
+.. pyripheral documentation master file, created by
    sphinx-quickstart on Sat Feb 19 12:21:09 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to covgDAQ's documentation!
+Welcome to pyripheral's documentation!
 ===================================
 
 .. toctree::
@@ -11,7 +11,7 @@ Welcome to covgDAQ's documentation!
    :caption: Contents:
 
    installation
-   interfaces
+   core
    peripherals
    utils
    register_index_guide

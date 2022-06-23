@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>utils &mdash; covgDAQ 0.0.1 documentation</title>
+  <title>utils &mdash; pyripherals 0.0.1 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> covgDAQ
+            <a href="index.html" class="icon icon-home"> pyripherals
           
 
           
@@ -91,7 +91,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interfaces.html">interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peripherals.html">peripherals</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="register_index_guide.html">Register Index Guide</a></li>
@@ -114,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">covgDAQ</a>
+          <a href="index.html">pyripherals</a>
         
       </nav>
 
@@ -168,14 +168,14 @@
             
   <div class="section" id="utils">
 <h1>utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils</span></code> contains several helpful methods used in peripheral classes that may be useful.</p>
-<span class="target" id="module-interfaces.utils"></span><p>Module containing general functions useful to interfaces.</p>
+<p><a class="reference internal" href="#module-pyripherals.utils" title="pyripherals.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyripherals.utils</span></code></a> contains several helpful methods used in peripheral classes that may be useful.</p>
+<span class="target" id="module-pyripherals.utils"></span><p>Module containing general functions useful to interfaces.</p>
 <p>June 2022</p>
 <p>Lucas Koerner, <a class="reference external" href="mailto:koer2434&#37;&#52;&#48;stthomas&#46;edu">koer2434<span>&#64;</span>stthomas<span>&#46;</span>edu</a>
 Abe Stroschein, <a class="reference external" href="mailto:ajstroschein&#37;&#52;&#48;stthomas&#46;edu">ajstroschein<span>&#64;</span>stthomas<span>&#46;</span>edu</a></p>
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.calc_impedance">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">calc_impedance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resistance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#calc_impedance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.calc_impedance" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.calc_impedance">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">calc_impedance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resistance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#calc_impedance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.calc_impedance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the impedance of an unknown component.</p>
 <p>It is assumed the voltage source is connect in series with both the resistor and the unknown component.</p>
 <dl class="field-list simple">
@@ -188,20 +188,20 @@ Abe Stroschein, <a class="reference external" href="mailto:ajstroschein&#37;&#52
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.count_bytes">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">count_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#count_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.count_bytes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.count_bytes">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">count_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#count_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.count_bytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Count the number of bytes in a number.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.create_yaml">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">create_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#create_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.create_yaml" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.create_yaml">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">create_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#create_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.create_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a default config.yaml file.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.from_voltage">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">from_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voltage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_negatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#from_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.from_voltage" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.from_voltage">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">from_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voltage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_negatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#from_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.from_voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the float/int voltage into binary data.</p>
 <p>We use the bit-width and voltage range to determine the voltage per bit.
 Then we divide the voltage by the bit-voltage and round to an integer to
@@ -219,14 +219,14 @@ list, numpy.ndarray -&gt; list(int)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.get_memory_usage">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">get_memory_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#get_memory_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.get_memory_usage" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.get_memory_usage">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">get_memory_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#get_memory_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.get_memory_usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a sorted list of the objects and their sizes.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.int_to_list">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">int_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">integer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byteorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'little'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#int_to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.int_to_list" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.int_to_list">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">int_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">integer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byteorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'little'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#int_to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.int_to_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an integer into a list of integers 1 byte long.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -246,14 +246,29 @@ represent the number.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.reverse_bits">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">reverse_bits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#reverse_bits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.reverse_bits" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.read_h5">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">read_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chan_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#read_h5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.read_h5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in h5 data and return the time and adc_data for the channels in
+input list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>(numpy.ndarray) time</dt><dd></dd>
+<dt>(dicionary of numpy.ndarrays) adc data</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyripherals.utils.reverse_bits">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">reverse_bits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#reverse_bits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.reverse_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an integer with the reversed bits of the input number.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.to_voltage">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">to_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_twos_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#to_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.to_voltage" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.to_voltage">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">to_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_twos_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#to_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.to_voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the binary read data into a float voltage.</p>
 <p>We use the bit-width of the data and the voltage range of the channel
 to determine the voltage per bit. Then we multiply the binary data by
@@ -270,8 +285,8 @@ list, numpy.ndarray -&gt; list(float)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="interfaces.utils.twos_comp">
-<span class="sig-prename descclassname"><span class="pre">interfaces.utils.</span></span><span class="sig-name descname"><span class="pre">twos_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/utils.html#twos_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.utils.twos_comp" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.utils.twos_comp">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">twos_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#twos_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.twos_comp" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute the 2’s complement of int value val
 handle an array (list or numpy)</p>
 </dd></dl>

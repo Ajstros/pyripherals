@@ -15,7 +15,7 @@ The first step is to add your peripheral to the `main registers spreadsheet <htt
 
 Interfaces
 ----------
-Add a class for your peripheral to the :py:mod:`~interfaces.interfaces` module. If your peripheral uses an I2C or SPI interface, you may consider extending the :py:class:`~interfaces.interfaces.I2CController`, :py:class:`~interfaces.interfaces.SPIController`, or :py:class:`~interfaces.interfaces.SPIFifoDriven` class. Your class should include a :py:meth:`create_chips` method for creating several instances of the new peripheral at once. Write and read commands are commonly useful methods that, if applicable, should be included, but remaining functionality will likely be specific to your peripheral. Add what will be useful.
+Add a class for your peripheral to the :py:mod:`~pyripherals.peripherals` subpackage in a new module. If your peripheral uses an I2C or SPI interface, you may consider extending the :py:class:`~pyripherals.peripherals.I2CController`, :py:class:`~pyripherals.peripherals.SPIController`, or :py:class:`~pyripherals.peripherals.SPIFifoDriven` class. Your class should include a :py:meth:`create_chips` method for creating several instances of the new peripheral at once. Write and read commands are commonly useful methods that, if applicable, should be included, but remaining functionality will likely be specific to your peripheral. Add what will be useful.
 
 Sandbox/Test File
 -----------------
@@ -23,7 +23,7 @@ Once your peripheral is functional, create an example script or test file to sho
 
 Documentation
 -------------
-The last requirement of your addition is documentation. Please add class and method docstrings to your code in `numpy format <https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard>`_. See the :py:class:`~interfaces.interfaces.DAC80508` class for an example. Please also add a docstring to your exampe/test file explaining what it does. 
+The last requirement of your addition is documentation. Please add class and method docstrings to your code in `numpy format <https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard>`_. See the :py:class:`~pyripherals.peripherals.DAC80508.DAC80508` class for an example. Please also add a docstring to your exampe/test file explaining what it does. 
 
 Pull Request
 ------------

@@ -1,7 +1,7 @@
 Tests
 =================
 
-PACKAGE_NAME uses `pytest <https://docs.pytest.org/en/7.1.x/>`_ for its tests. pytest can be installed with pip.
+:py:mod:`pyripherals` uses `pytest <https://docs.pytest.org/en/7.1.x/>`_ for its tests. pytest can be installed with pip.
 
 .. code-block:: python
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>New Peripheral Guide &mdash; covgDAQ 0.0.1 documentation</title>
+  <title>New Peripheral Guide &mdash; pyripherals 0.0.1 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> covgDAQ
+            <a href="index.html" class="icon icon-home"> pyripherals
           
 
           
@@ -91,7 +91,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interfaces.html">interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peripherals.html">peripherals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="register_index_guide.html">Register Index Guide</a></li>
@@ -122,7 +122,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">covgDAQ</a>
+          <a href="index.html">pyripherals</a>
         
       </nav>
 
@@ -187,7 +187,7 @@
 </div>
 <div class="section" id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h2>
-<p>Add a class for your peripheral to the <a class="reference internal" href="interfaces.html#module-interfaces.interfaces" title="interfaces.interfaces"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interfaces</span></code></a> module. If your peripheral uses an I2C or SPI interface, you may consider extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">I2CController</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SPIController</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">SPIFifoDriven</span></code> class. Your class should include a <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_chips()</span></code> method for creating several instances of the new peripheral at once. Write and read commands are commonly useful methods that, if applicable, should be included, but remaining functionality will likely be specific to your peripheral. Add what will be useful.</p>
+<p>Add a class for your peripheral to the <code class="xref py py-mod docutils literal notranslate"><span class="pre">peripherals</span></code> subpackage in a new module. If your peripheral uses an I2C or SPI interface, you may consider extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">I2CController</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SPIController</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">SPIFifoDriven</span></code> class. Your class should include a <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_chips()</span></code> method for creating several instances of the new peripheral at once. Write and read commands are commonly useful methods that, if applicable, should be included, but remaining functionality will likely be specific to your peripheral. Add what will be useful.</p>
 </div>
 <div class="section" id="sandbox-test-file">
 <h2>Sandbox/Test File<a class="headerlink" href="#sandbox-test-file" title="Permalink to this headline">¶</a></h2>

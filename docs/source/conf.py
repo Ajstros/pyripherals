@@ -22,9 +22,9 @@ print(sys.path)
 
 # -- Project information -----------------------------------------------------
 
-project = 'covgDAQ'
+project = 'pyripherals'
 copyright = '2022, University of St. Thomas CpE/EE Instrumentation Group'
-author = 'UST CpE/EE Instrumentation Group'
+author = 'Abe Stroschein'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'

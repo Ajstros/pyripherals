@@ -1,7 +1,7 @@
 Example
 ============
 
-One example of using PACKAGE_NAME is an impedance analyzer which calculates the impedance of an unknown
+One example of using :py:mod:`pyripherals` is an impedance analyzer which calculates the impedance of an unknown
 component. For this example you will need an Opal Kelly XEM7310 FPGA connected to your computer as well as a
 `DAC80508 <https://www.ti.com/product/DAC80508>`_ and `ADS8686 <https://www.ti.com/product/ADS8686S>`_
 connected to the FPGA. The pin connections between the FPGA and these peripherals are as follows:
