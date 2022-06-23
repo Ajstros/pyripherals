@@ -13,11 +13,16 @@ import os
 import sys
 import copy
 import yaml
+import warnings
 from .utils import gen_mask
 
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
-with open(os.path.join(home_dir, 'config.yaml'), 'r') as file:
-    configs = yaml.safe_load(file)
+config_path = os.path.join(home_dir, 'config.yaml')
+if os.path.exists(config_path):
+    with open(os.path.join(home_dir, 'config.yaml'), 'r') as file:
+        configs = yaml.safe_load(file)
+else:
+    warnings.warn(message=f'No config.yaml file found at {config_path}. Use pyripherals.utils.create_yaml to create one.', category=UserWarning)
 
 # TODO: make sure this path works for Windows, Mac, and Linux: https://docs.opalkelly.com/fpsdk/frontpanel-api/programming-languages/
 if sys.platform == 'win32':
