@@ -14,6 +14,7 @@ import sys
 import copy
 import yaml
 from .utils import gen_mask
+from warnings import warn
 
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
 config_path = os.path.join(home_dir, 'config.yaml')
@@ -35,7 +36,6 @@ if os.path.exists(config_path):
     except ImportError:
         warn(message=f"Could not find FrontPanel files. Is \n\tfrontpanel_path: {configs['frontpanel_path']} from {config_path} the correct path?", category=ImportWarning)
 else:
-    from warnings import warn
     warn(message=f'No config.yaml file found at {config_path}. Use pyripherals.utils.create_yaml to create one.', category=UserWarning)
     from .utils import DEFAULT_CONFIGS
     configs = DEFAULT_CONFIGS
