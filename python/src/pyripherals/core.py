@@ -2,10 +2,9 @@
 
 Use Registers for peripherals' internal registers and Endpoints for Opal Kelly Endpoints on the FPGA. 
 
-June 2022
+Abe Stroschein, ajstroschein@stthomas.edu
 
 Lucas Koerner, koer2434@stthomas.edu
-Abe Stroschein, ajstroschein@stthomas.edu
 """
 
 import pandas as pd
