@@ -11,27 +11,11 @@ January 2022
 """
 
 import pytest
-import os
-import sys
 import numpy as np
 from scipy.fft import rfftfreq
-
-# The interfaces.py file is located in the covg_fpga folder so we need to find that folder. If it is not above the current directory, the program fails.
-cwd = os.getcwd()
-if 'covg_fpga' in cwd:
-    covg_fpga_index = cwd.index('covg_fpga')
-    covg_path = cwd[:covg_fpga_index + len('covg_fpga') + 1]
-else:
-    print('covg_fpga folder not found. Please navigate to the covg_fpga folder.')
-    assert False
-interfaces_path = os.path.join(covg_path, 'python/src')
-sys.path.append(interfaces_path)
-top_level_module_bitfile = os.path.join(covg_path, 'fpga_XEM7310',
-                                        'fpga_XEM7310.runs', 'impl_1', 'top_level_module.bit')
-
-from interfaces.interfaces import FPGA
-from interfaces.peripherals.DDR3 import DDR3
-from interfaces.utils import from_voltage, to_voltage, calc_impedance
+from pyripherals.core import FPGA
+from pyripherals.peripherals.DDR3 import DDR3
+from pyripherals.utils import from_voltage, to_voltage, calc_impedance
 
 pytestmark = [pytest.mark.usable, pytest.mark.no_fpga]
 
@@ -40,8 +24,7 @@ pytestmark = [pytest.mark.usable, pytest.mark.no_fpga]
 
 @pytest.fixture(scope='module')
 def ddr():
-    global top_level_module_bitfile
-    f = FPGA(bitfile=top_level_module_bitfile)
+    f = FPGA()
     f.init_device()
     ddr = DDR3(fpga=f)
     yield ddr

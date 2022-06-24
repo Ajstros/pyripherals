@@ -7,26 +7,8 @@ Abe Stroschein, ajstroschein@stthomas.edu
 """
 
 import pytest
-import os
-import sys
-
-
-# The interfaces.py file is located in the covg_fpga folder so we need to find that folder. If it is not above the current directory, the program fails.
-cwd = os.getcwd()
-if 'covg_fpga' in cwd:
-    covg_fpga_index = cwd.index('covg_fpga')
-    covg_path = cwd[:covg_fpga_index + len('covg_fpga') + 1]
-else:
-    print('covg_fpga folder not found. Please navigate to the covg_fpga folder.')
-    assert False
-interfaces_path = os.path.join(covg_path, 'python/src')
-sys.path.append(interfaces_path)
-
-from interfaces.interfaces import FPGA, Endpoint
-from interfaces.peripherals.I2CController import I2CController
-
-top_level_module_bitfile = os.path.join(covg_path, 'fpga_XEM7310',
-                                        'fpga_XEM7310.runs', 'impl_1', 'top_level_module.bit')
+from pyripherals.core import FPGA, Endpoint
+from pyripherals.peripherals.I2CController import I2CController
 
 pytestmark = [pytest.mark.usable, pytest.mark.fpga_only]
 
@@ -41,11 +23,9 @@ message_eps = Endpoint.get_chip_endpoints('I2CTEST')
 # Fixtures
 @pytest.fixture(scope='module')
 def i2c_controller() -> I2CController:
-    global top_level_module_bitfile
-    f = FPGA(bitfile=top_level_module_bitfile)
+    f = FPGA()
     assert f.init_device()
-    Endpoint.update_endpoints_from_defines(ep_defines_path=os.path.join(covg_path, 'fpga_XEM7310',
-                                                                        'fpga_XEM7310.srcs', 'sources_1', 'ep_defines.v'))
+    Endpoint.update_endpoints_from_defines()
     yield I2CController(fpga=f, addr_pins=0, endpoints=Endpoint.get_chip_endpoints('I2CDAQ'))
     # Teardown
     f.xem.Close()
@@ -53,8 +33,7 @@ def i2c_controller() -> I2CController:
 
 # Tests
 def test_multiple_instances():
-    global top_level_module_bitfile
-    f = FPGA(bitfile=top_level_module_bitfile)
+    f = FPGA()
     i2c_types = ['I2CDC', 'I2CDAQ']
     for i2c_type in i2c_types:
         group1 = [

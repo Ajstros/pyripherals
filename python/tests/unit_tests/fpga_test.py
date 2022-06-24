@@ -6,26 +6,8 @@ Abe Stroschein, ajstroschein@stthomas.edu
 """
 
 import pytest
-import os
-import sys
 from random import randint
-
-
-# The interfaces.py file is located in the covg_fpga folder so we need to find that folder. If it is not above the current directory, the program fails.
-cwd = os.getcwd()
-if 'covg_fpga' in cwd:
-    covg_fpga_index = cwd.index('covg_fpga')
-    covg_path = cwd[:covg_fpga_index + len('covg_fpga') + 1]
-else:
-    print('covg_fpga folder not found. Please navigate to the covg_fpga folder.')
-    assert False
-interfaces_path = os.path.join(covg_path, 'python/src')
-sys.path.append(interfaces_path)
-
-top_level_module_bitfile = os.path.join(covg_path, 'fpga_XEM7310',
-                                        'fpga_XEM7310.runs', 'impl_1', 'top_level_module.bit')
-
-from interfaces.interfaces import FPGA, Endpoint
+from pyripherals.core import FPGA, Endpoint
 
 pytestmark = [pytest.mark.usable, pytest.mark.fpga_only]
 
@@ -33,7 +15,7 @@ pytestmark = [pytest.mark.usable, pytest.mark.fpga_only]
 # Fixtures
 @pytest.fixture(scope='module')
 def configured_fpga() -> FPGA:
-    f = FPGA(bitfile=top_level_module_bitfile)
+    f = FPGA()
     assert f.init_device()
     yield f
     # Teardown
@@ -45,8 +27,7 @@ def test_endpoints():
 
 # Tests
 def test_read_pipe_out(configured_fpga: FPGA, test_endpoints: dict[str, Endpoint]):
-    import numpy as np
-    from interfaces.utils import int_to_list
+    from pyripherals.utils import int_to_list
     test_num = 1234567890987654321
     test_list = int_to_list(test_num, byteorder='little')
     data_len = 16
