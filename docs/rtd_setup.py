@@ -16,6 +16,8 @@ registers_path: /python/Registers.xlsx'''
 
 print('home_dir:', home_dir)
 print('config_path:', config_path)
+print(os.path.exists('/python/Registers.xlsx'))
+print(os.path.abspath('/python/Registers.xlsx'))
 
 os.mkdir(home_dir)
 with open(config_path, 'w') as file:
