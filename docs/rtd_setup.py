@@ -12,7 +12,7 @@ doc_configs = '''endpoint_max_width: 32
 ep_defines_path: none
 fpga_bitfile_path: none
 frontpanel_path: none
-registers_path: ./python/Registers.xlsx'''
+registers_path: /python/Registers.xlsx'''
 
 print('home_dir:', home_dir)
 print('config_path:', config_path)
