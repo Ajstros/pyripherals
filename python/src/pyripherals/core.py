@@ -18,7 +18,7 @@ from .utils import gen_mask
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
 config_path = os.path.join(home_dir, 'config.yaml')
 if os.path.exists(config_path):
-    with open(os.path.join(home_dir, 'config.yaml'), 'r') as file:
+    with open(config_path, 'r') as file:
         configs = yaml.safe_load(file)
 
     # TODO: make sure this path works for Windows, Mac, and Linux: https://docs.opalkelly.com/fpsdk/frontpanel-api/programming-languages/
@@ -30,7 +30,10 @@ if os.path.exists(config_path):
         os.environ['PATH'] += os.pathsep + dll_dir
     elif sys.platform == 'darwin':
         sys.path.append(os.path.join(configs['frontpanel_path'], 'API/Python3/')) # Add _ok.so to PATH for import
-    import ok
+    try:
+        import ok
+    except ImportError:
+        warn(message=f"Could not find FrontPanel files. Is \n\tfrontpanel_path: {configs['frontpanel_path']} from {config_path} the correct path?", category=ImportWarning)
 else:
     from warnings import warn
     warn(message=f'No config.yaml file found at {config_path}. Use pyripherals.utils.create_yaml to create one.', category=UserWarning)
