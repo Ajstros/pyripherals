@@ -12,12 +12,12 @@ doc_configs = '''endpoint_max_width: 32
 ep_defines_path: none
 fpga_bitfile_path: none
 frontpanel_path: none
-registers_path: /python/Registers.xlsx'''
+registers_path: /home/docs/checkouts/readthedocs.org/user_builds/pyripherals/checkouts/latest/python/Registers.xlsx'''
 
 print('home_dir:', home_dir)
 print('config_path:', config_path)
-print(os.path.exists('/python/Registers.xlsx'))
-print(os.path.abspath('/python/Registers.xlsx'))
+print(os.path.exists('/home/docs/checkouts/readthedocs.org/user_builds/pyripherals/checkouts/latest/python/Registers.xlsx'))
+print(os.path.abspath('/home/docs/checkouts/readthedocs.org/user_builds/pyripherals/checkouts/latest/python/Registers.xlsx'))
 
 os.mkdir(home_dir)
 with open(config_path, 'w') as file:
