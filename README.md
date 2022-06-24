@@ -9,7 +9,7 @@
 _Note that not all of_ `pyripherals` _will work with Python 3.10_
 
 ```
-pip install PACKAGE_NAME
+pip install pyripherals
 ```
 
 To use an FPGA and peripherals:
@@ -24,11 +24,13 @@ To use an FPGA and peripherals:
 ```python
 >>> from interfaces.utils import create_yaml
 >>> create_yaml()
-YAML created at C:/Users/username/.PACKAGE_NAME
+YAML created at C:/Users/username/.pyripherals
 ```
 
-See [Installation Guide]() for more information.
+See [Installation Guide](https://pyripherals.readthedocs.io/en/latest/installation.html) for more information.
 
+## Documentation
+[Documentation](https://pyripherals.readthedocs.io/en/latest/index.html) is hosted on Read the Docs.
 
 ## Acknowledgements 
 
