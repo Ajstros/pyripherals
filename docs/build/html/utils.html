@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
 
   
   
@@ -168,21 +167,28 @@
             
   <div class="section" id="utils">
 <h1>utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="#module-pyripherals.utils" title="pyripherals.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyripherals.utils</span></code></a> contains several helpful methods used in peripheral classes that may be useful.</p>
+<p><a class="reference internal" href="#module-pyripherals.utils" title="pyripherals.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyripherals.utils</span></code></a> contains several methods used in peripheral classes that may be useful.</p>
 <span class="target" id="module-pyripherals.utils"></span><p>Module containing general functions useful to interfaces.</p>
-<p>June 2022</p>
-<p>Lucas Koerner, <a class="reference external" href="mailto:koer2434&#37;&#52;&#48;stthomas&#46;edu">koer2434<span>&#64;</span>stthomas<span>&#46;</span>edu</a>
-Abe Stroschein, <a class="reference external" href="mailto:ajstroschein&#37;&#52;&#48;stthomas&#46;edu">ajstroschein<span>&#64;</span>stthomas<span>&#46;</span>edu</a></p>
+<p>Abe Stroschein, <a class="reference external" href="mailto:ajstroschein&#37;&#52;&#48;stthomas&#46;edu">ajstroschein<span>&#64;</span>stthomas<span>&#46;</span>edu</a></p>
+<p>Lucas Koerner, <a class="reference external" href="mailto:koer2434&#37;&#52;&#48;stthomas&#46;edu">koer2434<span>&#64;</span>stthomas<span>&#46;</span>edu</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyripherals.utils.calc_impedance">
 <span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">calc_impedance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resistance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#calc_impedance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.calc_impedance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the impedance of an unknown component.</p>
 <p>It is assumed the voltage source is connect in series with both the resistor and the unknown component.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>numpy.ndarray</strong><span class="classifier">the array of impedances calculated.</span></dt><dd></dd>
-</dl>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v_in</strong> (<em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>)</em>) – The sinusoidal voltage source in the circuit.</p></li>
+<li><p><strong>v_out</strong> (<em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>)</em>) – The output voltage across the unknown component.</p></li>
+<li><p><strong>resistance</strong> (<em>int</em><em> or </em><em>float</em>) – The resistance of the resistor in the circuit in Ohms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>numpy.ndarray</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>the array of impedances calculated.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,13 +213,21 @@ Abe Stroschein, <a class="reference external" href="mailto:ajstroschein&#37;&#52
 Then we divide the voltage by the bit-voltage and round to an integer to
 find the binary data representation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>int or float or list</strong><span class="classifier">voltage version of the binary data in similar form voltage was given in</span></dt><dd><p>int -&gt; int
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>voltage</strong> (<em>int</em><em> or </em><em>float</em><em> or </em><em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>) or </em><em>numpy.ndarray</em><em>(</em><em>numpy.uint16</em><em>)</em>) – The method will return the converted version of either.</p></li>
+<li><p><strong>voltage_range</strong> (<em>int</em>) – The total voltage range used for the voltage.</p></li>
+<li><p><strong>with_negatives</strong> (<em>bool</em>) – True to convert the voltage with full negative at 0x0, zero at half
+scale, and full positive at full scale, False otherwise.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>int or float or list</strong> – int -&gt; int
 float -&gt; int
 list, numpy.ndarray -&gt; list(int)</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>voltage version of the binary data in similar form voltage was given in</p>
 </dd>
 </dl>
 </dd></dl>
@@ -230,17 +244,14 @@ list, numpy.ndarray -&gt; list(int)</p>
 <dd><p>Convert an integer into a list of integers 1 byte long.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>integer</strong><span class="classifier">int</span></dt><dd><p>The integer to convert.</p>
-</dd>
-<dt><strong>byteorder</strong><span class="classifier">str</span></dt><dd><p>Either ‘little’ for little Endian (LSB first) or ‘big’ for big Endian
-(MSB first).</p>
-</dd>
-<dt><strong>num_bytes</strong><span class="classifier">int</span></dt><dd><p>The number of bytes to convert the number into. None means the
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>integer</strong> (<em>int</em>) – The integer to convert.</p></li>
+<li><p><strong>byteorder</strong> (<em>str</em>) – Either ‘little’ for little Endian (LSB first) or ‘big’ for big Endian
+(MSB first).</p></li>
+<li><p><strong>num_bytes</strong> (<em>int</em>) – The number of bytes to convert the number into. None means the
 function will return the minimum number of bytes necessary to
-represent the number.</p>
-</dd>
-</dl>
+represent the number.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -251,11 +262,19 @@ represent the number.</p>
 <dd><p>Read in h5 data and return the time and adc_data for the channels in
 input list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>(numpy.ndarray) time</dt><dd></dd>
-<dt>(dicionary of numpy.ndarrays) adc data</dt><dd></dd>
-</dl>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>string</strong><strong>)</strong> (<em>file_name</em>) – </p></li>
+<li><p><strong>(</strong><strong>string</strong><strong>)</strong> – </p></li>
+<li><p><strong>ints</strong><strong>)</strong> (<em>chan_list</em><em> (</em><em>list of</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(numpy.ndarray) time</em></p></li>
+<li><p><em>(dicionary of numpy.ndarrays) adc data</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -274,12 +293,19 @@ input list</p>
 to determine the voltage per bit. Then we multiply the binary data by
 that voltage for the total voltage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>float or list</strong><span class="classifier">binary version of the voltage data in similar form data was given in</span></dt><dd><p>int -&gt; float
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>) or </em><em>numpy.ndarray</em><em>(</em><em>numpy.uint16</em><em>)</em>) – The method will return the converted version of either.</p></li>
+<li><p><strong>voltage_range</strong> (<em>int</em>) – The total voltage range used for the data.</p></li>
+<li><p><strong>use_twos_comp</strong> (<em>bool</em>) – True if the given data is in two’s complement form, False otherwise.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>float or list</strong> – int -&gt; float
 list, numpy.ndarray -&gt; list(float)</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>binary version of the voltage data in similar form data was given in</p>
 </dd>
 </dl>
 </dd></dl>
