@@ -30,7 +30,7 @@ pip
 
 FPGA
 ------------
-To use the FPGA class with an Opal Kelly FrontPanel-supported device, you will also need to download the `FrontPanel SDK <https://pins.opalkelly.com/downloads>`_ from Opal Kelly. If you are using a MAC see the :ref:`mac_ok_setup`. 
+To use the FPGA class with an Opal Kelly FrontPanel-supported device, you will also need to download the `FrontPanel SDK <https://pins.opalkelly.com/downloads>`_ from Opal Kelly. If you are using a MAC see the :ref:`mac_ok_setup` section.
 You will also need to update the config.yaml file. See the :ref:`installation_yaml` section and example.
 
 .. _installation_peripherals:
