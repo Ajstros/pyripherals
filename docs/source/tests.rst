@@ -8,7 +8,7 @@ Tests
     >>> pip install pytest
 
 All tests are available in the `tests folder on the GitHub <https://github.com/Ajstros/pyripherals/tree/main/python/tests>`_
-All automated and working tests can be run with the "usable" marker.
+All automated and working tests can be run with the "usable" marker. To run the tests clone the repository and navigate into the repository. 
 
 .. code-block:: python
 
@@ -20,4 +20,4 @@ More specific marks are available for different setups. Simply replace "usable" 
 
 * fpga_only: use if you have an FPGA connected
 
-* usable: all working automated tests; may require FPGA and connected peripherals 
+* usable: all working automated tests; requires an FPGA and connected peripherals which is very specific to our lab

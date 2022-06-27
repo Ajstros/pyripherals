@@ -30,7 +30,7 @@ pip
 
 FPGA
 ------------
-To use the FPGA class with an Opal Kelly FrontPanel-supported device, you will also need to download the `FrontPanel SDK <https://pins.opalkelly.com/downloads>`_ from Opal Kelly.
+To use the FPGA class with an Opal Kelly FrontPanel-supported device, you will also need to download the `FrontPanel SDK <https://pins.opalkelly.com/downloads>`_ from Opal Kelly. If you are using a MAC see the :ref:`mac_ok_setup` section.
 You will also need to update the config.yaml file. See the :ref:`installation_yaml` section and example.
 
 .. _installation_peripherals:
@@ -56,7 +56,9 @@ import :py:meth:`pyripherals.utils.create_yaml` and run it like below.
     YAML created at C:/Users/username/.pyripherals
 
 From there, you can configure the options available by editing the config.yaml file created at the path given
-after running :py:meth:`pyripherals.utils.create_yaml`. An example YAML is shown below.
+after running :py:meth:`pyripherals.utils.create_yaml`. An example YAML is shown below. Note that the paths to
+ep_defines.v, the FPGA bitfile, and the Registers.xlsx spreadsheet go directly to files, but the FrontPanel path
+goes to the FrontPanelUSB folder of your installation.
 
 .. code-block:: yaml
 
@@ -65,3 +67,20 @@ after running :py:meth:`pyripherals.utils.create_yaml`. An example YAML is shown
     fpga_bitfile_path: C:/Users/username/my_project/top_level_module.bit
     frontpanel_path: C:/Program Files/Opal Kelly/FrontPanelUSB
     registers_path: C:/Users/username/my_project/Registers.xlsx
+
+.. _mac_ok_setup:
+
+Opal Kelly Setup on MAC
+-----------------------
+The _ok.so shared library needs to be able to "find" the libokFrontPanel.dylib. Navigate to the FrontPanel API directory: e.g. frontpanel/API/Python3/ and check where _ok.so is searching for libokFrontPanel.dylib using otool.
+
+.. code-block:: console 
+
+    $ otool -L _ok.so
+
+This output indicates that the Python import of ok will fail since libok is one directory up. Change this using install_name_tool.
+
+.. code-block:: console 
+
+    $ install_name_tool -change libokFrontPanel.dylib /fullpath/to/libokFrontPanel/libokFrontPanel.dylib _ok.so
+

@@ -1,9 +1,8 @@
 """Module containing general functions useful to interfaces.
 
-June 2022
+Abe Stroschein, ajstroschein@stthomas.edu
 
 Lucas Koerner, koer2434@stthomas.edu
-Abe Stroschein, ajstroschein@stthomas.edu
 """
 
 import numpy as np
