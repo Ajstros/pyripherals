@@ -110,11 +110,13 @@ class Endpoint:
     bit_index_high : int
         Index of the MSB of the Endpoint.
     bit_width : int
-        Width of the Endpoint in bits.
+        Width of the Endpoint in bits. This number is used when using advance_endpoints if gen_bit is True.
     gen_bit : bool
-        Whether to increment the bits when incrementing the endpoint.
+        Whether to increment the bits when incrementing the Endpoint.
     gen_address : bool
-        Whether to increment the address when incrementing the endpoint.
+        Whether to increment the address when incrementing the Endpoint.
+    addr_step : int
+        How much to add to the address when using advance_endpoints if gen_address is True.
     """
 
     MAX_WIDTH = configs['endpoint_max_width']  # Maximum bit width of an Endpoint. Used to wrap Endpoints to the next address when incrementing
@@ -122,7 +124,7 @@ class Endpoint:
     I2CDAQ_level_shifted = dict()
     I2CDAQ_QW = dict()
 
-    def __init__(self, address, bit_index_low, bit_width, gen_bit, gen_address):
+    def __init__(self, address, bit_index_low, bit_width, gen_bit, gen_address, addr_step=1):
         self.address = address
         self.bit_index_low = bit_index_low
         # Endpoints that are only containing addresses will be generated from ep_defines.v with bit_index_low = None
@@ -133,6 +135,7 @@ class Endpoint:
         self.bit_width = bit_width
         self.gen_bit = gen_bit
         self.gen_address = gen_address
+        self.addr_step = addr_step
 
     def __str__(self):
         str_rep = '0x{:0x}[{}:{}]'.format(
@@ -165,6 +168,19 @@ class Endpoint:
             if pieces[0] != '`define':
                 # Line does not define an endpoint, skip
                 continue
+
+            # Grab "addr_step" and remove from pieces to leave later steps the same
+            shortened_pieces = [x[:len('addr_step')] for x in pieces]
+            if 'addr_step' in shortened_pieces:
+                addr_step_text = pieces.pop(shortened_pieces.index('addr_step'))
+                try:
+                    addr_step = addr_step_text[len('addr_step='):]
+                    addr_step = int(addr_step)
+                except ValueError as e:
+                    raise ValueError(f'addr_step not assigned to int in line {lines.index(line) + 1} of "{ep_defines_path}". Got addr_step={addr_step} instead.')
+            else:
+                # No addr_step assigned, default to 1
+                addr_step = 1
 
             # Extract data from definition
             # Class name
@@ -221,7 +237,7 @@ class Endpoint:
                 bit_width = int(pieces[5].split('=')[1])
 
             endpoint = Endpoint(address=address, bit_index_low=bit,
-                                bit_width=bit_width, gen_bit=gen_bit, gen_address=gen_address)
+                                bit_width=bit_width, gen_bit=gen_bit, gen_address=gen_address, addr_step=addr_step)
 
             # Put defined endpoint in endpoints_from_defines dictionary
             if Endpoint.endpoints_from_defines.get(class_name) is None:
@@ -354,9 +370,15 @@ class Endpoint:
     @staticmethod
     def advance_endpoints(endpoints_dict, advance_num=1):
         """
-        Advances Endpoints in a dict in place by advance_num. Checks each
-        Endpoint's gen_bit and gen_address attributes to see whether to
-        increment the bit or the address or both.
+        Advances Endpoints in a dict in place by advance_num.
+        
+        Checks each Endpoint's gen_bit and gen_address attributes to see
+        whether to increment the bit or the address or both. The Endpoint's
+        bit_width and addr_step attributes determine how much to increment the
+        bits or address by. If the Endpoint's bits would exceed
+        Endpoint.MAX_WIDTH (determined from config.yaml), then the bits wrap
+        around to start at bit zero on the next address determined by adding
+        the Endpoint's addr_step attribute.
 
         Example usage:
             endpoints=Endpoint.advance_endpoints(Endpoint.get_chip_endpoints('I2CDAQ'),1)
@@ -379,16 +401,16 @@ class Endpoint:
                 endpoint.bit_index_low += (endpoint.bit_width * advance_num)
                 if endpoint.bit_index_low > Endpoint.MAX_WIDTH:
                     # Endpoint does not fit, wrap to next address
-                    endpoint.address += 1
+                    endpoint.address += endpoint.addr_step
                     endpoint.bit_index_low %= Endpoint.MAX_WIDTH
                 endpoint.bit_index_high = endpoint.bit_index_low + endpoint.bit_width
                 if endpoint.bit_index_high > Endpoint.MAX_WIDTH:
                     # Endpoint split across two addresses -> move to next address, start at bit 0
-                    endpoint.address += 1
+                    endpoint.address += endpoint.addr_step
                     endpoint.bit_index_low = 0
                     endpoint.bit_index_high = endpoint.bit_index_low + endpoint.bit_width
             if endpoint.gen_address:
-                endpoint.address += advance_num
+                endpoint.address += advance_num * endpoint.addr_step
         return endpoints_dict
 
 # Class for the FPGA itself. Handles FPGA configuration, setting wire values,
