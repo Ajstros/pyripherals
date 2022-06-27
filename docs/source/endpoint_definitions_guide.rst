@@ -102,7 +102,7 @@ Alternatively, enter the information in an Excel spreadsheet copy of this `templ
 
 - **GEN_ADDR:** _GEN_ADDR (see :ref:`ep-defines-guide-bit-indices` section) from above. Enter True or False.
 
-- **Address Step:** ADDR_STEP (see :ref:`ep-defines-guide-bit-indices` section) from above. Leave empty to default to 1.
+- **Address Step:** ADDR_STEP (see :ref:`ep-defines-guide-addresses` section) from above. Leave empty to default to 1.
 
 - **Generated Name:** automatically generated chip name with Endpoint name. Since this is the name the “Address (hex)” column needs when referencing another Endpoint, referencing this cell allows you to have any future name changes to the address Endpoint reflected in the “Address (hex)” column of any Endpoint referencing it.
 
