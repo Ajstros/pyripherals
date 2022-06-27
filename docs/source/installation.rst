@@ -56,7 +56,9 @@ import :py:meth:`pyripherals.utils.create_yaml` and run it like below.
     YAML created at C:/Users/username/.pyripherals
 
 From there, you can configure the options available by editing the config.yaml file created at the path given
-after running :py:meth:`pyripherals.utils.create_yaml`. An example YAML is shown below.
+after running :py:meth:`pyripherals.utils.create_yaml`. An example YAML is shown below. Note that the paths to
+ep_defines.v, the FPGA bitfile, and the Registers.xlsx spreadsheet go directly to files, but the FrontPanel path
+goes to the FrontPanelUSB folder of your installation.
 
 .. code-block:: yaml
 
