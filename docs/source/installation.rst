@@ -70,7 +70,7 @@ after running :py:meth:`pyripherals.utils.create_yaml`. An example YAML is shown
 
 Opal Kelly Setup on MAC
 -----------------------
-The _ok.so shared library needs to be able to "find" the libokFrontPanel.dylib. Navigate to the FrontPanel API directory: e.g. frontpanel/API/Python3/ and check where _ok.so is searching for libokFrontPanel.dylib using ttool
+The _ok.so shared library needs to be able to "find" the libokFrontPanel.dylib. Navigate to the FrontPanel API directory: e.g. frontpanel/API/Python3/ and check where _ok.so is searching for libokFrontPanel.dylib using otool.
 
 .. code-block:: console 
 
