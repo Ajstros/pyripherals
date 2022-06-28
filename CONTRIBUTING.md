@@ -3,7 +3,7 @@ This is an open source project, and your contributions are welcome! Below are a 
 
 - Open an [issue](https://github.com/Ajstros/pyripherals/issues) to let us know about bugs or features you would like to see
 - Add to the documentation
-- Add code for more peripherals
+- Add code for [more peripherals](https://pyripherals.readthedocs.io/en/latest/new_peripheral_guide.html)
 - Help close [open issues](https://github.com/Ajstros/pyripherals/issues)
 
 To add code, first fork the repo at [https://github.com/Ajstros/pyripherals](https://github.com/Ajstros/pyripherals), and after adding your code to the forked repo, submit a [pull request](https://github.com/Ajstros/pyripherals/pulls). Links to more information on using GitHub for these things are below.

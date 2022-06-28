@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
 
   
   
@@ -170,7 +169,7 @@
 <p>One example of using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pyripherals</span></code> is an impedance analyzer which calculates the impedance of an unknown
 component. For this example you will need an Opal Kelly XEM7310 FPGA connected to your computer as well as a
 <a class="reference external" href="https://www.ti.com/product/DAC80508">DAC80508</a> and <a class="reference external" href="https://www.ti.com/product/ADS8686S">ADS8686</a>
-connected to the FPGA. The pin connections between the FPGA and these peripherals are as follows:</p>
+connected to the FPGA (the ADS8686 is available on an <a class="reference external" href="https://www.digikey.com/en/products/detail/texas-instruments/ADS8686SEVM-PDK/11308735?s=N4IgTCBcDaIIYBMDOAOAbOgBCAugXyA">eval kit</a> and the DAC8058 could be mounted onto a <a class="reference external" href="https://www.digikey.com/en/products/detail/chip-quik-inc/IPC0006/5014791">VQFN4x4 breakout board</a>). The pin connections between the FPGA on the XEM7310 and these peripherals are as follows:</p>
 <p>DAC80508</p>
 <ul class="simple">
 <li><p>SDI - L3</p></li>
@@ -182,9 +181,9 @@ connected to the FPGA. The pin connections between the FPGA and these peripheral
 <li><p>SDOA - N5</p></li>
 <li><p>SDOB - N2</p></li>
 </ul>
-<p>Also download the <a class="reference external" href="https://github.com/lucask07/covg_fpga/blob/daq_v2/fpga_XEM7310/fpga_XEM7310.runs/impl_1/top_level_module.bit">top_level_module.bit</a>
-bitfile and <a class="reference external" href="https://github.com/lucask07/covg_fpga/blob/daq_v2/examples/impedance_analyzer.py">impedance_analyzer.py</a>
-file from the GitHub. Change the BITFILE_PATH constant in impedance_analyzer.py to the path of
+<p>Also download the <a class="reference external" href="https://github.com/Ajstros/pyripherals/blob/main/examples/top_level_module.bit">top_level_module.bit</a>
+bitfile, <a class="reference external" href="https://github.com/Ajstros/pyripherals/blob/main/examples/ep_defines.v">ep_defines</a>, <a class="reference external" href="https://github.com/Ajstros/pyripherals/blob/main/python/Registers.xlsx">Registers.xlsx</a>, and the <a class="reference external" href="https://github.com/Ajstros/pyripherals/blob/main/examples/impedance_analyzer.py">impedance_analyzer.py</a>
+Python file from the GitHub. Change the BITFILE_PATH constant in impedance_analyzer.py to the path of
 top_level_module.bit on your computer. Read through the documentation included in impedance_analyzer.py
 to understand the other constants you can change as well as the setup of the circuit. You can then run
 impedance_analyzer.py.</p>

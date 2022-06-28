@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
 
   
   
@@ -182,20 +181,50 @@
 <dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyripherals.peripherals.I2CController.</span></span><span class="sig-name descname"><span class="pre">I2CController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr_pins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i2c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'m_nDataStart':</span> <span class="pre">7,</span> <span class="pre">'m_pBuf':</span> <span class="pre">[]}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/I2CController.html#I2CController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for controllers on the FPGA using I2C protocol.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.I2C_MAX_TIMEOUT_MS">
+<span class="sig-name descname"><span class="pre">I2C_MAX_TIMEOUT_MS</span></span><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.I2C_MAX_TIMEOUT_MS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum wait time until transmission timeout in milliseconds.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>I2C_MAX_TIMEOUT_MS</strong><span class="classifier">int</span></dt><dd><p>Maximum wait time until transmission timeout in milliseconds.</p>
-</dd>
-<dt><strong>i2c</strong><span class="classifier">dict</span></dt><dd><p>Dictionary of I2C memory buffer and data start location.</p>
-</dd>
-<dt><strong>fpga</strong><span class="classifier">FPGA</span></dt><dd><p>FPGA instance this controller uses to communicate.</p>
-</dd>
-<dt><strong>endpoints</strong><span class="classifier">dict</span></dt><dd><p>Endpoints on the FPGA this controller uses to communicate.</p>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.i2c">
+<span class="sig-name descname"><span class="pre">i2c</span></span><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.i2c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of I2C memory buffer and data start location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.fpga">
+<span class="sig-name descname"><span class="pre">fpga</span></span><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.fpga" title="Permalink to this definition">¶</a></dt>
+<dd><p>FPGA instance this controller uses to communicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#pyripherals.core.FPGA" title="pyripherals.core.FPGA">FPGA</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.endpoints">
+<span class="sig-name descname"><span class="pre">endpoints</span></span><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoints on the FPGA this controller uses to communicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.create_chips">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_chips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr_pins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/I2CController.html#I2CController.create_chips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.create_chips" title="Permalink to this definition">¶</a></dt>
@@ -203,18 +232,16 @@
 <p>The FPGA and endpoints will be the same for all instantiated chips.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>fpga</strong><span class="classifier">FPGA</span></dt><dd><p>The fpga instance for the chip to connect with.</p>
-</dd>
-<dt><strong>addr_pins</strong><span class="classifier">list</span></dt><dd><p>The list of addr_pins assigned to the new chips.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fpga</strong> (<a class="reference internal" href="core.html#pyripherals.core.FPGA" title="pyripherals.core.FPGA"><em>FPGA</em></a>) – The fpga instance for the chip to connect with.</p></li>
+<li><p><strong>addr_pins</strong> (<em>list</em>) – The list of addr_pins assigned to the new chips.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A list of the newly instantiated chips in the same order addr_pins was given in.</p>
+<dd class="field-even"><p>A list of the newly instantiated chips in the same order addr_pins was given in.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -231,14 +258,11 @@
 <dd><p>Read data_length bytes from regAddr on devAddr.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>devAddr</strong><span class="classifier">int</span></dt><dd><p>8 bit address (don’t set the read bit (LSB) since this is done in this function)</p>
-</dd>
-<dt><strong>regAddr</strong><span class="classifier">int</span></dt><dd><p>Written to device (this is a list and must be even if length 1)</p>
-</dd>
-<dt><strong>data_length</strong><span class="classifier">int</span></dt><dd><p>Number of bytes expected to receive</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>devAddr</strong> (<em>int</em>) – 8 bit address (don’t set the read bit (LSB) since this is done in this function)</p></li>
+<li><p><strong>regAddr</strong> (<em>int</em>) – Written to device (this is a list and must be even if length 1)</p></li>
+<li><p><strong>data_length</strong> (<em>int</em>) – Number of bytes expected to receive</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -274,48 +298,108 @@
 <dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyripherals.peripherals.SPIController.</span></span><span class="sig-name descname"><span class="pre">SPIController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">master_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/SPIController.html#SPIController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for controllers on the FPGA using SPI protocol.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.WB_SET_ADDRESS">
+<span class="sig-name descname"><span class="pre">WB_SET_ADDRESS</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.WB_SET_ADDRESS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set address command for the Wishbone.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>WB_SET_ADDRESS</strong><span class="classifier">int</span></dt><dd><p>Set address command for the Wishbone.</p>
-</dd>
-<dt><strong>WB_WRITE</strong><span class="classifier">int</span></dt><dd><p>Write command for the Wishbone.</p>
-</dd>
-<dt><strong>WB_READ</strong><span class="classifier">int</span></dt><dd><p>Read command for the Wishbone.</p>
-</dd>
-<dt><strong>WB_CLK_FREQ</strong><span class="classifier">int</span></dt><dd><p>Frequency of the clock the Wishbone runs on.</p>
-</dd>
-<dt><strong>fpga</strong><span class="classifier">FPGA</span></dt><dd><p>FPGA instance this controller uses to communicate.</p>
-</dd>
-<dt><strong>endpoints</strong><span class="classifier">dict</span></dt><dd><p>Endpoints on the FPGA this controller uses to communicate.</p>
-</dd>
-<dt><strong>master_config</strong><span class="classifier">int</span></dt><dd><p>Value of the CTRL register in the Wishbone.</p>
-</dd>
-<dt><strong>registers</strong><span class="classifier">dict</span></dt><dd><p>Name-Register pairs for the internal registers of the Wishbone.</p>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.WB_WRITE">
+<span class="sig-name descname"><span class="pre">WB_WRITE</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.WB_WRITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write command for the Wishbone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.WB_READ">
+<span class="sig-name descname"><span class="pre">WB_READ</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.WB_READ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read command for the Wishbone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.WB_CLK_FREQ">
+<span class="sig-name descname"><span class="pre">WB_CLK_FREQ</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.WB_CLK_FREQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frequency of the clock the Wishbone runs on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.fpga">
+<span class="sig-name descname"><span class="pre">fpga</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.fpga" title="Permalink to this definition">¶</a></dt>
+<dd><p>FPGA instance this controller uses to communicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#pyripherals.core.FPGA" title="pyripherals.core.FPGA">FPGA</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.endpoints">
+<span class="sig-name descname"><span class="pre">endpoints</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoints on the FPGA this controller uses to communicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.master_config">
+<span class="sig-name descname"><span class="pre">master_config</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.master_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of the CTRL register in the Wishbone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.registers">
+<span class="sig-name descname"><span class="pre">registers</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.registers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name-Register pairs for the internal registers of the Wishbone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.SPIController.SPIController.configure_master">
 <span class="sig-name descname"><span class="pre">configure_master</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ASS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LSB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tx_NEG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rx_NEG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CHAR_LEN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/SPIController.html#SPIController.configure_master"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.SPIController.SPIController.configure_master" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the Wishbone’s CTRL register using several parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ASS</strong><span class="classifier">bool or int</span></dt><dd><p>Automatic Slave Select</p>
-</dd>
-<dt><strong>IE</strong><span class="classifier">bool or int</span></dt><dd><p>Set interrupt output active after a transfer is finished</p>
-</dd>
-<dt><strong>LSB</strong><span class="classifier">bool or int</span></dt><dd><p>Send LSB first</p>
-</dd>
-<dt><strong>Tx_NEG</strong><span class="classifier">bool or int</span></dt><dd><p>Change output signal on falling edge of SCLK</p>
-</dd>
-<dt><strong>Rx_NEG</strong><span class="classifier">bool or int</span></dt><dd><p>Latch input signal on falling edge of SCLK</p>
-</dd>
-<dt><strong>CHAR_LEN</strong><span class="classifier">bool or int</span></dt><dd><p>Number of bits transmitted per transfer (up to 64).</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ASS</strong> (<em>bool</em><em> or </em><em>int</em>) – Automatic Slave Select</p></li>
+<li><p><strong>IE</strong> (<em>bool</em><em> or </em><em>int</em>) – Set interrupt output active after a transfer is finished</p></li>
+<li><p><strong>LSB</strong> (<em>bool</em><em> or </em><em>int</em>) – Send LSB first</p></li>
+<li><p><strong>Tx_NEG</strong> (<em>bool</em><em> or </em><em>int</em>) – Change output signal on falling edge of SCLK</p></li>
+<li><p><strong>Rx_NEG</strong> (<em>bool</em><em> or </em><em>int</em>) – Latch input signal on falling edge of SCLK</p></li>
+<li><p><strong>CHAR_LEN</strong> (<em>bool</em><em> or </em><em>int</em>) – Number of bits transmitted per transfer (up to 64).</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -443,24 +527,72 @@ reformat to 34 bits.</p>
 <dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyripherals.peripherals.SPIFifoDriven.</span></span><span class="sig-name descname"><span class="pre">SPIFifoDriven</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">master_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_mux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'DDR':</span> <span class="pre">0,</span> <span class="pre">'DDR_norepeat':</span> <span class="pre">3,</span> <span class="pre">'ad7961_ch0':</span> <span class="pre">4,</span> <span class="pre">'ad7961_ch1':</span> <span class="pre">5,</span> <span class="pre">'ad7961_ch2':</span> <span class="pre">6,</span> <span class="pre">'ad7961_ch3':</span> <span class="pre">7,</span> <span class="pre">'ads8686_chA':</span> <span class="pre">2,</span> <span class="pre">'host':</span> <span class="pre">1}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/SPIFifoDriven.html#SPIFifoDriven"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for SPI controllers on the FPGA driven by a FIFO.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.default_data_mux">
+<span class="sig-name descname"><span class="pre">default_data_mux</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.default_data_mux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class attribute. Default data_mux dictionary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>default_data_mux</strong><span class="classifier">dict</span></dt><dd><p>Class attribute. Default data_mux dictionary.</p>
-</dd>
-<dt><strong>fpga</strong><span class="classifier">FPGA</span></dt><dd><p>FPGA instance this controller uses to communicate.</p>
-</dd>
-<dt><strong>endpoints</strong><span class="classifier">dict</span></dt><dd><p>Endpoints on the FPGA this controller uses to communicate.</p>
-</dd>
-<dt><strong>master_config</strong><span class="classifier">int</span></dt><dd><p>Value of the CTRL register in the Wishbone.</p>
-</dd>
-<dt><strong>data_mux: dict</strong></dt><dd><p>Name to select value dictionary for source data MUX.</p>
-</dd>
-<dt><strong>current_data_mux</strong><span class="classifier">str</span></dt><dd><p>Name of the current MUX data source.</p>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.fpga">
+<span class="sig-name descname"><span class="pre">fpga</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.fpga" title="Permalink to this definition">¶</a></dt>
+<dd><p>FPGA instance this controller uses to communicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#pyripherals.core.FPGA" title="pyripherals.core.FPGA">FPGA</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.endpoints">
+<span class="sig-name descname"><span class="pre">endpoints</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Endpoints on the FPGA this controller uses to communicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.master_config">
+<span class="sig-name descname"><span class="pre">master_config</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.master_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of the CTRL register in the Wishbone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.data_mux">
+<span class="sig-name descname"><span class="pre">data_mux</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.data_mux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name to select value dictionary for source data MUX.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.current_data_mux">
+<span class="sig-name descname"><span class="pre">current_data_mux</span></span><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.current_data_mux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the current MUX data source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.create_chips">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_chips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_chips</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">master_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/SPIFifoDriven.html#SPIFifoDriven.create_chips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.SPIFifoDriven.SPIFifoDriven.create_chips" title="Permalink to this definition">¶</a></dt>
@@ -512,10 +644,7 @@ endpoints there are ready for another instantiation if needed.</p>
 <dd><p>Configure the MUX that routes data source to the SPI output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>source</strong><span class="classifier">str</span></dt><dd><p>See SPIFifoDriven.data_mux dict for options and conversion.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>source</strong> (<em>str</em>) – See SPIFifoDriven.data_mux dict for options and conversion.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -544,20 +673,41 @@ endpoints there are ready for another instantiation if needed.</p>
 <dd><p>Class for the I/O Expander TCA9555.</p>
 <p>Subclass of the I2CController class. Attributes and methods below are
 differences in this class from I2CController only.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ADDRESS_HEADER</strong><span class="classifier">int</span></dt><dd><p>7-bit device address with R/W bit space and 4 MSBs filled in specific
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.TCA9555.TCA9555.ADDRESS_HEADER">
+<span class="sig-name descname"><span class="pre">ADDRESS_HEADER</span></span><a class="headerlink" href="#pyripherals.peripherals.TCA9555.TCA9555.ADDRESS_HEADER" title="Permalink to this definition">¶</a></dt>
+<dd><p>7-bit device address with R/W bit space and 4 MSBs filled in specific
 to this chip. The rest is left as 0 to be filled in later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
-<dt><strong>registers</strong><span class="classifier">dict</span></dt><dd><p>Name-Register pairs for the internal registers of the TCA9555 chip.</p>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.TCA9555.TCA9555.registers">
+<span class="sig-name descname"><span class="pre">registers</span></span><a class="headerlink" href="#pyripherals.peripherals.TCA9555.TCA9555.registers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name-Register pairs for the internal registers of the TCA9555 chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
-<dt><strong>addr_pins</strong><span class="classifier">int</span></dt><dd><p>3 LSBs of the 7-bit device address formed alongside the address header
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.TCA9555.TCA9555.addr_pins">
+<span class="sig-name descname"><span class="pre">addr_pins</span></span><a class="headerlink" href="#pyripherals.peripherals.TCA9555.TCA9555.addr_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>3 LSBs of the 7-bit device address formed alongside the address header
 used to differentiate between different instances of the TCA9555 chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
-</dd>
-</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.TCA9555.TCA9555.configure_pins">
 <span class="sig-name descname"><span class="pre">configure_pins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/TCA9555.html#TCA9555.configure_pins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.TCA9555.TCA9555.configure_pins" title="Permalink to this definition">¶</a></dt>
@@ -584,20 +734,41 @@ used to differentiate between different instances of the TCA9555 chip.</p>
 <dd><p>Class for the ID chip 24AA025UID.</p>
 <p>Subclass of the I2CController class. Attributes and methods below are
 differences in this class from I2CController only.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ADDRESS_HEADER</strong><span class="classifier">int</span></dt><dd><p>7-bit device address with R/W bit space and 4 MSBs filled in specific
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.ADDRESS_HEADER">
+<span class="sig-name descname"><span class="pre">ADDRESS_HEADER</span></span><a class="headerlink" href="#pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.ADDRESS_HEADER" title="Permalink to this definition">¶</a></dt>
+<dd><p>7-bit device address with R/W bit space and 4 MSBs filled in specific
 to this chip. The rest is left as 0 to be filled in later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
-<dt><strong>registers</strong><span class="classifier">dict</span></dt><dd><p>Name-Register pairs for the internal registers of the TCA9555 chip.</p>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.registers">
+<span class="sig-name descname"><span class="pre">registers</span></span><a class="headerlink" href="#pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.registers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name-Register pairs for the internal registers of the TCA9555 chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
-<dt><strong>addr_pins</strong><span class="classifier">int</span></dt><dd><p>3 LSBs of the 7-bit device address formed alongside the address header
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.addr_pins">
+<span class="sig-name descname"><span class="pre">addr_pins</span></span><a class="headerlink" href="#pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.addr_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>3 LSBs of the 7-bit device address formed alongside the address header
 used to differentiate between different instances of the TCA9555 chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
-</dd>
-</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.get_device_code">
 <span class="sig-name descname"><span class="pre">get_device_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/UID_24AA025UID.html#UID_24AA025UID.get_device_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.UID_24AA025UID.UID_24AA025UID.get_device_code" title="Permalink to this definition">¶</a></dt>
@@ -638,20 +809,41 @@ used to differentiate between different instances of the TCA9555 chip.</p>
 <dd><p>Class for the I2C DAC chip DAC53401.</p>
 <p>Subclass of the I2CController class. Attributes and methods below are
 differences in this class from I2CController only.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ADDRESS_HEADER</strong><span class="classifier">int</span></dt><dd><p>7-bit device address with R/W bit space and 4 MSBs filled in specific
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC53401.DAC53401.ADDRESS_HEADER">
+<span class="sig-name descname"><span class="pre">ADDRESS_HEADER</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC53401.DAC53401.ADDRESS_HEADER" title="Permalink to this definition">¶</a></dt>
+<dd><p>7-bit device address with R/W bit space and 4 MSBs filled in specific
 to this chip. The rest is left as 0 to be filled in later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
-<dt><strong>registers</strong><span class="classifier">dict</span></dt><dd><p>Name-Register pairs for the internal registers of the TCA9555 chip.</p>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC53401.DAC53401.registers">
+<span class="sig-name descname"><span class="pre">registers</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC53401.DAC53401.registers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name-Register pairs for the internal registers of the TCA9555 chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
-<dt><strong>addr_pins</strong><span class="classifier">int</span></dt><dd><p>3 LSBs of the 7-bit device address formed alongside the address header
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC53401.DAC53401.addr_pins">
+<span class="sig-name descname"><span class="pre">addr_pins</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC53401.DAC53401.addr_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>3 LSBs of the 7-bit device address formed alongside the address header
 used to differentiate between different instances of the TCA9555 chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
-</dd>
-</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DAC53401.DAC53401.config_func">
 <span class="sig-name descname"><span class="pre">config_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DAC53401.html#DAC53401.config_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DAC53401.DAC53401.config_func" title="Permalink to this definition">¶</a></dt>
@@ -788,16 +980,28 @@ Internal reference must be enabled.</p>
 <dd><p>Class for the Time-of-flight I2C device</p>
 <p>Subclass of the I2CController class. Attributes and methods below are
 differences in this class from I2CController only.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.TMF8801.TMF8801.ADDRESS">
+<span class="sig-name descname"><span class="pre">ADDRESS</span></span><a class="headerlink" href="#pyripherals.peripherals.TMF8801.TMF8801.ADDRESS" title="Permalink to this definition">¶</a></dt>
+<dd><p>7-bit device address with R/W bit space</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ADDRESS</strong><span class="classifier">int</span></dt><dd><p>7-bit device address with R/W bit space</p>
-</dd>
-<dt><strong>registers</strong><span class="classifier">dict</span></dt><dd><p>Name-Register pairs for the internal registers of the chip.</p>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.TMF8801.TMF8801.registers">
+<span class="sig-name descname"><span class="pre">registers</span></span><a class="headerlink" href="#pyripherals.peripherals.TMF8801.TMF8801.registers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name-Register pairs for the internal registers of the chip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.TMF8801.TMF8801.factory_calibration">
 <span class="sig-name descname"><span class="pre">factory_calibration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/TMF8801.html#TMF8801.factory_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.TMF8801.TMF8801.factory_calibration" title="Permalink to this definition">¶</a></dt>
@@ -904,20 +1108,18 @@ vals must be 10, 5, or 2.5. These represent +/-10, +/-5, and +/-2.5 V.</p>
 <dd><p>Start the sequencer looping through the given channels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>chan_list</strong><span class="classifier">list</span></dt><dd><dl class="simple">
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chan_list</strong> (<em>list</em>) – <dl class="simple">
 <dt>Ordered list of channel pairs (A, B) to loop through. Options below.</dt><dd><p>[0-7]
 AVDD
 ALDO
 FIXED (0xAAAA, 0x5555)</p>
 </dd>
 </dl>
-</dd>
-<dt><strong>voltage_range</strong><span class="classifier">int</span></dt><dd><p>Voltage range of the channels, positive and negative.</p>
-</dd>
-<dt><strong>lpf</strong><span class="classifier">int</span></dt><dd><p>Low pass frequency in kHz.</p>
-</dd>
-</dl>
+</p></li>
+<li><p><strong>voltage_range</strong> (<em>int</em>) – Voltage range of the channels, positive and negative.</p></li>
+<li><p><strong>lpf</strong> (<em>int</em>) – Low pass frequency in kHz.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -944,20 +1146,50 @@ FIXED (0xAAAA, 0x5555)</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyripherals.peripherals.DAC80508.</span></span><span class="sig-name descname"><span class="pre">DAC80508</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">master_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12824</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_mux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'DDR':</span> <span class="pre">0,</span> <span class="pre">'ad7961_ch0':</span> <span class="pre">4,</span> <span class="pre">'ad7961_ch1':</span> <span class="pre">5,</span> <span class="pre">'ad7961_ch2':</span> <span class="pre">6,</span> <span class="pre">'ad7961_ch3':</span> <span class="pre">7,</span> <span class="pre">'ads8686_chA':</span> <span class="pre">2,</span> <span class="pre">'ads8686_chB':</span> <span class="pre">3,</span> <span class="pre">'host':</span> <span class="pre">1}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DAC80508.html#DAC80508"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DAC80508.DAC80508" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for SPI DAC chip DAC80508.</p>
 <p>Subclass of the SPIFifoDriven class. Listed methods do not include SPIFifoDriven methods.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC80508.DAC80508.WRITE_OPERATION">
+<span class="sig-name descname"><span class="pre">WRITE_OPERATION</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC80508.DAC80508.WRITE_OPERATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>SPI data prefix for writing to the DAC.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>WRITE_OPERATION</strong><span class="classifier">int</span></dt><dd><p>SPI data prefix for writing to the DAC.</p>
-</dd>
-<dt><strong>READ_OPERATION</strong><span class="classifier">int</span></dt><dd><p>SPI data prefix for reading from the DAC.</p>
-</dd>
-<dt><strong>registers</strong><span class="classifier">dict</span></dt><dd><p>Name-Register pairs for the internal registers of the DAC80508.</p>
-</dd>
-<dt><strong>data_mux</strong><span class="classifier">dict</span></dt><dd><p>Matches data source names in the MUX to their select values.</p>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC80508.DAC80508.READ_OPERATION">
+<span class="sig-name descname"><span class="pre">READ_OPERATION</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC80508.DAC80508.READ_OPERATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>SPI data prefix for reading from the DAC.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC80508.DAC80508.registers">
+<span class="sig-name descname"><span class="pre">registers</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC80508.DAC80508.registers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name-Register pairs for the internal registers of the DAC80508.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DAC80508.DAC80508.data_mux">
+<span class="sig-name descname"><span class="pre">data_mux</span></span><a class="headerlink" href="#pyripherals.peripherals.DAC80508.DAC80508.data_mux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matches data source names in the MUX to their select values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DAC80508.DAC80508.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DAC80508.html#DAC80508.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DAC80508.DAC80508.reset" title="Permalink to this definition">¶</a></dt>
@@ -989,15 +1221,12 @@ gain = 1, div_ref = /2</p>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>gain</strong><span class="classifier">int</span></dt><dd><p>The gain for the outputs. 1 or 2.</p>
-</dd>
-<dt><strong>ouptuts</strong><span class="classifier">int or list(int)</span></dt><dd><p>The output or list of outputs to set the gain for.</p>
-</dd>
-<dt><strong>divide_reference</strong><span class="classifier">bool</span></dt><dd><p>True to divide the reference voltage by 2, False to leave the it
-unaffected.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gain</strong> (<em>int</em>) – The gain for the outputs. 1 or 2.</p></li>
+<li><p><strong>ouptuts</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>)</em>) – The output or list of outputs to set the gain for.</p></li>
+<li><p><strong>divide_reference</strong> (<em>bool</em>) – True to divide the reference voltage by 2, False to leave the it
+unaffected.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1025,16 +1254,13 @@ unaffected.</p>
 <dd><p>Write the voltage to the outputs of the DAC.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>voltage</strong><span class="classifier">int or float</span></dt><dd><p>The decimal voltage to write. This will be rounded to a
-representable binary value.</p>
-</dd>
-<dt><strong>ouptuts</strong><span class="classifier">int or list(int)</span></dt><dd><p>The output or list of outputs to write the voltage to.</p>
-</dd>
-<dt><strong>auto_gain</strong><span class="classifier">bool</span></dt><dd><p>True to automatically set the gain for the
-outputs, False otherwise.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>voltage</strong> (<em>int</em><em> or </em><em>float</em>) – The decimal voltage to write. This will be rounded to a
+representable binary value.</p></li>
+<li><p><strong>ouptuts</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>)</em>) – The output or list of outputs to write the voltage to.</p></li>
+<li><p><strong>auto_gain</strong> (<em>bool</em>) – True to automatically set the gain for the
+outputs, False otherwise.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1166,16 +1392,13 @@ the DACs and ADC data into DDR</p>
 <dd><p>Determine closest frequency so the waveform evenly divides into the length of the DDR3</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>freq</strong><span class="classifier">float</span></dt><dd><p>Desired frequency</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>freq</strong> (<em>float</em>) – Desired frequency</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>new_frequency</strong><span class="classifier">float</span></dt><dd><p>The closest possible frequency</p>
+<dd class="field-even"><p><strong>new_frequency</strong> – The closest possible frequency</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1191,22 +1414,16 @@ Check the constant values for errors.</p>
 ‘TIMESTAMPS’: DDR data is numerous. AD7961, AD5453 out, ADS8686, timestamps, readcheck</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>chan_data</strong><span class="classifier">dict of np.arrays</span></dt><dd><p>data from reading DDR (minimally processed into 2 byte containers)</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>chan_data</strong> (<em>dict of np.arrays</em>) – data from reading DDR (minimally processed into 2 byte containers)</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>adc_data</strong><span class="classifier">dict</span></dt><dd><p>fast adc data (double format &#64; 5 MSPS)</p>
-</dd>
-<dt><strong>timestamp</strong><span class="classifier">np.array</span></dt><dd><p>timestamps</p>
-</dd>
-<dt><strong>dac_data</strong><span class="classifier">dict</span></dt><dd><p>DAC output data</p>
-</dd>
-<dt><strong>ads</strong><span class="classifier">dict</span></dt><dd><p>ADS8686 ADC data (double format &#64; 1 MSPS)</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>adc_data</strong> (<em>dict</em>) – fast adc data (double format &#64; 5 MSPS)</p></li>
+<li><p><strong>timestamp</strong> (<em>np.array</em>) – timestamps</p></li>
+<li><p><strong>dac_data</strong> (<em>dict</em>) – DAC output data</p></li>
+<li><p><strong>ads</strong> (<em>dict</em>) – ADS8686 ADC data (double format &#64; 1 MSPS)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1218,18 +1435,16 @@ Check the constant values for errors.</p>
 and combine with LSBytes. Swap channels to match ADC channel numbering.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>d</strong><span class="classifier">array</span></dt><dd><p>array of bytes.</p>
-</dd>
-<dt><strong>convert_twos</strong><span class="classifier">Boolean</span></dt><dd><p>if true converts data to signed</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<em>array</em>) – array of bytes.</p></li>
+<li><p><strong>convert_twos</strong> (<em>Boolean</em>) – if true converts data to signed</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>chan_data</strong><span class="classifier">dict</span></dt><dd><p>dictionary of data arrays (keys are channel numbers)</p>
+<dd class="field-even"><p><strong>chan_data</strong> – dictionary of data arrays (keys are channel numbers)</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1240,10 +1455,10 @@ and combine with LSBytes. Swap channels to match ADC channel numbering.</p>
 <dd><p>Check the empty, full, and count status of the DDR interfacing FIFOs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>fifo_status</strong><span class="classifier">dict</span></dt><dd><p>dictionary of fifo status (‘EMPTY’, ‘FULL’, ‘ADC_DATA_COUNT’) for ‘IN’, ‘OUT’, and channels 1, 2</p>
+<dd class="field-odd"><p><strong>fifo_status</strong> – dictionary of fifo status (‘EMPTY’, ‘FULL’, ‘ADC_DATA_COUNT’) for ‘IN’, ‘OUT’, and channels 1, 2</p>
 </dd>
-</dl>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1257,16 +1472,13 @@ float or int voltage to int digital (binary) code should take place
 BEFORE this function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>amplitude: int</strong></dt><dd><p>Digital (binary) value of the flat voltage</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>amplitude</strong> (<em>int</em>) – Digital (binary) value of the flat voltage</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>amplitude</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>to be assigned to DDR data array</p>
+<dd class="field-even"><p><strong>amplitude</strong> – to be assigned to DDR data array</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1279,20 +1491,17 @@ BEFORE this function.</p>
 should take place BEFORE this function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>start</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) value to start the ramp at</p>
-</dd>
-<dt><strong>stop</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) value to stop the ramp at</p>
-</dd>
-<dt><strong>step</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) code to step by</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>int</em>) – Digital (binary) value to start the ramp at</p></li>
+<li><p><strong>stop</strong> (<em>int</em>) – Digital (binary) value to stop the ramp at</p></li>
+<li><p><strong>step</strong> (<em>int</em>) – Digital (binary) code to step by</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>ddr_seq</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>to be assigned to DDR data array</p>
+<dd class="field-even"><p><strong>ddr_seq</strong> – to be assigned to DDR data array</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1305,24 +1514,19 @@ should take place BEFORE this function.</p>
 should take place BEFORE this function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>amplitude</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) value of the sine wave.</p>
-</dd>
-<dt><strong>frequency</strong><span class="classifier">float</span></dt><dd><p>Desired frequency in Hz.</p>
-</dd>
-<dt><strong>offset</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) value offset.</p>
-</dd>
-<dt><strong>actual_frequency</strong><span class="classifier">bool</span></dt><dd><p>Decide whether closest frequency that fits an integer number of periods is used.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amplitude</strong> (<em>int</em>) – Digital (binary) value of the sine wave.</p></li>
+<li><p><strong>frequency</strong> (<em>float</em>) – Desired frequency in Hz.</p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – Digital (binary) value offset.</p></li>
+<li><p><strong>actual_frequency</strong> (<em>bool</em>) – Decide whether closest frequency that fits an integer number of periods is used.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>ddr_seq</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>to be assigned to DDR data array</p>
-</dd>
-<dt><strong>frequency</strong><span class="classifier">float</span></dt><dd><p>actual frequency after closest_frequency</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ddr_seq</strong> (<em>numpy.ndarray</em>) – to be assigned to DDR data array</p></li>
+<li><p><strong>frequency</strong> (<em>float</em>) – actual frequency after closest_frequency</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1335,24 +1539,19 @@ should take place BEFORE this function.</p>
 should take place BEFORE this function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>low</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) code for the low value of the step.</p>
-</dd>
-<dt><strong>high</strong><span class="classifier">int</span></dt><dd><p>Digital (binary) code for the high value of the step.</p>
-</dd>
-<dt><strong>length</strong><span class="classifier">TODO add type for length</span></dt><dd><p>TODO add description for length</p>
-</dd>
-<dt><strong>actual_length</strong><span class="classifier">bool</span></dt><dd><p>TODO add description for actual_length</p>
-</dd>
-<dt><strong>duty</strong><span class="classifier">int or float</span></dt><dd><p>Duty cycle percentage. Enter as a percentage [0.0, 100.0].</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>low</strong> (<em>int</em>) – Digital (binary) code for the low value of the step.</p></li>
+<li><p><strong>high</strong> (<em>int</em>) – Digital (binary) code for the high value of the step.</p></li>
+<li><p><strong>length</strong> (<em>TODO add type for length</em>) – TODO add description for length</p></li>
+<li><p><strong>actual_length</strong> (<em>bool</em>) – TODO add description for actual_length</p></li>
+<li><p><strong>duty</strong> (<em>int</em><em> or </em><em>float</em>) – Duty cycle percentage. Enter as a percentage [0.0, 100.0].</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>ddr_seq</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>to be assigned to DDR data array</p>
+<dd class="field-even"><p><strong>ddr_seq</strong> – to be assigned to DDR data array</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1363,10 +1562,7 @@ should take place BEFORE this function.</p>
 <dd><p>Print the FIFO status dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>fifo_status</strong><span class="classifier">dict</span></dt><dd><p>Dictionary of fifo status.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>fifo_status</strong> (<em>dict</em>) – Dictionary of fifo status.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1377,18 +1573,14 @@ should take place BEFORE this function.</p>
 <dd><p>read DDR data into a numpy buffer of bytes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>blk_multiples</strong><span class="classifier">int</span></dt><dd><p>total size of the read is blk_multiples * block_size</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>blk_multiples</strong> (<em>int</em>) – total size of the read is blk_multiples * block_size</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>d</strong><span class="classifier">bytearray</span></dt><dd><p>data as uint32</p>
-</dd>
-<dt><strong>bytes_read_error</strong><span class="classifier">int</span></dt><dd><p>bytes read or error code</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>d</strong> (<em>bytearray</em>) – data as uint32</p></li>
+<li><p><strong>bytes_read_error</strong> (<em>int</em>) – bytes read or error code</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1404,22 +1596,19 @@ and the length must be an Integer multiple of Block Size.
 see <a class="reference external" href="https://docs.opalkelly.com/fpsdk/frontpanel-api/">https://docs.opalkelly.com/fpsdk/frontpanel-api/</a> section 3.3.1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>sample_size</strong><span class="classifier">int</span></dt><dd><p>Length of read in bytes. If none uses DDR parameter ‘sample_size.’</p>
-</dd>
-<dt><strong>source</strong><span class="classifier">str</span></dt><dd><p>FIFO output buffer to read. Either ‘ADC’ or ‘FG’. ‘FG’ just reads
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> (<em>int</em>) – Length of read in bytes. If none uses DDR parameter ‘sample_size.’</p></li>
+<li><p><strong>source</strong> (<em>str</em>) – FIFO output buffer to read. Either ‘ADC’ or ‘FG’. ‘FG’ just reads
 back what is written for DACs (as function generator) so not so
-useful.</p>
-</dd>
-</dl>
+useful.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>data_buf</strong><span class="classifier">byearray</span></dt><dd><p>adc data read as a bytearray</p>
-</dd>
-<dt><strong>read_cnt</strong><span class="classifier">int</span></dt><dd><p>The count (or error code) read from the OpalKelly interface</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>data_buf</strong> (<em>byearray</em>) – adc data read as a bytearray</p></li>
+<li><p><strong>read_cnt</strong> (<em>int</em>) – The count (or error code) read from the OpalKelly interface</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1444,22 +1633,18 @@ the DDR address pointers for read/write of both buffers
 <dd><p>read and save DDR data to an hdf file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>data_dir</strong><span class="classifier">string</span></dt><dd><p>directory for data</p>
-</dd>
-<dt><strong>file_name</strong><span class="classifier">string</span></dt><dd><p>filename to save data (does not append extension).</p>
-</dd>
-<dt><strong>num_repeats</strong><span class="classifier">int</span></dt><dd><p>total data read is 2048 bytes * num_repeats * blk_multiples</p>
-</dd>
-<dt><strong>blk_multiples</strong><span class="classifier">int</span></dt><dd><p>number of blocks read by adc_read. adc_read is a single OpalKelly API call</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dir</strong> (<em>string</em>) – directory for data</p></li>
+<li><p><strong>file_name</strong> (<em>string</em>) – filename to save data (does not append extension).</p></li>
+<li><p><strong>num_repeats</strong> (<em>int</em>) – total data read is 2048 bytes * num_repeats * blk_multiples</p></li>
+<li><p><strong>blk_multiples</strong> (<em>int</em>) – number of blocks read by adc_read. adc_read is a single OpalKelly API call</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>chan_data</strong><span class="classifier">dict</span></dt><dd><p>dictionary of data arrays (keys are channel numbers)</p>
+<dd class="field-even"><p><strong>chan_data</strong> – dictionary of data arrays (keys are channel numbers)</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1525,18 +1710,14 @@ This is now fixed to improve timing performance.</p>
 <dd><p>Write a bytearray to the DDR3.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>buf</strong><span class="classifier">bytearray</span></dt><dd><p>bytearray to write to the DDR</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>buf</strong> (<em>bytearray</em>) – bytearray to write to the DDR</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>block_pipe_return</strong><span class="classifier">int</span></dt><dd><p>length of the buffer written to the DDR (or error code if unsuccessful)</p>
-</dd>
-<dt><strong>speed_MBs</strong><span class="classifier">float</span></dt><dd><p>speed of the write in MB/s</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>block_pipe_return</strong> (<em>int</em>) – length of the buffer written to the DDR (or error code if unsuccessful)</p></li>
+<li><p><strong>speed_MBs</strong> (<em>float</em>) – speed of the write in MB/s</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1637,11 +1818,8 @@ ads8686 timing)</p>
 <p>Uses the Opal Kelly WireIn (the trigger can’t hold the reset).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>value</strong><span class="classifier">int</span></dt><dd><p>value = 1 is reset
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – value = 1 is reset
 value = 0 releases reset</p>
-</dd>
-</dl>
 </dd>
 </dl>
 </dd></dl>
