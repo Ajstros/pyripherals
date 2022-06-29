@@ -66,7 +66,7 @@ class AD5453(SPIFifoDriven):
         for i in np.arange(self.filter_offset, 1 + self.filter_offset + self.filter_len):
             if (i-self.filter_offset) in self.filter_coeff:
                 addr = int(
-                    self.endpoints['REGBRIDGE_OFFSET'].bit_index_low + i)
+                    self.endpoints['REGBRIDGE_OFFSET'].address + i)
                 val = int(self.filter_coeff[i-self.filter_offset])
                 # TODO: ian has first addr of 0x19, second as 0x1a
                 print(
@@ -86,7 +86,7 @@ class AD5453(SPIFifoDriven):
         for i in loop_thru:  # TODO is this correct? and how to parameterize?
             if (i-self.filter_offset) in self.filter_coeff:
                 addr = int(
-                    self.endpoints['REGBRIDGE_OFFSET'].bit_index_low + i)
+                    self.endpoints['REGBRIDGE_OFFSET'].address + i)
                 val = int(self.filter_coeff[i-self.filter_offset])
                 idx = int(i-self.filter_offset)
                 regs[idx].address = addr
