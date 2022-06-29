@@ -192,6 +192,7 @@ if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 file_name = 'impedance_analyzer'
 
+time.sleep(23)
 # saves data to a file; returns to the workspace the deswizzled DDR data of the last repeat
 chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_repeats=8,
                                     blk_multiples=40)  # blk multiples multiple of 10
