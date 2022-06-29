@@ -89,21 +89,6 @@ ADS8686_A_CHAN = 7                      # ADS8686 input from side A reading DAC8
 ADS8686_B_CHAN = 3                      # ADS8686 input from side B reading unknown impedance voltage
 
 
-# Helper functions for DDR3
-def ddr_write_setup():
-    ddr.set_adcs_connected()
-    ddr.clear_dac_read()
-    ddr.clear_adc_write()
-    ddr.reset_fifo(name='ALL')
-    ddr.reset_mig_interface()
-    ad7961s[0].reset_trig()
-
-
-def ddr_write_finish():
-    # reenable both DACs
-    ddr.set_adc_dac_simultaneous()  # enable DAC playback and ADC writing to DDR
-
-
 # --- Set up FPGA, DDR3, DAC80508, ADS8686 ---
 f = FPGA()
 f.init_device()
@@ -179,11 +164,11 @@ ddr.data_arrays[1] = np.bitwise_or(ddr.data_arrays[1], (DAC80508_OUT_CHAN & 0b00
 # Set voltage
 ddr.data_arrays[6] = v_in_code.astype(np.uint16)
 
-ddr_write_setup()
+ddr.write_setup()
 # ddr.write_channels()   # Double write to ensure good output
 g_buf = ddr.write_channels()
 ddr.reset_mig_interface()
-ddr_write_finish()
+ddr.write_finish()
 
 ddr.clear_adc_read()
 ddr.clear_adc_write()
@@ -192,7 +177,7 @@ ddr.reset_fifo(name='ADC_IN')
 ddr.reset_fifo(name='ADC_TRANSFER')
 ddr.reset_mig_interface()
 
-ddr_write_finish()
+ddr.write_finish()
 time.sleep(0.01)
 
 # # --- Read input and ouput voltage signals ---
@@ -207,6 +192,7 @@ if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 file_name = 'impedance_analyzer'
 
+time.sleep(23)
 # saves data to a file; returns to the workspace the deswizzled DDR data of the last repeat
 chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_repeats=8,
                                     blk_multiples=40)  # blk multiples multiple of 10

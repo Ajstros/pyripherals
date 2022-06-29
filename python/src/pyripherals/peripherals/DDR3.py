@@ -281,9 +281,9 @@ class DDR3():
                 data[(7-i + 1)::8] = self.data_arrays[i]
 
         print('Length of data DDR data [2 byte words] = {}'.format(len(data)))
-        return self.write(bytearray(data), set_ddr_read=set_ddr_read)
+        return self.write_buf(bytearray(data), set_ddr_read=set_ddr_read)
 
-    def write(self, buf, set_ddr_read=True):
+    def write_buf(self, buf, set_ddr_read=True):
         """Write a bytearray to the DDR3.
 
         Parameters
@@ -788,3 +788,35 @@ class DDR3():
         """
         print('Set index is no longer used. Index is fixed to: {}'.format(
             self.parameters['port1_index']))
+
+    def write_setup(self, data_driven_clock=True):
+        """Set up DDR for writing."""
+
+        if data_driven_clock:
+            self.set_adcs_connected()
+        else:
+            self.clear_adcs_connected()
+        self.clear_dac_read()
+        self.clear_adc_write()
+        self.clear_adc_read()    # Stop putting data in outgoing FIFO for Pipe read
+        self.reset_fifo(name='ALL')
+        self.reset_mig_interface()
+
+    def repeat_setup(self):
+        """Setup for reading new data without writing to the DDR again."""
+
+        # stop access to the FIFOs so that after reset of the FIFO(s) no new data is added/extracted
+        self.clear_adc_read()
+        self.clear_adc_write()
+        self.clear_dac_read()
+        self.reset_fifo(name='ALL')
+        # self.fpga.send_trig(self.endpoints['UI_RESET'])
+        self.reset_mig_interface()
+        # note that the MIG interface addresses are driven by the FIFOs so will idle
+        # until the FIFOs are reenable with write_finish()
+        self.write_finish()
+        time.sleep(0.01)
+
+    def write_finish(self):
+        # reenable both DACs
+        self.set_adc_dac_simultaneous()  # enable DAC playback and ADC writing to DDR
