@@ -331,7 +331,7 @@ def create_filter_coefficients(fc, output_scale=0x2000,
     coeffs = {}
     coeff_idx = 0
     # gain of filter scale 1 (coeff_idx 0)
-    t = numfi(k, 1, word_length, scale_frac, fixed=True)
+    t = numfi(-k, 1, word_length, scale_frac, fixed=True)
     coeffs[coeff_idx] = print_get_int(t)
     coeff_idx += 1
 
