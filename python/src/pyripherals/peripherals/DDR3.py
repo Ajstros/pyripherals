@@ -789,10 +789,13 @@ class DDR3():
         print('Set index is no longer used. Index is fixed to: {}'.format(
             self.parameters['port1_index']))
 
-    def write_setup(self):
+    def write_setup(self, data_driven_clock=True):
         """Set up DDR for writing."""
 
-        self.set_adcs_connected()
+        if data_driven_clock:
+            self.set_adcs_connected()
+        else:
+            self.clear_adcs_connected()
         self.clear_dac_read()
         self.clear_adc_write()
         self.clear_adc_read()    # Stop putting data in outgoing FIFO for Pipe read
