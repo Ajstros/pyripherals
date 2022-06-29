@@ -66,7 +66,7 @@ class AD5453(SPIFifoDriven):
         for i in np.arange(self.filter_offset, 1 + self.filter_offset + self.filter_len):
             if (i-self.filter_offset) in self.filter_coeff:
                 addr = int(
-                    self.endpoints['REGBRIDGE_OFFSET'].bit_index_low + i)
+                    self.endpoints['REGBRIDGE_OFFSET'].address + i)
                 val = int(self.filter_coeff[i-self.filter_offset])
                 # TODO: ian has first addr of 0x19, second as 0x1a
                 print(
@@ -86,7 +86,7 @@ class AD5453(SPIFifoDriven):
         for i in loop_thru:  # TODO is this correct? and how to parameterize?
             if (i-self.filter_offset) in self.filter_coeff:
                 addr = int(
-                    self.endpoints['REGBRIDGE_OFFSET'].bit_index_low + i)
+                    self.endpoints['REGBRIDGE_OFFSET'].address + i)
                 val = int(self.filter_coeff[i-self.filter_offset])
                 idx = int(i-self.filter_offset)
                 regs[idx].address = addr
@@ -122,7 +122,8 @@ class AD5453(SPIFifoDriven):
         # TODO: add method docstring
 
         if (target == 'passthru') or (target == 'passthrough'):
-            self.filter_coeff = {0: 0x7fff_ffff,   # changed for about unity gain
+            self.filter_coeff = {#0: 0x7fff_ffff,   # changed for about unity gain
+                                 0: 0x80000000,
                                  1: 0x20000000,
                                  2: 0,
                                  3: 0,
@@ -136,7 +137,7 @@ class AD5453(SPIFifoDriven):
                                  13: 0,
                                  7: 0x7fffffff,
                                  6: 0,
-                                 15: 0x0080_2000} # offset=0, scale=1 
+                                 15: 0x0000_0900} # offset=0, scale=1 
         elif target == '100kHz':
             self.filter_coeff = {0: 0x0000_6f84,
                                  1: 0x20000000,
@@ -153,7 +154,8 @@ class AD5453(SPIFifoDriven):
                                  7: 0x7fffffff, 
                                  15: 0x0000_1000} # offset=0, scale=1 
         elif target == '500kHz':
-            self.filter_coeff = {0: 0x009e1586,
+            self.filter_coeff = {#0: 0x009e1586,
+                                 0: 0xFF61EA7A,
                                  1: 0x20000000,
                                  2: 0x40000000,
                                  3: 0x20000000,
@@ -166,4 +168,7 @@ class AD5453(SPIFifoDriven):
                                  12: 0xab762783,
                                  13: 0x287ecada,
                                  7: 0x7fffffff,
-                                 15: 0x0000_2000} # offset=0, scale=1 
+                                 15: 0x0000_0900}
+                                 #15: 0x0000_0B1F} # offset=0, scale=1
+        else :
+            self.filter_coeff = value

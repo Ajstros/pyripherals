@@ -184,7 +184,7 @@ class SPIFifoDriven():
         """
 
         self.fpga.xem.WriteRegister(
-            self.endpoints['REGBRIDGE_OFFSET'].bit_index_low, reg_value)
+            self.endpoints['REGBRIDGE_OFFSET'].address, reg_value)
 
         # resets the SPI state machine -- needed since these registers are only
         #   programmed at startup of the state machine
@@ -201,7 +201,7 @@ class SPIFifoDriven():
         print('SCLK predicted frequency {:.2f} [MHz]'.format(
             sys_clk/(divide_value+1)))
         self.fpga.xem.WriteRegister(
-            self.endpoints['REGBRIDGE_OFFSET'].bit_index_low + 1, divide_value)
+            self.endpoints['REGBRIDGE_OFFSET'].address + 1, divide_value)
 
         # resets the SPI state machine -- needed since these WishBone
         #   registers are only programmed at startup of the state machine
