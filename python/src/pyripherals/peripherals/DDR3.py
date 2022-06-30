@@ -676,7 +676,7 @@ class DDR3():
 
             error = False
             # check that the constant values are constant
-            constant_values = {0: 0xaa55, 1: (0x28ab<<5), 2: 0x77bb, 3: (0x28c<<5)}
+            constant_values = {0: 0xaa55, 1: (0x28b<<5), 2: 0x77bb, 3: (0x28c<<5)}
             constant_value_mask = {0: 0xffff, 1: 0xffe0, 2: 0xffff, 3: 0xffe0}
             for i in range(4):
                 if not np.all( (read_check[i] & constant_value_mask[i]) == constant_values[i]):
