@@ -655,8 +655,13 @@ class DDR3():
 
             read_check = {}
             read_check[0] = chan_data[7][3::10]
-            read_check[1] = chan_data[7][4::5]
+            read_check[1] = chan_data[7][4::10]
             read_check[2] = chan_data[7][8::10]
+            read_check[3] = chan_data[7][9::10]
+
+            ads_seq_cnt = {}
+            ads_seq_cnt[0] = (chan_data[7][4::10] & 0x001f)
+            ads_seq_cnt[1] = (chan_data[7][9::10] & 0x001f)
 
             dac_data = {}
             dac_data[0] = chan_data[4][0::2]
@@ -671,9 +676,10 @@ class DDR3():
 
             error = False
             # check that the constant values are constant
-            constant_values = {0: 0xaa55, 1: 0x28ab, 2: 0x77bb}
-            for i in range(2):
-                if not np.all(read_check[i] == constant_values[i]):
+            constant_values = {0: 0xaa55, 1: (0x28ab<<5), 2: 0x77bb, 3: (0x28c<<5)}
+            constant_value_mask = {0: 0xffff, 1: 0xffe0, 2: 0xffff, 3: 0xffe0}
+            for i in range(4):
+                if not np.all( (read_check[i] & constant_value_mask[i]) == constant_values[i]):
                     print(f'Error in constant value: {constant_values[i]} ')
                     print(
                         f'Number of errors: {np.sum(read_check[i] != constant_values[i])}')
@@ -685,7 +691,7 @@ class DDR3():
                 print('Warning: Multiple time intervals')
                 error = True
 
-            return adc_data, timestamp, dac_data, ads, error
+            return adc_data, timestamp, dac_data, ads, ads_seq_cnt, error
 
     def save_data(self, data_dir, file_name, num_repeats=4, blk_multiples=40):
         """
