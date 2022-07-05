@@ -200,7 +200,7 @@ chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_
 _, chan_data = read_h5(data_dir, file_name=file_name.format(
     0) + '.h5', chan_list=np.arange(8))
 # Long data sequence -- entire file
-adc_data, timestamp, dac_data, ads, read_errors = ddr.data_to_names(chan_data)
+adc_data, timestamp, dac_data, ads, ads_seq_cnt, read_errors = ddr.data_to_names(chan_data)
 
 data_stream = ads
 v_in_code = data_stream[input_side]
@@ -243,7 +243,7 @@ if PLOT:
     while not stop:
         chan_data = ddr.deswizzle(ddr.read_adc(blk_multiples=40)[0])
         ddr_data_from_names = ddr.data_to_names(chan_data)
-        adc_data, timestamp, dac_data, ads, read_check = ddr_data_from_names
+        adc_data, timestamp, dac_data, ads, ads_seq_cnt, read_check = ddr_data_from_names
         data_stream = ads
         v_in = to_voltage(
             data=data_stream['A'], num_bits=16, voltage_range=10, use_twos_comp=True)

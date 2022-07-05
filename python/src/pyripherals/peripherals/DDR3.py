@@ -628,6 +628,15 @@ class DDR3():
             DAC output data
         ads : dict 
             ADS8686 ADC data (double format @ 1 MSPS)
+
+        ads_seq_cnt : dict
+            two keys 0, 1. Each value is an array of sequence counts (counts from 0 to 23)
+            the first key will have 0,2,4,6, ... , 22 (or similar)
+            the second key will have 1,3,5, ..., 23 (or similar)
+
+        error : boolean 
+            if True the constant read values were wrong 
+               or the timestamp steps are not all the same
         """
 
         # first version of ADC data before DACs + timestamps are stored
