@@ -64,6 +64,8 @@ def gen_mask(bit_pos):
 def twos_comp(val, bits):
     """compute the 2's complement of int value val
         handle an array (list or numpy)
+
+    Use for converting twos complement binary data to a signed integer.
     """
 
     def twos_comp_scalar(val, bits):
@@ -219,12 +221,16 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     if num_bits <= 8:
         data_type = np.uint8
+        signed_data_type = np.int8
     elif num_bits <= 16:
         data_type = np.uint16
+        signed_data_type = np.int16
     elif num_bits <= 32:
         data_type = np.uint32
+        signed_data_type = np.int32
     elif num_bits <= 64:
         data_type = np.uint64
+        signed_data_type = np.int64
     else:
         raise ValueError(f'from_voltage num_bits={num_bits} greater than maximum 64')
 
@@ -240,7 +246,9 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
         raise TypeError(f'voltage expected np.integer or np.floating type, got {type(voltage)}')
 
     if with_negatives:
-        return data + data_type(2 ** (num_bits - 1) - 1)
+        # Perform twos complement conversion to get a signed N-bit integer
+        signed_data = data.astype(signed_data_type)
+        return np.where(signed_data < 0, np.bitwise_xor(np.abs(signed_data), 2**num_bits - 1) + 1, signed_data).astype(data_type)
     else:
         return data
 
