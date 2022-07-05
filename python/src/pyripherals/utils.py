@@ -189,6 +189,7 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
             return data * bit_voltage
     else:
         print(f'ERROR: wrong data type in to_voltage: type(data) = {type(data)} Expected int or list(int) or numpy.ndarray(numpy.uint16)')
+        print(f'data: {data} {bin(data)} ({len(bin(data))})')
         return None
 
 
@@ -201,8 +202,10 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     Arguments
     ---------
-    voltage : int or float or list(int or float) or numpy.ndarray(numpy.uint16)
-        The method will return the converted version of either.
+    voltage : np.integer or np.floating or np.ndarray of those
+        The voltage data to convert.
+    num_bits : int
+        The number of bits to convert the voltage data to. Maximum 64.
     voltage_range : int
         The total voltage range used for the voltage.
     with_negatives : bool
@@ -211,48 +214,35 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     Returns
     -------
-    int or float or list : voltage version of the binary data in similar form voltage was given in
-        int -> int
-        float -> int
-        list, numpy.ndarray -> list(int)
+    np.ndarray of np.integer : binary version of voltage data.
     """
 
-    if type(voltage) is list:
-        # If the voltage is given in a list, we can use our int version of
-        # the method on every element in the list.
-        return [from_voltage(voltage=x, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives) for x in voltage]
-    elif type(voltage) is np.ndarray:
-        return [from_voltage(voltage=x, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives) for x in [int(k) for k in list(voltage)]]
-    elif type(voltage) is int or type(voltage) is float or type(voltage) is np.uint16:
-        # Determine the voltage represented by a single bit
-        if with_negatives:
-            if voltage < -(voltage_range / 2):
-                print(f'WARNING: Voltage {voltage} out of range [{-voltage_range / 2}-{voltage_range / 2}]. Truncating...')
-                data = 0x0
-            elif voltage > (voltage_range / 2):
-                print(f'WARNING: Voltage {voltage} out of range [{-voltage_range / 2}, {voltage_range / 2}]. Truncating...')
-                data = 2 ** num_bits - 1
-            else:
-                bit_voltage = voltage_range / (2 ** num_bits)
-                data = round(voltage / bit_voltage)
-                data = 2 ** (num_bits - 1) - 1 + data
-        elif voltage < 0:
-            print(f'WARNING: negative numbers not included in range [0, {voltage_range}]. Use with_negatives=True. Truncating...')
-            data = 0x0
-        elif voltage > voltage_range:
-            print(f'WARNING: voltage {voltage} outside range [0, {voltage_range}]. Truncating...')
-            data = 2 ** num_bits - 1
-        elif voltage == voltage_range:
-            data = 0xffff
-        else:
-            bit_voltage = voltage_range / (2 ** num_bits)
-            data = int(voltage // bit_voltage)
-
-        return data
+    if num_bits <= 8:
+        data_type = np.uint8
+    elif num_bits <= 16:
+        data_type = np.uint16
+    elif num_bits <= 32:
+        data_type = np.uint32
+    elif num_bits <= 64:
+        data_type = np.uint64
     else:
-        print(
-            f'ERROR: wrong voltage type in from_voltage: type(voltage) = {type(voltage)} Expected int, float, list(int or float), or numpy.ndarray(numpy.uint16)')
-        return None
+        raise ValueError(f'from_voltage num_bits={num_bits} greater than maximum 64')
+
+    bit_voltage = voltage_range / (2 ** num_bits)
+
+    if type(voltage) is np.ndarray:
+        data = (voltage // bit_voltage).astype(data_type)
+    elif type(voltage) is list:
+        data = (np.array(voltage) // bit_voltage).astype(data_type)
+    elif np.issubdtype(type(voltage), np.integer) or np.issubdtype(type(voltage), np.floating):
+        data = data_type(voltage // bit_voltage)
+    else:
+        raise TypeError(f'voltage expected np.integer or np.floating type, got {type(voltage)}')
+
+    if with_negatives:
+        return data + data_type(2 ** (num_bits - 1) - 1)
+    else:
+        return data
 
 
 def get_timestamp():
