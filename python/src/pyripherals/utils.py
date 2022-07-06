@@ -240,6 +240,10 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
     else:
         raise TypeError(f'from_voltage voltage expected np.integer, np.floating, list, or np.ndarray type, got {type(voltage)}')
 
+    # Since this system may overflow to 0 on the maximum value, we limit any
+    # input voltages of maximum to full-scale.
+    data = np.where(voltage == voltage_range, 2 ** num_bits - 1, data)
+
     if with_negatives:
         # Perform twos complement conversion to get a signed N-bit integer
         signed_data = data.astype(signed_data_type)
