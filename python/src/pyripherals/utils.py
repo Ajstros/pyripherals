@@ -162,37 +162,32 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
 
     Arguments
     ---------
-    data : int or list(int) or numpy.ndarray(numpy.uint16)
-        The method will return the converted version of either.
+    data : int or list(int) or np.ndarray(np.integer)
+        The binary voltage data.
     voltage_range : int
-        The total voltage range used for the data.
+        The total voltage range (peak-to-peak) used for the data.
     use_twos_comp : bool
         True if the given data is in two's complement form, False otherwise.
 
     Returns
     -------
-    float or list : binary version of the voltage data in similar form data was given in
-        int -> float
-        list, numpy.ndarray -> list(float)
+    float or np.ndarray of float : voltage(s) represented by the given binary data.
     """
 
-    if type(data) is list:
-        # If the data is given in a list, we can use our int version of
-        # the method on every element in the list.
-        return [to_voltage(data=x, num_bits=num_bits, voltage_range=voltage_range, use_twos_comp=use_twos_comp) for x in data]
-    elif type(data) is np.ndarray:
-        return [to_voltage(data=int(x), num_bits=num_bits, voltage_range=voltage_range, use_twos_comp=use_twos_comp) for x in data]
-    elif type(data) is int or type(data) is np.uint16:
-        # Determine the voltage represented by a single bit
-        bit_voltage = voltage_range / (2 ** num_bits)
-        if use_twos_comp:
-            return twos_comp(val=data, bits=num_bits) * bit_voltage
-        else:
-            return data * bit_voltage
+    bit_voltage = voltage_range / (2 ** num_bits)
+    if use_twos_comp:
+        data = twos_comp(val=data, bits=num_bits)
+
+    if type(data) is np.ndarray:
+        voltage = data * bit_voltage
+    elif type(data) is list:
+        voltage = np.array(data) * bit_voltage
+    elif np.issubdtype(type(data), np.integer):
+        voltage = data * bit_voltage
     else:
-        print(f'ERROR: wrong data type in to_voltage: type(data) = {type(data)} Expected int or list(int) or numpy.ndarray(numpy.uint16)')
-        print(f'data: {data} {bin(data)} ({len(bin(data))})')
-        return None
+        raise TypeError(f'to_voltage data expected np.integer, list, or np.ndarray type, got {type(data)}')
+
+    return voltage
 
 
 def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
@@ -209,7 +204,7 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
     num_bits : int
         The number of bits to convert the voltage data to. Maximum 64.
     voltage_range : int
-        The total voltage range used for the voltage.
+        The total voltage range (peak-to-peak) used for the voltage.
     with_negatives : bool
         True to convert the voltage with full negative at 0x0, zero at half
         scale, and full positive at full scale, False otherwise.
@@ -243,7 +238,7 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
     elif np.issubdtype(type(voltage), np.integer) or np.issubdtype(type(voltage), np.floating):
         data = data_type(voltage // bit_voltage)
     else:
-        raise TypeError(f'voltage expected np.integer or np.floating type, got {type(voltage)}')
+        raise TypeError(f'from_voltage voltage expected np.integer, np.floating, list, or np.ndarray type, got {type(voltage)}')
 
     if with_negatives:
         # Perform twos complement conversion to get a signed N-bit integer
