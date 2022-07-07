@@ -242,7 +242,11 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     # Since this system may overflow to 0 on the maximum value, we limit any
     # input voltages of maximum to full-scale.
-    data = np.where(voltage == voltage_range, 2 ** num_bits - 1, data)
+    if type(data) is np.ndarray:
+        data = np.where(voltage == voltage_range, 2 ** num_bits - 1, data)
+    else:
+        # Keep scalar voltage from converting to 0d array by only using np.where on arrays
+        data = 2 ** num_bits - 1 if voltage == voltage_range else data
 
     if with_negatives:
         # Perform twos complement conversion to get a signed N-bit integer
