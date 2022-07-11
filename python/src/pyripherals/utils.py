@@ -211,49 +211,37 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     Returns
     -------
-    np.ndarray of np.integer : binary version of voltage data.
+    np.ndarray of int or int : binary version of voltage data. Scalar int returned if voltage was a scalar.
     """
 
-    if num_bits <= 8:
-        data_type = np.uint8
-        signed_data_type = np.int8
-    elif num_bits <= 16:
-        data_type = np.uint16
-        signed_data_type = np.int16
-    elif num_bits <= 32:
-        data_type = np.uint32
-        signed_data_type = np.int32
-    elif num_bits <= 64:
-        data_type = np.uint64
-        signed_data_type = np.int64
-    else:
-        raise ValueError(f'from_voltage num_bits={num_bits} greater than maximum 64')
+    if num_bits > 32:
+        raise ValueError(f'from_voltage num_bits={num_bits} greater than maximum 32')
 
     bit_voltage = voltage_range / (2 ** num_bits)
 
     if type(voltage) is np.ndarray:
-        data = (voltage // bit_voltage).astype(data_type)
+        data = (voltage // bit_voltage).astype(int)
     elif type(voltage) is list:
-        data = (np.array(voltage) // bit_voltage).astype(data_type)
+        data = (np.array(voltage) // bit_voltage).astype(int)
     elif np.issubdtype(type(voltage), np.integer) or np.issubdtype(type(voltage), np.floating):
-        data = data_type(voltage // bit_voltage)
+        data = int(voltage // bit_voltage)
     else:
         raise TypeError(f'from_voltage voltage expected np.integer, np.floating, list, or np.ndarray type, got {type(voltage)}')
+
+    if with_negatives:
+        # Perform twos complement conversion to get a signed N-bit integer
+        data = np.where(data < 0, np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, data).astype(int)
 
     # Since this system may overflow to 0 on the maximum value, we limit any
     # input voltages of maximum to full-scale.
     if type(data) is np.ndarray:
+        # Note that this only catches maximum values without negatives, since with negatives the maximum is halved
         data = np.where(voltage == voltage_range, 2 ** num_bits - 1, data)
     else:
         # Keep scalar voltage from converting to 0d array by only using np.where on arrays
         data = 2 ** num_bits - 1 if voltage == voltage_range else data
 
-    if with_negatives:
-        # Perform twos complement conversion to get a signed N-bit integer
-        signed_data = data.astype(signed_data_type)
-        return np.where(signed_data < 0, np.bitwise_xor(np.abs(signed_data), 2**num_bits - 1) + 1, signed_data).astype(data_type)
-    else:
-        return data
+    return data
 
 
 def get_timestamp():
