@@ -64,6 +64,8 @@ def gen_mask(bit_pos):
 def twos_comp(val, bits):
     """compute the 2's complement of int value val
         handle an array (list or numpy)
+
+    Use for converting twos complement binary data to a signed integer.
     """
 
     def twos_comp_scalar(val, bits):
@@ -151,6 +153,40 @@ def int_to_list(integer, byteorder='little', num_bytes=None):
         return list_int
 
 
+def binary_twos_comp(data, num_bits):
+    """Apply two's complement using the binary method.
+    
+    Invert all bits (in num_bits), add 1 (only keeping num_bits).
+
+    Parameters
+    ----------
+    data : int or list(int) or np.ndarray(int)
+        The binary data to apply two's complement to.
+    num_bits : int
+        The number of bits the number is represented in. This is important
+        for knowing how many bits to keep in the end.
+
+    Returns
+    -------
+    twos_data : int or np.ndarray(int)
+        The two's complement conversion of the data with num_bits.
+    """
+
+    if type(data) is np.ndarray:
+        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
+        twos_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1), data).astype(int)
+    elif type(data) is list:
+        data = np.array(data)
+        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
+        twos_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1), data).astype(int)
+    elif np.issubdtype(type(data), np.integer):
+        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
+        twos_data = np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) if data & (1 << num_bits - 1) else data
+        twos_data = int(twos_data)
+
+    return twos_data
+
+
 def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
     """Convert the binary read data into a float voltage.
 
@@ -160,36 +196,33 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
 
     Arguments
     ---------
-    data : int or list(int) or numpy.ndarray(numpy.uint16)
-        The method will return the converted version of either.
+    data : int or list(int) or np.ndarray(np.integer)
+        The binary voltage data.
     voltage_range : int
-        The total voltage range used for the data.
+        The total voltage range (peak-to-peak) used for the data.
     use_twos_comp : bool
         True if the given data is in two's complement form, False otherwise.
 
     Returns
     -------
-    float or list : binary version of the voltage data in similar form data was given in
-        int -> float
-        list, numpy.ndarray -> list(float)
+    float or np.ndarray of float : voltage(s) represented by the given binary data.
     """
 
-    if type(data) is list:
-        # If the data is given in a list, we can use our int version of
-        # the method on every element in the list.
-        return [to_voltage(data=x, num_bits=num_bits, voltage_range=voltage_range, use_twos_comp=use_twos_comp) for x in data]
-    elif type(data) is np.ndarray:
-        return [to_voltage(data=int(x), num_bits=num_bits, voltage_range=voltage_range, use_twos_comp=use_twos_comp) for x in data]
-    elif type(data) is int or type(data) is np.uint16:
-        # Determine the voltage represented by a single bit
-        bit_voltage = voltage_range / (2 ** num_bits)
-        if use_twos_comp:
-            return twos_comp(val=data, bits=num_bits) * bit_voltage
-        else:
-            return data * bit_voltage
+    bit_voltage = voltage_range / (2 ** num_bits)
+    if use_twos_comp:
+        twos_data = binary_twos_comp(data=data, num_bits=num_bits)
+        data = np.where(np.array(data) >= (1 << num_bits - 1), -1 * twos_data, twos_data)
+
+    if type(data) is np.ndarray:
+        voltage = data * bit_voltage
+    elif type(data) is list:
+        voltage = np.array(data) * bit_voltage
+    elif np.issubdtype(type(data), np.integer):
+        voltage = data * bit_voltage
     else:
-        print(f'ERROR: wrong data type in to_voltage: type(data) = {type(data)} Expected int or list(int) or numpy.ndarray(numpy.uint16)')
-        return None
+        raise TypeError(f'to_voltage data expected np.integer, list, or np.ndarray type, got {type(data)}')
+
+    return voltage
 
 
 def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
@@ -201,58 +234,49 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     Arguments
     ---------
-    voltage : int or float or list(int or float) or numpy.ndarray(numpy.uint16)
-        The method will return the converted version of either.
+    voltage : np.integer or np.floating or np.ndarray of those
+        The voltage data to convert.
+    num_bits : int
+        The number of bits to convert the voltage data to. Maximum 64.
     voltage_range : int
-        The total voltage range used for the voltage.
+        The total voltage range (peak-to-peak) used for the voltage.
     with_negatives : bool
         True to convert the voltage with full negative at 0x0, zero at half
         scale, and full positive at full scale, False otherwise.
 
     Returns
     -------
-    int or float or list : voltage version of the binary data in similar form voltage was given in
-        int -> int
-        float -> int
-        list, numpy.ndarray -> list(int)
+    np.ndarray of int or int : binary version of voltage data. Scalar int returned if voltage was a scalar.
     """
 
-    if type(voltage) is list:
-        # If the voltage is given in a list, we can use our int version of
-        # the method on every element in the list.
-        return [from_voltage(voltage=x, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives) for x in voltage]
-    elif type(voltage) is np.ndarray:
-        return [from_voltage(voltage=x, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives) for x in [int(k) for k in list(voltage)]]
-    elif type(voltage) is int or type(voltage) is float or type(voltage) is np.uint16:
-        # Determine the voltage represented by a single bit
-        if with_negatives:
-            if voltage < -(voltage_range / 2):
-                print(f'WARNING: Voltage {voltage} out of range [{-voltage_range / 2}-{voltage_range / 2}]. Truncating...')
-                data = 0x0
-            elif voltage > (voltage_range / 2):
-                print(f'WARNING: Voltage {voltage} out of range [{-voltage_range / 2}, {voltage_range / 2}]. Truncating...')
-                data = 2 ** num_bits - 1
-            else:
-                bit_voltage = voltage_range / (2 ** num_bits)
-                data = round(voltage / bit_voltage)
-                data = 2 ** (num_bits - 1) - 1 + data
-        elif voltage < 0:
-            print(f'WARNING: negative numbers not included in range [0, {voltage_range}]. Use with_negatives=True. Truncating...')
-            data = 0x0
-        elif voltage > voltage_range:
-            print(f'WARNING: voltage {voltage} outside range [0, {voltage_range}]. Truncating...')
-            data = 2 ** num_bits - 1
-        elif voltage == voltage_range:
-            data = 0xffff
-        else:
-            bit_voltage = voltage_range / (2 ** num_bits)
-            data = int(voltage // bit_voltage)
+    if num_bits > 32:
+        raise ValueError(f'from_voltage num_bits={num_bits} greater than maximum 32')
 
-        return data
+    bit_voltage = voltage_range / (2 ** num_bits)
+
+    if type(voltage) is np.ndarray:
+        data = (voltage // bit_voltage).astype(int)
+    elif type(voltage) is list:
+        data = (np.array(voltage) // bit_voltage).astype(int)
+    elif np.issubdtype(type(voltage), np.integer) or np.issubdtype(type(voltage), np.floating):
+        data = int(voltage // bit_voltage)
     else:
-        print(
-            f'ERROR: wrong voltage type in from_voltage: type(voltage) = {type(voltage)} Expected int, float, list(int or float), or numpy.ndarray(numpy.uint16)')
-        return None
+        raise TypeError(f'from_voltage voltage expected np.integer, np.floating, list, or np.ndarray type, got {type(voltage)}')
+
+    if with_negatives:
+        data = binary_twos_comp(data=data, num_bits=num_bits)
+
+    # Since this system may overflow to 0 on the maximum value, we limit any
+    # input voltages of maximum to full-scale.
+    if type(voltage) is int or type(voltage) is float:
+        # Keep scalar voltage from converting to 0d array by only using np.where on arrays
+        data = 2 ** num_bits - 1 if voltage == voltage_range else int(data)
+    else:
+        # Use an array
+        # Note that this only catches maximum values without negatives, since with negatives the maximum is halved
+        data = np.where(voltage == voltage_range, 2 ** num_bits - 1, data)
+
+    return data
 
 
 def get_timestamp():
