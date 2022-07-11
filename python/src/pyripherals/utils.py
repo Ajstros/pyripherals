@@ -153,6 +153,40 @@ def int_to_list(integer, byteorder='little', num_bytes=None):
         return list_int
 
 
+def binary_twos_comp(data, num_bits):
+    """Apply two's complement using the binary method.
+    
+    Invert all bits (in num_bits), add 1 (only keeping num_bits).
+
+    Parameters
+    ----------
+    data : int or list(int) or np.ndarray(int)
+        The binary data to apply two's complement to.
+    num_bits : int
+        The number of bits the number is represented in. This is important
+        for knowing how many bits to keep in the end.
+
+    Returns
+    -------
+    twos_data : int or np.ndarray(int)
+        The two's complement conversion of the data with num_bits.
+    """
+
+    if type(data) is np.ndarray:
+        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
+        twos_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1), data).astype(int)
+    elif type(data) is list:
+        data = np.array(data)
+        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
+        twos_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1), data).astype(int)
+    elif np.issubdtype(type(data), np.integer):
+        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
+        twos_data = np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) if data & (1 << num_bits - 1) else data
+        twos_data = int(twos_data)
+
+    return twos_data
+
+
 def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
     """Convert the binary read data into a float voltage.
 
@@ -176,7 +210,8 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
 
     bit_voltage = voltage_range / (2 ** num_bits)
     if use_twos_comp:
-        data = twos_comp(val=data, bits=num_bits)
+        twos_data = binary_twos_comp(data=data, num_bits=num_bits)
+        data = np.where(np.array(data) >= (1 << num_bits - 1), -1 * twos_data, twos_data)
 
     if type(data) is np.ndarray:
         voltage = data * bit_voltage
@@ -229,8 +264,7 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
         raise TypeError(f'from_voltage voltage expected np.integer, np.floating, list, or np.ndarray type, got {type(voltage)}')
 
     if with_negatives:
-        # Perform twos complement conversion to get a signed N-bit integer
-        data = np.where(data < 0, np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, data).astype(int)
+        data = binary_twos_comp(data=data, num_bits=num_bits)
 
     # Since this system may overflow to 0 on the maximum value, we limit any
     # input voltages of maximum to full-scale.
