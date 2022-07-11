@@ -55,15 +55,23 @@ def test_to_voltage(data, num_bits, voltage_range, use_twos_comp, expected):
 def test_from_voltage(expected, num_bits, voltage_range, with_negatives, voltage):
     tolerance = 0.001
 
+    from_voltage_value = from_voltage(voltage=voltage, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives)
+
     if type(voltage) is list:
-        difference = np.abs(np.array(from_voltage(voltage=voltage, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives)) - expected)
+        difference = np.abs(np.array(from_voltage_value) - expected)
     else:
-        difference = np.abs(from_voltage(voltage=voltage, num_bits=num_bits, voltage_range=voltage_range, with_negatives=with_negatives) - expected)
+        difference = np.abs(from_voltage_value - expected)
 
     if type(difference) is np.ndarray:
         assert all(difference < tolerance)
     else:
         assert difference < tolerance
+
+    # We expect an scalar int if we gave a scalar int or float, otherwise an array.
+    if type(voltage) is int or type(voltage) is float:
+        assert type(from_voltage_value) is int
+    else:
+        assert type(from_voltage_value) is np.ndarray
 
 def test_voltage_conversion():
     tolerance = 0.001

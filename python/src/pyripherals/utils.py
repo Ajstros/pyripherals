@@ -234,12 +234,13 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
 
     # Since this system may overflow to 0 on the maximum value, we limit any
     # input voltages of maximum to full-scale.
-    if type(data) is np.ndarray:
+    if type(voltage) is int or type(voltage) is float:
+        # Keep scalar voltage from converting to 0d array by only using np.where on arrays
+        data = 2 ** num_bits - 1 if voltage == voltage_range else int(data)
+    else:
+        # Use an array
         # Note that this only catches maximum values without negatives, since with negatives the maximum is halved
         data = np.where(voltage == voltage_range, 2 ** num_bits - 1, data)
-    else:
-        # Keep scalar voltage from converting to 0d array by only using np.where on arrays
-        data = 2 ** num_bits - 1 if voltage == voltage_range else data
 
     return data
 
