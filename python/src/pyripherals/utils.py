@@ -437,7 +437,7 @@ def plt_uniques(data, ax=None, block=True):
         fig, ax = plt.subplots()
 
     if len(data.shape) > 1:
-        # 2-dimensional, plot each row as a separate line
+        # Call recursively until we can plot a line. All lines will end up on the same plot.
         for d in data:
             plt_uniques(data=d, ax=ax)
 
@@ -455,6 +455,5 @@ def plt_uniques(data, ax=None, block=True):
         # Grab data at indices
         unique_data = data[indices]
 
-        # Plot dotted line so we can see original underneath
-        plt.plot(indices, unique_data, linestyle='dotted')
-        plt.show(block=False)
+        plt.plot(indices, unique_data)
+        plt.show(block=block)
