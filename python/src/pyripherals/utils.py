@@ -439,7 +439,8 @@ def plt_uniques(data, ax=None, block=True):
     if len(data.shape) > 1:
         # Call recursively until we can plot a line. All lines will end up on the same plot.
         for d in data:
-            plt_uniques(data=d, ax=ax)
+            plt_uniques(data=d, ax=ax, block=False)
+        plt.show(block=block)
 
     else:
         # len(data.shape) == 1, we can plot as normal
@@ -455,5 +456,5 @@ def plt_uniques(data, ax=None, block=True):
         # Grab data at indices
         unique_data = data[indices]
 
-        plt.plot(indices, unique_data)
+        ax.plot(indices, unique_data)
         plt.show(block=block)
