@@ -5,6 +5,8 @@ Abe Stroschein, ajstroschein@stthomas.edu
 Lucas Koerner, koer2434@stthomas.edu
 """
 
+import matplotlib.pyplot as plt
+import time
 import numpy as np
 from scipy.fft import rfft
 import datetime
@@ -409,3 +411,50 @@ def read_h5(data_dir, file_name, chan_list=[0]):
         for ch in chan_list:
             adc_data[ch] = dset[ch, :].astype(np.uint16)
     return t, adc_data
+
+
+def plt_uniques(data, ax=None, block=True):
+    """Plot only the first and last of each group of unique data points to save time and memory.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        Data to plot. Must be at least 1 dimensional
+    ax : matplotlib.axes._subplots.AxesSubplot
+        The axes to plot the data on.
+    block : bool
+        Whether to block when showing the plot. Used in plt.show(block=block).
+    """
+
+    if type(data) is not np.ndarray:
+        raise TypeError(f'plt_uniques expected data of type np.ndarray but got {type(data)}')
+
+    if len(data.shape) < 1:
+        raise Exception(f'plt_uniques expected data.shape >= 1 but data.shape is {data.shape}')
+
+    if ax is None:
+        # No axis provided, create new
+        fig, ax = plt.subplots()
+
+    if len(data.shape) > 1:
+        # Call recursively until we can plot a line. All lines will end up on the same plot.
+        for d in data:
+            plt_uniques(data=d, ax=ax, block=False)
+        plt.show(block=block)
+
+    else:
+        # len(data.shape) == 1, we can plot as normal
+        # Get indices of first appearance of unique values
+        uniques, indices = np.unique(data, return_index=True)
+        # Get indices from just before unique values to get first and last of each group of unique values
+        indices = np.append(indices, indices - 1)
+        # Add last index so full data is plotted
+        indices = np.append(indices, len(data) - 1)
+
+        # Sort data for plotting and remove negative indices (-1 from unique at 0)
+        indices = np.sort(indices[indices >= 0])
+        # Grab data at indices
+        unique_data = data[indices]
+
+        ax.plot(indices, unique_data)
+        plt.show(block=block)
