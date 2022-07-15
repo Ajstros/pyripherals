@@ -26,6 +26,13 @@ pip
 
     pip install pyripherals
 
+To install the latest development version of :py:mod:`pyripherals` from the
+`GitHub repository <https://github.com/Ajstros/pyripherals>`_, use the following pip command.
+
+.. code-block:: console
+    
+    pip install git+https://github.com/Ajstros/pyripherals
+
 .. _installation_fpga:
 
 FPGA
