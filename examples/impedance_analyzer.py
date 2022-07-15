@@ -73,17 +73,16 @@ from pyripherals.utils import calc_impedance, from_voltage, to_voltage, read_h5
 
 
 # USER SET CONSTANTS
-RESISTANCE = 10000  # Resistance of the known resistance in Ohms
+RESISTANCE = 9.819e3  # Resistance of the known resistance in Ohms
 FREQUENCY = 200     # Desired frequency of the output sine wave in Hertz
-AMPLITUDE = 1.0     # Desired amplitude of the output sine wave in Volts
+AMPLITUDE = 0.01     # Desired amplitude of the output sine wave in Volts
 BITFILE_PATH = 'default'    # Path to top_level_module.bit. Leave as default if configured in config.yaml
 DATA_DIR = os.path.join(os.path.expanduser('~'), '.pyripherals/data/{}{:02d}{:02d}')  # Folder where data will be saved
 PLOT = False        # True to create a graph of ADS8686 readings, False otherwise
 
 # Other constants
 DAC80508_OFFSET = 0x8000                # DAC80508 voltage offset code for keeping sine wave positive
-ADS8686_UPDATE_PERIOD = 4.950495e-06    # Time (seconds) between ADS8686 voltage reads
-# TODO: remove this comment once in new repository -> DAC80508 is using DAC1 on the DAQ board in this example so we don't have to change the endpoints
+ADS8686_UPDATE_PERIOD = 1e-6    # Time (seconds) between ADS8686 voltage reads
 DAC80508_OUT_CHAN = 7                   # DAC80508 sine wave output channel
 ADS8686_A_CHAN = 7                      # ADS8686 input from side A reading DAC80508 output voltage
 ADS8686_B_CHAN = 3                      # ADS8686 input from side B reading unknown impedance voltage
@@ -96,17 +95,27 @@ time.sleep(2)
 Endpoint.update_endpoints_from_defines()
 f.send_trig(Endpoint.endpoints_from_defines["GP"]["SYSTEM_RESET"])  # system reset
 
+# Note: if you are using the DAQ board you will need to turn on the power with
+# boards.Daq.Power.supply_on() by uncommenting the section below and filling in your path to boards.py
+# import os, sys
+# sys.path.append(os.path.abspath('C:/Users/ajstr/OneDrive - University of St. Thomas/Research Internship/Programs/covg_fpga/python'))
+# from boards import Daq
+# pwr = Daq.Power(f)
+# pwr.all_off()
+
+# for name in ['1V8', '5V', '3V3']:
+#     pwr.supply_on(name)
+#     time.sleep(0.05)
+
 ddr = DDR3(fpga=f, data_version='TIMESTAMPS')
 dac = DAC80508(fpga=f)
 adc = ADS8686(fpga=f)
 
-ad7961s = AD7961.create_chips(fpga=f, number_of_chips=4)
-ad7961s[0].reset_wire(1)
-ad7961s[0].reset_wire(0)
-
 # --- Configure DAC80508 for DDR driven ---
-dac.set_spi_sclk_divide(0x8)
 dac.set_ctrl_reg(0x3218)
+dac.set_spi_sclk_divide(0x8)
+dac.filter_select(operation='clear')
+dac.set_data_mux('host')
 dac.set_config_bin(0x00)
 
 # TODO: switch this from AD5453 to DDR3 method
@@ -147,6 +156,11 @@ output_side = 'B'
 codes = adc.setup_sequencer(chan_list=[chan_list])
 adc.write_reg_bridge()
 adc.set_fpga_mode()
+time.sleep(0.1)
+ad7961s = AD7961.create_chips(fpga=f, number_of_chips=4)
+ad7961s[0].reset_wire(1)
+ad7961s[0].reset_wire(0)
+ad7961s[0].reset_trig()
 
 # --- Generate input voltage signal ---
 amplitude_code = from_voltage(voltage=AMPLITUDE, num_bits=16, voltage_range=voltage_range, with_negatives=False)
@@ -169,16 +183,7 @@ ddr.write_setup()
 g_buf = ddr.write_channels()
 ddr.reset_mig_interface()
 ddr.write_finish()
-
-ddr.clear_adc_read()
-ddr.clear_adc_write()
-
-ddr.reset_fifo(name='ADC_IN')
-ddr.reset_fifo(name='ADC_TRANSFER')
-ddr.reset_mig_interface()
-
-ddr.write_finish()
-time.sleep(0.01)
+time.sleep(0.1)
 
 # # --- Read input and ouput voltage signals ---
 # chan_data = ddr.deswizzle(ddr.read_adc(blk_multiples=40)[0])
@@ -192,9 +197,9 @@ if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 file_name = 'impedance_analyzer'
 
-time.sleep(23)
+ddr.repeat_setup()
 # saves data to a file; returns to the workspace the deswizzled DDR data of the last repeat
-chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_repeats=8,
+chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_repeats=16,
                                     blk_multiples=40)  # blk multiples multiple of 10
 # to get the deswizzled data of all repeats need to read the file
 _, chan_data = read_h5(data_dir, file_name=file_name.format(
@@ -203,13 +208,16 @@ _, chan_data = read_h5(data_dir, file_name=file_name.format(
 adc_data, timestamp, dac_data, ads, ads_seq_cnt, read_errors = ddr.data_to_names(chan_data)
 
 data_stream = ads
-v_in_code = data_stream[input_side]
-v_out_code = data_stream[output_side]
+# We discard the first few points because we want the component to reach steady state.
+initial_cutoff = 5000
+v_in_code = data_stream[input_side][initial_cutoff:]
+v_out_code = data_stream[output_side][initial_cutoff:]
+
 
 # --- Calculate impedance across frequencies ---
 # Convert back to voltage
-v_in_voltage = to_voltage(data=v_in_code, num_bits=16, voltage_range=10, use_twos_comp=True)
-v_out_voltage = to_voltage(data=v_out_code, num_bits=16, voltage_range=10, use_twos_comp=True)
+v_in_voltage = to_voltage(data=np.array(v_in_code, dtype=int), num_bits=16, voltage_range=10, use_twos_comp=True)
+v_out_voltage = to_voltage(data=np.array(v_out_code, dtype=int), num_bits=16, voltage_range=10, use_twos_comp=True)
 impedance_arr = calc_impedance(v_in=v_in_voltage, v_out=v_out_voltage, resistance=RESISTANCE)
 
 # --- Set up x frequencies ---
@@ -246,9 +254,9 @@ if PLOT:
         adc_data, timestamp, dac_data, ads, ads_seq_cnt, read_check = ddr_data_from_names
         data_stream = ads
         v_in = to_voltage(
-            data=data_stream['A'], num_bits=16, voltage_range=10, use_twos_comp=True)
+            data=np.array(data_stream['A'], dtype=int), num_bits=16, voltage_range=10, use_twos_comp=True)
         v_out = to_voltage(
-            data=data_stream['B'], num_bits=16, voltage_range=10, use_twos_comp=True)
+            data=np.array(data_stream['B'], dtype=int), num_bits=16, voltage_range=10, use_twos_comp=True)
         x = [len(v_out) + j for j in range(len(v_out))]
         ax.plot(x, v_in, color='blue', scalex=True, scaley=False, label='v_in')
         ax.plot(x, v_out, color='red', scalex=True, scaley=False, label='v_out')

@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 from scipy.fft import rfft
+from scipy.signal.windows import hann
 import datetime
 import sys
 import yaml
@@ -306,7 +307,11 @@ def calc_impedance(v_in, v_out, resistance):
 
     current = np.subtract(v_in, v_out) / resistance
 
-    impedance_calc = np.divide(rfft(v_out), rfft(current))
+    window = hann(len(v_out), sym=False)
+    w_v_out = window * v_out
+    w_current = window * current
+
+    impedance_calc = np.divide(rfft(w_v_out), rfft(w_current))
     
     return impedance_calc
 
