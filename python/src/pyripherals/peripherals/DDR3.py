@@ -772,6 +772,55 @@ class DDR3():
         print(f'Done with DDR reading: saved as {full_data_name}')
         return chan_data
 
+
+    def get_data(self, num_repeats=4, blk_multiples=40):
+        """Read and return DDR data.
+
+        This method does not save the data in a file. See DDR3.save_data for that functionality.
+
+        Parameters
+        ----------
+        num_repeats : int
+            total data read is 2048 bytes * num_repeats * blk_multiples
+        blk_multiples : int 
+            number of blocks read by adc_read. adc_read is a single OpalKelly API call 
+
+        Returns
+        -------
+        chan_data : np.ndarray
+            2D array of channel numbered data (e.g. channel 0 data array at index 0).
+        """
+
+        chunk_size = int(self.parameters["BLOCK_SIZE"] * blk_multiples / (
+            self.parameters['adc_channels']*2))  # readings per ADC
+        repeat = 0
+        adc_readings = chunk_size*num_repeats
+        print(f'Anticipated chunk size (readings per channel) {chunk_size}')
+        print(f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*self.parameters["adc_period"]*1000} ms of data')
+
+        self.set_adc_read()  # enable data into the ADC reading FIFO
+        time.sleep(adc_readings*self.parameters['adc_period'])
+
+        data_set = np.ones(
+            shape=(self.parameters['adc_channels'], chunk_size * num_repeats), dtype=int)
+        for repeat in range(num_repeats):
+            d, bytes_read_error = self.read_adc(blk_multiples)
+            chan_data = self.deswizzle(d)
+
+            if self.parameters['adc_channels'] == 4:
+                chan_stack = np.vstack(
+                    (chan_data[0], chan_data[1], chan_data[2], chan_data[3]))
+
+            if self.parameters['adc_channels'] == 8:
+                chan_stack = np.vstack((chan_data[0], chan_data[1], chan_data[2], chan_data[3],
+                                        chan_data[4], chan_data[5], chan_data[6], chan_data[7]))
+
+            data_set[:, repeat * chunk_size:(repeat + 1) * chunk_size] = chan_stack
+
+        print(f'Done with DDR reading')
+        return data_set
+
+
     def read_adc(self, blk_multiples=2048):
         """ 
         read DDR data into a numpy buffer of bytes
