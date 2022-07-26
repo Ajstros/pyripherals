@@ -602,7 +602,7 @@ class DDR3():
 
         return chan_data
 
-    def data_to_names(self, chan_data):
+    def data_to_names(self, chan_data, old=False):
         """
         Put deswizzled data into dictionaries with names that match with the data sources. 
         Complete twos complement conversion where necessary. Check timestamps for skips.
@@ -617,6 +617,8 @@ class DDR3():
         ----------
         chan_data : dict of np.arrays
             data from reading DDR (minimally processed into 2 byte containers)
+        old : bool
+            indicates if the chan data is from before the ADS channel B was repositioned to fix synchronization issues
         
         Returns
         -------
