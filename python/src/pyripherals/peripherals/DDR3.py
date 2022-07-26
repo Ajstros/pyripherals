@@ -655,7 +655,10 @@ class DDR3():
                 # adc_data[i] = twos_comp(chan_data[i], 16)
                 adc_data[i] = chan_data[i]
 
-            lsb = chan_data[7][1::5].astype(np.uint64)
+            if old:
+                lsb = chan_data[6][0::5].astype(np.uint64)
+            else:
+                lsb = chan_data[7][1::5].astype(np.uint64)
             mid_b = ((chan_data[6][1::5].astype(np.uint64)) << 16)
             msb = ((chan_data[7][2::5].astype(np.uint64)) << 32)
             t_len = np.size(msb)
@@ -681,8 +684,10 @@ class DDR3():
 
             ads = {}
             ads['A'] = twos_comp(chan_data[7][0::5], 16)
-            ads['B'] = twos_comp(chan_data[6][0::5], 16)
-
+            if old:
+                ads['B'] = twos_comp(chan_data[7][1::5], 16)
+            else:
+                ads['B'] = twos_comp(chan_data[6][0::5], 16)
             error = False
             # check that the constant values are constant
             constant_values = {0: 0xaa55, 1: (0x28b<<5), 2: 0x77bb, 3: (0x28c<<5)}
