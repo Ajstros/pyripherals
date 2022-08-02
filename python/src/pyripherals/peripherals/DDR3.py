@@ -1,5 +1,5 @@
 from ..core import Endpoint
-from ..utils import test_bit, gen_mask, twos_comp, binary_twos_comp
+from ..utils import test_bit, gen_mask, twos_comp, twos_comp
 import numpy as np
 import time
 import os
@@ -680,8 +680,8 @@ class DDR3():
             # dac channels 4,5 are available but not every sample. skip for now. TODO: add channels 4,5
 
             ads = {}
-            ads['A'] = binary_twos_comp(chan_data[7][0::5], 16)
-            ads['B'] = binary_twos_comp(chan_data[7][1::5], 16)
+            ads['A'] = twos_comp(chan_data[7][0::5], 16)
+            ads['B'] = twos_comp(chan_data[7][1::5], 16)
 
             error = False
             # check that the constant values are constant

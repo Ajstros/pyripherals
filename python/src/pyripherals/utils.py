@@ -64,26 +64,6 @@ def gen_mask(bit_pos):
     mask = sum([(1 << b) for b in bit_pos])
     return mask
 
-def twos_comp(val, bits):
-    """compute the 2's complement of int value val
-        handle an array (list or numpy)
-
-    Use for converting twos complement binary data to a signed integer.
-    """
-
-    def twos_comp_scalar(val, bits):
-        if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
-            val = val - (1 << bits)        # compute negative value
-        return val                         # return positive value as is
-
-    if hasattr(val, "__len__"):
-        tmp_arr = np.array([])
-        for v in val:
-            tmp_arr = np.append(tmp_arr, twos_comp_scalar(v,bits))
-        return tmp_arr
-    else:
-        return twos_comp_scalar(val, bits)
-
 
 def reverse_bits(number, bit_width=8):
     """Return an integer with the reversed bits of the input number."""
@@ -156,7 +136,7 @@ def int_to_list(integer, byteorder='little', num_bytes=None):
         return list_int
 
 
-def binary_twos_comp(data, num_bits):
+def twos_comp(data, num_bits):
     """Apply two's complement using the binary method.
     
     Invert all bits (in num_bits), add 1 (only keeping num_bits).
