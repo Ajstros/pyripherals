@@ -121,6 +121,12 @@ class I2CController:
         """Take in data from the SCL and SDA lines."""
 
         if data_transfer.lower() == 'pipe':
+            try:
+                self.endpoints['FIFO_RESET']
+                self.endpoints['PIPE_OUT']
+            except KeyError as e:
+                raise KeyError('i2c_receive requires the I2C endpoints FIFO_RESET and PIPE_OUT. One or both are missing.')
+
             self.fpga.xem.ActivateTriggerIn(self.endpoints['FIFO_RESET'].address, self.endpoints['FIFO_RESET'].bit_index_low)
 
         self.i2c['m_pBuf'][0] |= 0x80
