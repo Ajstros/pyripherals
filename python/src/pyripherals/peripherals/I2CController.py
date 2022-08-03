@@ -118,7 +118,21 @@ class I2CController:
         print('Timeout error in transmit')
 
     def i2c_receive(self, data_length, data_transfer='wire'):
-        """Take in data from the SCL and SDA lines."""
+        """Take in data from the SCL and SDA lines.
+            
+            Parameters
+            ----------
+            data_length : int
+                Number of bytes expected to receive.
+            data_transfer : str
+                The form of the data transfer. Either 'wire' and 'pipe'. Defaults to 'wire'.
+
+            Returns
+            -------
+            data or buf, e : list or bytearray, int
+                The data or a bytearray and error code, depending on whether data_transfer was 'wire' or 'pipe'.
+            """
+
 
         self.i2c['m_pBuf'][0] |= 0x80
         self.i2c['m_pBuf'][3] = data_length
@@ -203,7 +217,15 @@ class I2CController:
             Written to device (this is a list and must be even if length 1)
         data_length : int
             Number of bytes expected to receive
+        data_transfer : str
+            The form of the data transfer. Either 'wire' and 'pipe'. Defaults to 'wire'.
+
+        Returns
+        -------
+        data or buf, e : list or bytearray, int
+            The data or a bytearray and error code, depending on whether data_transfer was 'wire' or 'pipe'.
         """
+        
         if (regAddr == None) or (regAddr == [None]):
             # for chips without register addresses -- just a single register
             preamble = [devAddr | 0x01]
