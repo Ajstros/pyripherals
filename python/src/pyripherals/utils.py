@@ -248,7 +248,7 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
 
     bit_voltage = voltage_range / (2 ** num_bits)
     if use_twos_comp:
-        twos_data = twos_comp(data=data, num_bits=num_bits)
+        twos_data = custom_signed_to_int(data=data, num_bits=num_bits)
         data = np.where(np.array(data) >= (1 << num_bits - 1), -1 * twos_data, twos_data)
 
     if type(data) is np.ndarray:
@@ -302,7 +302,7 @@ def from_voltage(voltage, num_bits, voltage_range, with_negatives=False):
         raise TypeError(f'from_voltage voltage expected np.integer, np.floating, list, or np.ndarray type, got {type(voltage)}')
 
     if with_negatives:
-        data = twos_comp(data=data, num_bits=num_bits)
+        data = int_to_custom_signed(data=data, num_bits=num_bits)
 
     # Since this system may overflow to 0 on the maximum value, we limit any
     # input voltages of maximum to full-scale.
