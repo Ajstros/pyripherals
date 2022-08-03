@@ -1,5 +1,5 @@
 from ..core import Endpoint
-from ..utils import test_bit, gen_mask, twos_comp
+from ..utils import test_bit, gen_mask, custom_signed_to_int
 import numpy as np
 import time
 import os
@@ -581,7 +581,7 @@ class DDR3():
             chan_data[3] = chan_data_swz[1]
             if convert_twos:
                 for i in range(4):
-                    chan_data[i] = twos_comp(chan_data[i], bits)
+                    chan_data[i] = custom_signed_to_int(chan_data[i], bits)
 
         # first version of ADC data before DACs + timestamps are stored
         if self.parameters['data_version'] == 'TIMESTAMPS':
@@ -652,7 +652,7 @@ class DDR3():
 
             adc_data = {}
             for i in range(4):
-                # adc_data[i] = twos_comp(chan_data[i], 16)
+                # adc_data[i] = custom_signed_to_int(chan_data[i], 16)
                 adc_data[i] = chan_data[i]
 
             lsb = chan_data[6][0::5].astype(np.uint64)
@@ -680,8 +680,8 @@ class DDR3():
             # dac channels 4,5 are available but not every sample. skip for now. TODO: add channels 4,5
 
             ads = {}
-            ads['A'] = twos_comp(chan_data[7][0::5], 16)
-            ads['B'] = twos_comp(chan_data[7][1::5], 16)
+            ads['A'] = custom_signed_to_int(chan_data[7][0::5], 16)
+            ads['B'] = custom_signed_to_int(chan_data[7][1::5], 16)
 
             error = False
             # check that the constant values are constant
