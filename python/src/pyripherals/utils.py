@@ -237,8 +237,8 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
 
     bit_voltage = voltage_range / (2 ** num_bits)
     if use_twos_comp:
-        twos_data = custom_signed_to_int(data=data, num_bits=num_bits)
-        data = np.where(np.array(data) >= (1 << num_bits - 1), -1 * twos_data, twos_data)
+        data = custom_signed_to_int(data=data, num_bits=num_bits)
+        # data = np.where(np.array(data) >= (1 << num_bits - 1), -1 * twos_data, twos_data)
 
     if type(data) is np.ndarray:
         voltage = data * bit_voltage
