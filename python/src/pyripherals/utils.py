@@ -164,19 +164,8 @@ def int_to_custom_signed(data, num_bits):
     array([65531, 5])
     """
 
-    if type(data) is np.ndarray:
-        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
-        twos_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1), data).astype(int)
-    elif type(data) is list:
-        data = np.array(data)
-        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
-        twos_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1), data).astype(int)
-    elif np.issubdtype(type(data), np.integer):
-        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out.
-        twos_data = np.bitwise_and(np.bitwise_xor(np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) if data & (1 << num_bits - 1) else data
-        twos_data = int(twos_data)
-
-    return twos_data
+    # If int is positive, this should cut off nothing but leading zeros. If negative, it should only cut off leading ones.
+    return np.bitwise_and(data, (1 << num_bits) - 1)
 
 
 def custom_signed_to_int(data, num_bits):
