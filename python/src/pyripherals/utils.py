@@ -139,7 +139,9 @@ def int_to_list(integer, byteorder='little', num_bytes=None):
 def int_to_custom_signed(data, num_bits):
     """Return the given integer in two's complement form in the given number of bits.
     
-    Invert all bits (in num_bits), add 1 (only keeping num_bits).
+    Assuming the data fits in the given number of bits, we simply cut off any
+    leading 1's from the number being negative. Viewed as a num_bits-bit
+    integer, this does not change its value.
 
     Parameters
     ----------
@@ -171,7 +173,10 @@ def int_to_custom_signed(data, num_bits):
 def custom_signed_to_int(data, num_bits):
     """Return the Python int form of a two's complement integer in the given number of bits.
     
-    Invert all bits (in num_bits), add 1 (only keeping num_bits).
+    For negative numbers, we invert all bits (in num_bits) and add 1 (only
+    keeping num_bits) to apply two's complement and get the positive version
+    of the number. Then we multiply the number by -1 so it has the same value
+    as before, but now as a 32-bit Python int.
 
     Parameters
     ----------
@@ -197,16 +202,16 @@ def custom_signed_to_int(data, num_bits):
     """
 
     if type(data) is np.ndarray:
-        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
+        # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
         int_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(
             np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1, data).astype(int)
     elif type(data) is list:
         data = np.array(data)
-        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
+        # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
         int_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(
             np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1, data).astype(int)
     elif np.issubdtype(type(data), np.integer):
-        # Use bitwise_or to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
+        # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
         int_data = np.bitwise_and(np.bitwise_xor(np.abs(
             data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1 if data & (1 << num_bits - 1) else data
         int_data = int(int_data)
@@ -238,7 +243,6 @@ def to_voltage(data, num_bits, voltage_range, use_twos_comp=False):
     bit_voltage = voltage_range / (2 ** num_bits)
     if use_twos_comp:
         data = custom_signed_to_int(data=data, num_bits=num_bits)
-        # data = np.where(np.array(data) >= (1 << num_bits - 1), -1 * twos_data, twos_data)
 
     if type(data) is np.ndarray:
         voltage = data * bit_voltage
