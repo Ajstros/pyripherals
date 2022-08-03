@@ -120,6 +120,9 @@ class I2CController:
     def i2c_receive(self, data_length, data_transfer='wire'):
         """Take in data from the SCL and SDA lines."""
 
+        if data_transfer.lower() == 'pipe':
+            self.fpga.xem.ActivateTriggerIn(self.endpoints['FIFO_RESET'].address, self.endpoints['FIFO_RESET'].bit_index_low)
+
         self.i2c['m_pBuf'][0] |= 0x80
         self.i2c['m_pBuf'][3] = data_length
 
@@ -164,9 +167,7 @@ class I2CController:
                             self.endpoints['MEMREAD'].address, self.endpoints['MEMREAD'].bit_index_low)
                     return data
                 if data_transfer.lower() == 'pipe':
-                    # this does not take care of the FIFO reset
-                    # wait so next data is ready, then continue
-                    time.sleep(0.01)
+                    return self.fpga.read_pipe_out(self.endpoints['PIPE_OUT'].address, data_length)
             time.sleep(0.01)
 
         print('Timeout Exception in Rx')
