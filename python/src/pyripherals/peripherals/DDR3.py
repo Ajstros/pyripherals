@@ -51,7 +51,7 @@ class DDR3():
     
     """
 
-    def __init__(self, fpga, endpoints=None, data_version='ADC_NO_TIMESTAMPS'):
+    def __init__(self, fpga, endpoints=None, data_version='TIMESTAMPS'):
         if endpoints is None:
             endpoints = Endpoint.get_chip_endpoints('DDR3')
         self.fpga = fpga
@@ -744,6 +744,8 @@ class DDR3():
         with h5py.File(full_data_name, "w") as file:
             data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
                 self.parameters['adc_channels'], None))
+            data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
+            
             while repeat < num_repeats:
                 d, bytes_read_error = self.read_adc(blk_multiples)
                 if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
