@@ -432,13 +432,20 @@ class FPGA:
     """
 
 
-    def __init__(self, bitfile='default', debug=False):
+    def __init__(self, bitfile='default', endpoints=None, debug=False):
         if bitfile == 'default':
             # Use bitfile from config.yaml fpga_bitfile_path
             self.bitfile = configs['fpga_bitfile_path']
         else:
             self.bitfile = bitfile
+
+        if endpoints is None:
+            self.endpoints = Endpoint.get_chip_endpoints('GP')
+        else:
+            self.endpoints = endpoints
+            
         self.debug = debug
+        self.bitfile_version = None
 
 
     def init_device(self):
@@ -464,7 +471,10 @@ class FPGA:
               (self.device_info.deviceMajorVersion, self.device_info.deviceMinorVersion))
         print("   Serial Number: %s" % self.device_info.serialNumber)
         print("       Device ID: %s" % self.device_info.deviceID)
-        print("       USB Speed  %d" % self.device_info.usbSpeed)
+        print("       USB Speed: %d" % self.device_info.usbSpeed)
+
+        self.bitfile_version = self.read_wire(self.endpoints['BITFILE_VERSION'].address)
+        print(f"Bitfile Version: {self.bitfile_version}")
 
         self.xem.LoadDefaultPLLConfiguration()
 
