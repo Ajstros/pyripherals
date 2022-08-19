@@ -475,9 +475,15 @@ class FPGA:
 
         self.xem.LoadDefaultPLLConfiguration()
 
-        self.bitfile_version = self.read_wire(self.endpoints['BITFILE_VERSION'].address)
+        try:
+            self.bitfile_version = self.read_wire(self.endpoints['BITFILE_VERSION'].address)
+        except KeyError:
+            print('No Endpoint BITFILE_VERSION in Endpoints read from', configs['ep_defines_path'])
+            # Default to version 1
+            self.bitfile_version = 1
         if self.bitfile_version < 0:
             # An error occurred in the read
+            print('Error reading BITFILE_VERSION endpoint:', self.bitfile_version)
             self.bitfile_version = 1    # 00.00.01
         print(str_bitfile_version(self.bitfile_version))
 
