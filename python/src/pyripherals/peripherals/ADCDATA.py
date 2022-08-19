@@ -1,5 +1,5 @@
 from ..core import Endpoint
-from ..utils import twos_comp
+from ..utils import custom_signed_to_int
 import numpy as np
 import time
 
@@ -37,7 +37,7 @@ class ADCDATA():
     def convert_twos(self, d):
         """Convert data to integer two's complement representation."""
 
-        return twos_comp(d, self.num_bits)
+        return custom_signed_to_int(d, self.num_bits)
 
     def convert_data(self, buf):
         """Deswizle and convert the twos complement representation."""
@@ -46,17 +46,17 @@ class ADCDATA():
 
     # TODO: test composite ADC function that enables, reads, converts and plots
     # TODO: incorporate/connect QT graphing (UIscript.py)
-    def read(self, twos_comp_conv=True):
+    def read(self, custom_signed_to_int_conv=True):
         # TODO: add method docstring
 
         s, e = self.fpga.read_pipe_out(self.endpoints['PIPE_OUT'].address)
-        if twos_comp_conv:
+        if custom_signed_to_int_conv:
             data = self.convert_data(s)
         else:
             data = self.deswizzle(s)
         return data
 
-    def stream_mult(self, swps=4, twos_comp_conv=True, data_len=1024):
+    def stream_mult(self, swps=4, custom_signed_to_int_conv=True, data_len=1024):
         # TODO: add method docstring
         print('ADC stream multiple')
         cnt = 0
@@ -82,7 +82,7 @@ class ADCDATA():
         if not timeout_flg:
             print('ADC stream_mult timed out')
             return -1
-        if twos_comp_conv:
+        if custom_signed_to_int_conv:
             data = self.convert_data(st)
         else:
             data = self.deswizzle(st)

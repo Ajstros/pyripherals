@@ -1,5 +1,5 @@
 from ..core import Endpoint, Register
-from ..utils import twos_comp
+from ..utils import custom_signed_to_int
 from .SPIController import SPIController
 from .ADCDATA import ADCDATA
 
@@ -95,7 +95,7 @@ class ADS8686(SPIController, ADCDATA):
         Uses the stored gain range. reg_val can be list of ints or int
         """
         #  TODO: setup for sequence of channels
-        val = twos_comp(reg_val, 16)  # 16-bit channel readings
+        val = custom_signed_to_int(reg_val, 16)  # 16-bit channel readings
         lsb = (self.ranges[chan_num]*2)/2**16
         return val*lsb
 
