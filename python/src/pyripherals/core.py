@@ -485,7 +485,7 @@ class FPGA:
             # An error occurred in the read
             print('Error reading BITFILE_VERSION endpoint:', self.bitfile_version)
             self.bitfile_version = 1    # 00.00.01
-        print(str_bitfile_version(self.bitfile_version))
+        print('Bitfile Version:', str_bitfile_version(self.bitfile_version))
 
         # Download the configuration file.
         if self.bitfile is not None:
