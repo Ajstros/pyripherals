@@ -602,7 +602,7 @@ class DDR3():
 
         return chan_data
 
-    def data_to_names(self, chan_data, old=False):
+    def data_to_names(self, chan_data, bitfile_version=self.fpga.bitfile_version):
         """
         Put deswizzled data into dictionaries with names that match with the data sources. 
         Complete twos complement conversion where necessary. Check timestamps for skips.
@@ -617,8 +617,8 @@ class DDR3():
         ----------
         chan_data : dict of np.arrays
             data from reading DDR (minimally processed into 2 byte containers)
-        old : bool
-            indicates if the chan data is from before the ADS channel B was repositioned to fix synchronization issues
+        bitfile_version : int
+            The bitfile version that the .h5 file which held chan_data was created with. Defaults to the bitfile version of the FPGA
         
         Returns
         -------
@@ -657,7 +657,7 @@ class DDR3():
                 # adc_data[i] = custom_signed_to_int(chan_data[i], 16)
                 adc_data[i] = chan_data[i]
 
-            if old:
+            if bitfile_version < 2: # 00.00.02 -> 2
                 lsb = chan_data[6][0::5].astype(np.uint64)
             else:
                 lsb = chan_data[7][1::5].astype(np.uint64)
@@ -686,7 +686,7 @@ class DDR3():
 
             ads = {}
             ads['A'] = custom_signed_to_int(chan_data[7][0::5], 16)
-            if old:
+            if bitfile_version < 2: # 00.00.02 -> 2
                 ads['B'] = custom_signed_to_int(chan_data[7][1::5], 16)
             else:
                 ads['B'] = custom_signed_to_int(chan_data[6][0::5], 16)
@@ -752,7 +752,7 @@ class DDR3():
             data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
                 self.parameters['adc_channels'], None))
             data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
-            
+
             while repeat < num_repeats:
                 d, bytes_read_error = self.read_adc(blk_multiples)
                 if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
