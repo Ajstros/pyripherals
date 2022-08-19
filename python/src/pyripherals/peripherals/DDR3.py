@@ -57,19 +57,17 @@ class DDR3():
         self.fpga = fpga
         self.endpoints = endpoints
         self.parameters = {'BLOCK_SIZE': 2048,  # 1/2 the incoming FIFO depth in bytes (size of the BlockPipeIn)
-                           'sample_size': 65536,  # per channel
                            # number of channels that the DDR is striped between (for DACs)
                            'channels': 8,
                            'update_period': 400e-9,  # 2.5 MHz -- requires SCLK ~ 50 MHZ
-                           'port1_index': 0x7f_ff_f8,
+                           'port1_index': 0x3_7f_ff_f8,
                            'adc_channels': 8,  # number of 2 byte chunks in DDR
                            'adc_period': 200e-9
                            }
 
         # the index is the DDR address that the circular buffer stops at.
         # need to write all the way up to this stoping point otherwise the SPI output will glitch
-        self.parameters['sample_size'] = int(
-            (self.parameters['port1_index'] + 8)/2)
+        self.parameters['sample_size'] = int((self.parameters['port1_index'] + 8)/4)
         self.parameters['data_version'] = data_version  # sets deswizzling mode
 
         self.data_arrays = []
