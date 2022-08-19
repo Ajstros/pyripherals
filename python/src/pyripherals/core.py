@@ -12,7 +12,7 @@ import os
 import sys
 import copy
 import yaml
-from .utils import gen_mask
+from .utils import gen_mask, str_bitfile_version
 from warnings import warn
 
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
@@ -443,7 +443,7 @@ class FPGA:
             self.endpoints = Endpoint.get_chip_endpoints('GP')
         else:
             self.endpoints = endpoints
-            
+
         self.debug = debug
         self.bitfile_version = None
 
@@ -473,10 +473,13 @@ class FPGA:
         print("       Device ID: %s" % self.device_info.deviceID)
         print("       USB Speed: %d" % self.device_info.usbSpeed)
 
-        self.bitfile_version = self.read_wire(self.endpoints['BITFILE_VERSION'].address)
-        print(f"Bitfile Version: {self.bitfile_version}")
-
         self.xem.LoadDefaultPLLConfiguration()
+
+        self.bitfile_version = self.read_wire(self.endpoints['BITFILE_VERSION'].address)
+        if self.bitfile_version < 0:
+            # An error occurred in the read
+            self.bitfile_version = 1    # 00.00.01
+        print(str_bitfile_version(self.bitfile_version))
 
         # Download the configuration file.
         if self.bitfile is not None:
