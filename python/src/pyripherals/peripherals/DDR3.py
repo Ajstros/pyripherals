@@ -602,7 +602,7 @@ class DDR3():
 
         return chan_data
 
-    def data_to_names(self, chan_data, bitfile_version=self.fpga.bitfile_version):
+    def data_to_names(self, chan_data, bitfile_version=None):
         """
         Put deswizzled data into dictionaries with names that match with the data sources. 
         Complete twos complement conversion where necessary. Check timestamps for skips.
@@ -640,6 +640,14 @@ class DDR3():
             if True the constant read values were wrong 
                or the timestamp steps are not all the same
         """
+
+        if bitfile_version is None:
+            # Old code, hasn't been updated to pass bitfile_version from .h5 file header
+            # Default to FPGA bitfile version, or version 1 if the FPGA bitfile version is None
+            if self.fpga.bitfile_version is None:
+                bitfile_version = 1
+            else:
+                bitfile_version = self.fpga.bitfile_version
 
         # first version of ADC data before DACs + timestamps are stored
         if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
