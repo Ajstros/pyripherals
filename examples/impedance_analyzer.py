@@ -74,8 +74,8 @@ from pyripherals.utils import calc_impedance, from_voltage, to_voltage, read_h5
 
 # USER SET CONSTANTS
 RESISTANCE = 9.819e3  # Resistance of the known resistance in Ohms
-FREQUENCY = 200     # Desired frequency of the output sine wave in Hertz
-AMPLITUDE = 0.01     # Desired amplitude of the output sine wave in Volts
+FREQUENCY = 20000     # Desired frequency of the output sine wave in Hertz
+AMPLITUDE = 0.5     # Desired amplitude of the output sine wave in Volts
 BITFILE_PATH = 'default'    # Path to top_level_module.bit. Leave as default if configured in config.yaml
 DATA_DIR = os.path.join(os.path.expanduser('~'), '.pyripherals/data/{}{:02d}{:02d}')  # Folder where data will be saved
 PLOT = False        # True to create a graph of ADS8686 readings, False otherwise
@@ -97,15 +97,15 @@ f.send_trig(Endpoint.endpoints_from_defines["GP"]["SYSTEM_RESET"])  # system res
 
 # Note: if you are using the DAQ board you will need to turn on the power with
 # boards.Daq.Power.supply_on() by uncommenting the section below and filling in your path to boards.py
-# import os, sys
-# sys.path.append(os.path.abspath('C:/Users/ajstr/OneDrive - University of St. Thomas/Research Internship/Programs/covg_fpga/python'))
-# from boards import Daq
-# pwr = Daq.Power(f)
-# pwr.all_off()
+import os, sys
+sys.path.append(os.path.abspath('C:/Users/koer2434/Documents/fpga/covg_fpga/python'))
+from boards import Daq
+pwr = Daq.Power(f)
+pwr.all_off()
 
-# for name in ['1V8', '5V', '3V3']:
-#     pwr.supply_on(name)
-#     time.sleep(0.05)
+for name in ['1V8', '5V', '3V3']:
+    pwr.supply_on(name)
+    time.sleep(0.05)
 
 ddr = DDR3(fpga=f, data_version='TIMESTAMPS')
 dac = DAC80508(fpga=f)
@@ -113,7 +113,7 @@ adc = ADS8686(fpga=f)
 
 # --- Configure DAC80508 for DDR driven ---
 dac.set_ctrl_reg(0x3218)
-dac.set_spi_sclk_divide(0x8)
+dac.set_spi_sclk_divide(0x2)
 dac.filter_select(operation='clear')
 dac.set_data_mux('host')
 dac.set_config_bin(0x00)
@@ -154,7 +154,7 @@ chan_list = (str(ADS8686_A_CHAN), str(ADS8686_B_CHAN))
 input_side = 'A'
 output_side = 'B'
 codes = adc.setup_sequencer(chan_list=[chan_list])
-adc.write_reg_bridge()
+adc.write_reg_bridge(clk_div=200)
 adc.set_fpga_mode()
 time.sleep(0.1)
 ad7961s = AD7961.create_chips(fpga=f, number_of_chips=4)
@@ -195,11 +195,11 @@ data_dir = DATA_DIR.format(
 )
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
-file_name = 'impedance_analyzer'
+file_name = 'impedance_analyzer_15k_900pF_v2'
 
 ddr.repeat_setup()
 # saves data to a file; returns to the workspace the deswizzled DDR data of the last repeat
-chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_repeats=16,
+chan_data_one_repeat = ddr.save_data(data_dir, file_name.format(0) + '.h5', num_repeats=64,
                                     blk_multiples=40)  # blk multiples multiple of 10
 # to get the deswizzled data of all repeats need to read the file
 _, chan_data = read_h5(data_dir, file_name=file_name.format(
@@ -232,6 +232,13 @@ frequency_found = x_freq[desired_index]
 z = impedance_arr[desired_index]
 print(f'Impedance of {z} Ohms found at {frequency_found} Hz')
 print(f'Phasor Notation Impedance: {np.abs(z)}\N{ANGLE}{np.angle(z, deg=True)}\N{DEGREE SIGN}')
+
+plt.ion()
+fig, ax = plt.subplots()
+ax.plot(v_in_voltage)
+ax.plot(v_out_voltage)
+
+
 
 # --- Optionally plot input and output ---
 if PLOT:

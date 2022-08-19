@@ -602,7 +602,7 @@ class DDR3():
 
         return chan_data
 
-    def data_to_names(self, chan_data):
+    def data_to_names(self, chan_data, old=False):
         """
         Put deswizzled data into dictionaries with names that match with the data sources. 
         Complete twos complement conversion where necessary. Check timestamps for skips.
@@ -617,6 +617,8 @@ class DDR3():
         ----------
         chan_data : dict of np.arrays
             data from reading DDR (minimally processed into 2 byte containers)
+        old : bool
+            indicates if the chan data is from before the ADS channel B was repositioned to fix synchronization issues
         
         Returns
         -------
@@ -655,7 +657,10 @@ class DDR3():
                 # adc_data[i] = custom_signed_to_int(chan_data[i], 16)
                 adc_data[i] = chan_data[i]
 
-            lsb = chan_data[6][0::5].astype(np.uint64)
+            if old:
+                lsb = chan_data[6][0::5].astype(np.uint64)
+            else:
+                lsb = chan_data[7][1::5].astype(np.uint64)
             mid_b = ((chan_data[6][1::5].astype(np.uint64)) << 16)
             msb = ((chan_data[7][2::5].astype(np.uint64)) << 32)
             t_len = np.size(msb)
@@ -681,8 +686,10 @@ class DDR3():
 
             ads = {}
             ads['A'] = custom_signed_to_int(chan_data[7][0::5], 16)
-            ads['B'] = custom_signed_to_int(chan_data[7][1::5], 16)
-
+            if old:
+                ads['B'] = custom_signed_to_int(chan_data[7][1::5], 16)
+            else:
+                ads['B'] = custom_signed_to_int(chan_data[6][0::5], 16)
             error = False
             # check that the constant values are constant
             constant_values = {0: 0xaa55, 1: (0x28b<<5), 2: 0x77bb, 3: (0x28c<<5)}
