@@ -732,9 +732,8 @@ class DDR3():
 
         Returns
         -------
-        chan_data : dict
-            dictionary of data arrays (keys are channel numbers)
-
+        full_data : np.ndarray
+            All data in the newly saved h5 file.
         """
 
         # If the file doesn't already exist, write a new one
@@ -800,9 +799,10 @@ class DDR3():
                     data_set[:, -chunk_size:] = chan_stack
                 if repeat < num_repeats:
                     data_set.resize(data_set.shape[1] + chunk_size, axis=1)
+            full_data = data_set[:]
 
         print(f'Done with DDR reading: saved as {full_data_name}')
-        return chan_data
+        return full_data
 
     def read_adc(self, blk_multiples=2048):
         """ 
