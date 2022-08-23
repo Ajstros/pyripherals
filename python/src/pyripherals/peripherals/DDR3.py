@@ -737,13 +737,13 @@ class DDR3():
 
         """
 
+        # If the file doesn't already exist, write a new one
+        if os.path.exists(os.path.join(data_dir, file_name)):
+            print(f'No existing file found at {os.path.join(data_dir, file_name)}, creating new file')
+            append = False
+
         if append:
-            # If the file doesn't already exist, write a new one
-            if os.path.exists(os.path.join(data_dir, file_name)):
-                file_mode = 'a'
-            else:
-                file_mode = 'w'
-                print(f'No existing file found at {os.path.join(data_dir, file_name)}, creating new file')
+            file_mode = 'a'
         else:
             file_mode = 'w'
 
