@@ -715,7 +715,7 @@ class DDR3():
 
             return adc_data, timestamp, dac_data, ads, ads_seq_cnt, error
 
-    def save_data(self, data_dir, file_name, num_repeats=4, blk_multiples=40):
+    def save_data(self, data_dir, file_name, num_repeats=4, blk_multiples=40, append=False):
         """
         read and save DDR data to an hdf file 
 
@@ -736,6 +736,17 @@ class DDR3():
             dictionary of data arrays (keys are channel numbers)
 
         """
+
+        if append:
+            # If the file doesn't already exist, write a new one
+            if os.path.exists(os.path.join(data_dir, file_name)):
+                file_mode = 'a'
+            else:
+                file_mode = 'w'
+                print(f'No existing file found at {os.path.join(data_dir, file_name)}, creating new file')
+        else:
+            file_mode = 'w'
+
         chunk_size = int(self.parameters["BLOCK_SIZE"] * blk_multiples / (
             self.parameters['adc_channels']*2))  # readings per ADC
         repeat = 0
@@ -754,10 +765,15 @@ class DDR3():
         time.sleep(adc_readings*self.parameters['adc_period'])
 
         # Save ADC DDR data to a file
-        with h5py.File(full_data_name, "w") as file:
-            data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
-                self.parameters['adc_channels'], None))
-            data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
+        with h5py.File(full_data_name, file_mode) as file:
+            if append:
+                data_set = file['adc']
+                if data_set.attrs['bitfile_version'] != self.fpga.bitfile_version:
+                    raise Exception(f"File {os.path.join(data_dir, file_name)} bitfile version {data_set.attrs['bitfile_version']} does not match FPGA bitfile version {self.fpga.bitfile_version}")
+            else:
+                data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
+                    self.parameters['adc_channels'], None))
+                data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
 
             while repeat < num_repeats:
                 d, bytes_read_error = self.read_adc(blk_multiples)
