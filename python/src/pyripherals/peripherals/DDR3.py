@@ -768,7 +768,7 @@ class DDR3():
         with h5py.File(full_data_name, file_mode) as file:
             if append:
                 data_set = file['adc']
-                new_data_index = data_set.shape[1] + 1
+                new_data_index = data_set.shape[1]
                 if data_set.attrs['bitfile_version'] != self.fpga.bitfile_version:
                     raise Exception(f"File {os.path.join(data_dir, file_name)} bitfile version {data_set.attrs['bitfile_version']} does not match FPGA bitfile version {self.fpga.bitfile_version}")
             else:
