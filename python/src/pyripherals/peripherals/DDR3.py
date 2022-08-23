@@ -732,8 +732,8 @@ class DDR3():
 
         Returns
         -------
-        full_data : np.ndarray
-            All data in the newly saved h5 file.
+        new_data : np.ndarray
+            The new data saved in the h5 file.
         """
 
         # If the file doesn't already exist, write a new one
@@ -768,12 +768,14 @@ class DDR3():
         with h5py.File(full_data_name, file_mode) as file:
             if append:
                 data_set = file['adc']
+                new_data_index = data_set.shape[1] + 1
                 if data_set.attrs['bitfile_version'] != self.fpga.bitfile_version:
                     raise Exception(f"File {os.path.join(data_dir, file_name)} bitfile version {data_set.attrs['bitfile_version']} does not match FPGA bitfile version {self.fpga.bitfile_version}")
             else:
                 data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
                     self.parameters['adc_channels'], None))
                 data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
+                new_data_index = 0
 
             while repeat < num_repeats:
                 d, bytes_read_error = self.read_adc(blk_multiples)
@@ -799,10 +801,10 @@ class DDR3():
                     data_set[:, -chunk_size:] = chan_stack
                 if repeat < num_repeats:
                     data_set.resize(data_set.shape[1] + chunk_size, axis=1)
-            full_data = data_set[:]
+            new_data = data_set[new_data_index:]
 
         print(f'Done with DDR reading: saved as {full_data_name}')
-        return full_data
+        return new_data
 
     def read_adc(self, blk_multiples=2048):
         """ 
