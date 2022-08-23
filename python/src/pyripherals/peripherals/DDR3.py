@@ -738,9 +738,16 @@ class DDR3():
         """
 
         # If the file doesn't already exist, write a new one
-        if append and not os.path.exists(os.path.join(data_dir, file_name)):
-            print(f'No existing file found at {os.path.join(data_dir, file_name)}, creating new file')
-            append = False
+        full_data_name = os.path.join(data_dir, file_name)
+        if append:
+            if not os.path.exists(full_data_name):
+                print(f'No existing file found at {full_data_name}, creating new file')
+                append = False
+        else:
+            try:
+                os.remove(full_data_name)
+            except OSError:
+                pass
 
         if append:
             file_mode = 'a'
@@ -754,12 +761,6 @@ class DDR3():
         print(f'Anticipated chunk size (readings per channel) {chunk_size}')
         print(
             f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*self.parameters["adc_period"]*1000} ms of data')
-
-        full_data_name = os.path.join(data_dir, file_name)
-        try:
-            os.remove(full_data_name)
-        except OSError:
-            pass
 
         self.set_adc_read()  # enable data into the ADC reading FIFO
         time.sleep(adc_readings*self.parameters['adc_period'])
