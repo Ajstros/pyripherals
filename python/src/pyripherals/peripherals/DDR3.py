@@ -801,7 +801,7 @@ class DDR3():
                     data_set[:, -chunk_size:] = chan_stack
                 if repeat < num_repeats:
                     data_set.resize(data_set.shape[1] + chunk_size, axis=1)
-            new_data = data_set[new_data_index:]
+            new_data = data_set[:, new_data_index:]
 
         print(f'Done with DDR reading: saved as {full_data_name}')
         return new_data
