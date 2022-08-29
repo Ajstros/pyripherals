@@ -51,25 +51,23 @@ class DDR3():
     
     """
 
-    def __init__(self, fpga, endpoints=None, data_version='ADC_NO_TIMESTAMPS'):
+    def __init__(self, fpga, endpoints=None, data_version='TIMESTAMPS'):
         if endpoints is None:
             endpoints = Endpoint.get_chip_endpoints('DDR3')
         self.fpga = fpga
         self.endpoints = endpoints
         self.parameters = {'BLOCK_SIZE': 2048,  # 1/2 the incoming FIFO depth in bytes (size of the BlockPipeIn)
-                           'sample_size': 65536,  # per channel
                            # number of channels that the DDR is striped between (for DACs)
                            'channels': 8,
                            'update_period': 400e-9,  # 2.5 MHz -- requires SCLK ~ 50 MHZ
-                           'port1_index': 0x7f_ff_f8,
+                           'port1_index': 0x3_7f_ff_f8,
                            'adc_channels': 8,  # number of 2 byte chunks in DDR
                            'adc_period': 200e-9
                            }
 
         # the index is the DDR address that the circular buffer stops at.
         # need to write all the way up to this stoping point otherwise the SPI output will glitch
-        self.parameters['sample_size'] = int(
-            (self.parameters['port1_index'] + 8)/2)
+        self.parameters['sample_size'] = int((self.parameters['port1_index'] + 8)/4)
         self.parameters['data_version'] = data_version  # sets deswizzling mode
 
         self.data_arrays = []
@@ -602,7 +600,7 @@ class DDR3():
 
         return chan_data
 
-    def data_to_names(self, chan_data, old=False):
+    def data_to_names(self, chan_data, bitfile_version=None):
         """
         Put deswizzled data into dictionaries with names that match with the data sources. 
         Complete twos complement conversion where necessary. Check timestamps for skips.
@@ -617,8 +615,8 @@ class DDR3():
         ----------
         chan_data : dict of np.arrays
             data from reading DDR (minimally processed into 2 byte containers)
-        old : bool
-            indicates if the chan data is from before the ADS channel B was repositioned to fix synchronization issues
+        bitfile_version : int
+            The bitfile version that the .h5 file which held chan_data was created with. Defaults to the bitfile version of the FPGA
         
         Returns
         -------
@@ -641,6 +639,14 @@ class DDR3():
                or the timestamp steps are not all the same
         """
 
+        if bitfile_version is None:
+            # Old code, hasn't been updated to pass bitfile_version from .h5 file header
+            # Default to FPGA bitfile version, or version 1 if the FPGA bitfile version is None
+            if self.fpga.bitfile_version is None:
+                bitfile_version = 1
+            else:
+                bitfile_version = self.fpga.bitfile_version
+
         # first version of ADC data before DACs + timestamps are stored
         if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
             adc_data = chan_data
@@ -657,7 +663,7 @@ class DDR3():
                 # adc_data[i] = custom_signed_to_int(chan_data[i], 16)
                 adc_data[i] = chan_data[i]
 
-            if old:
+            if bitfile_version < 2: # 00.00.02 -> 2
                 lsb = chan_data[6][0::5].astype(np.uint64)
             else:
                 lsb = chan_data[7][1::5].astype(np.uint64)
@@ -686,7 +692,7 @@ class DDR3():
 
             ads = {}
             ads['A'] = custom_signed_to_int(chan_data[7][0::5], 16)
-            if old:
+            if bitfile_version < 2: # 00.00.02 -> 2
                 ads['B'] = custom_signed_to_int(chan_data[7][1::5], 16)
             else:
                 ads['B'] = custom_signed_to_int(chan_data[6][0::5], 16)
@@ -709,7 +715,7 @@ class DDR3():
 
             return adc_data, timestamp, dac_data, ads, ads_seq_cnt, error
 
-    def save_data(self, data_dir, file_name, num_repeats=4, blk_multiples=40):
+    def save_data(self, data_dir, file_name, num_repeats=4, blk_multiples=40, append=False):
         """
         read and save DDR data to an hdf file 
 
@@ -726,10 +732,27 @@ class DDR3():
 
         Returns
         -------
-        chan_data : dict
-            dictionary of data arrays (keys are channel numbers)
-
+        new_data : np.ndarray
+            The new data saved in the h5 file.
         """
+
+        # If the file doesn't already exist, write a new one
+        full_data_name = os.path.join(data_dir, file_name)
+        if append:
+            if not os.path.exists(full_data_name):
+                print(f'No existing file found at {full_data_name}, creating new file')
+                append = False
+        else:
+            try:
+                os.remove(full_data_name)
+            except OSError:
+                pass
+
+        if append:
+            file_mode = 'a'
+        else:
+            file_mode = 'w'
+
         chunk_size = int(self.parameters["BLOCK_SIZE"] * blk_multiples / (
             self.parameters['adc_channels']*2))  # readings per ADC
         repeat = 0
@@ -738,19 +761,22 @@ class DDR3():
         print(
             f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*self.parameters["adc_period"]*1000} ms of data')
 
-        full_data_name = os.path.join(data_dir, file_name)
-        try:
-            os.remove(full_data_name)
-        except OSError:
-            pass
-
         self.set_adc_read()  # enable data into the ADC reading FIFO
         time.sleep(adc_readings*self.parameters['adc_period'])
 
         # Save ADC DDR data to a file
-        with h5py.File(full_data_name, "w") as file:
-            data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
-                self.parameters['adc_channels'], None))
+        with h5py.File(full_data_name, file_mode) as file:
+            if append:
+                data_set = file['adc']
+                new_data_index = data_set.shape[1]
+                if data_set.attrs['bitfile_version'] != self.fpga.bitfile_version:
+                    raise Exception(f"File {os.path.join(data_dir, file_name)} bitfile version {data_set.attrs['bitfile_version']} does not match FPGA bitfile version {self.fpga.bitfile_version}")
+            else:
+                data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
+                    self.parameters['adc_channels'], None))
+                data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
+                new_data_index = 0
+
             while repeat < num_repeats:
                 d, bytes_read_error = self.read_adc(blk_multiples)
                 if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
@@ -775,9 +801,10 @@ class DDR3():
                     data_set[:, -chunk_size:] = chan_stack
                 if repeat < num_repeats:
                     data_set.resize(data_set.shape[1] + chunk_size, axis=1)
+            new_data = data_set[:, new_data_index:]
 
         print(f'Done with DDR reading: saved as {full_data_name}')
-        return chan_data
+        return new_data
 
     def read_adc(self, blk_multiples=2048):
         """ 

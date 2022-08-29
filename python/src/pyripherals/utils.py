@@ -491,3 +491,29 @@ def plt_uniques(data, ax=None, block=True):
 
         ax.plot(indices, unique_data)
         plt.show(block=block)
+
+
+def str_bitfile_version(bitfile_version : int) -> str:
+    """Return the string format of the bitfile version.
+    
+    Parameters
+    ----------
+    bitfile_version : int
+        The bitfile version number in integer form.
+    
+    Returns
+    -------
+    str : The string format, decimal separated form of the bitfile version number.
+
+    Examples
+    --------
+    >>> str_bitfile_version(21301)
+    '02.13.01'
+    """
+
+    first = bitfile_version // 10000
+    second = (bitfile_version % 10000) // 100
+    third = bitfile_version % 100
+    pieces = [first, second, third]
+    pieces_str = ['0' + str(piece) if piece < 10 else str(piece) for piece in pieces]
+    return '.'.join(pieces_str)

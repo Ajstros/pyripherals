@@ -12,7 +12,7 @@ import os
 import sys
 import copy
 import yaml
-from .utils import gen_mask
+from .utils import gen_mask, str_bitfile_version
 from warnings import warn
 
 home_dir = os.path.join(os.path.expanduser('~'), '.pyripherals')
@@ -432,13 +432,20 @@ class FPGA:
     """
 
 
-    def __init__(self, bitfile='default', debug=False):
+    def __init__(self, bitfile='default', endpoints=None, debug=False):
         if bitfile == 'default':
             # Use bitfile from config.yaml fpga_bitfile_path
             self.bitfile = configs['fpga_bitfile_path']
         else:
             self.bitfile = bitfile
+
+        if endpoints is None:
+            self.endpoints = Endpoint.get_chip_endpoints('GP')
+        else:
+            self.endpoints = endpoints
+
         self.debug = debug
+        self.bitfile_version = None
 
 
     def init_device(self):
@@ -464,9 +471,21 @@ class FPGA:
               (self.device_info.deviceMajorVersion, self.device_info.deviceMinorVersion))
         print("   Serial Number: %s" % self.device_info.serialNumber)
         print("       Device ID: %s" % self.device_info.deviceID)
-        print("       USB Speed  %d" % self.device_info.usbSpeed)
+        print("       USB Speed: %d" % self.device_info.usbSpeed)
 
         self.xem.LoadDefaultPLLConfiguration()
+
+        try:
+            self.bitfile_version = self.read_wire(self.endpoints['BITFILE_VERSION'].address)
+        except KeyError:
+            print('No Endpoint BITFILE_VERSION in Endpoints read from', configs['ep_defines_path'])
+            # Default to version 1
+            self.bitfile_version = 1
+        if self.bitfile_version < 0:
+            # An error occurred in the read
+            print('Error reading BITFILE_VERSION endpoint:', self.bitfile_version)
+            self.bitfile_version = 1    # 00.00.01
+        print('Bitfile Version:', str_bitfile_version(self.bitfile_version))
 
         # Download the configuration file.
         if self.bitfile is not None:
