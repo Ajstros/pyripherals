@@ -771,6 +771,8 @@ class DDR3():
                 new_data_index = data_set.shape[1]
                 if data_set.attrs['bitfile_version'] != self.fpga.bitfile_version:
                     raise Exception(f"File {os.path.join(data_dir, file_name)} bitfile version {data_set.attrs['bitfile_version']} does not match FPGA bitfile version {self.fpga.bitfile_version}")
+                # Make space for first round of new data. Not needed when not appending because the data set is created with chunk_size space
+                data_set.resize(data_set.shape[1] + chunk_size, axis=1)
             else:
                 data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
                     self.parameters['adc_channels'], None))
