@@ -5,6 +5,7 @@ Abe Stroschein, ajstroschein@stthomas.edu
 Lucas Koerner, koer2434@stthomas.edu
 """
 
+from typing import Type
 import matplotlib.pyplot as plt
 import time
 import numpy as np
@@ -166,6 +167,14 @@ def int_to_custom_signed(data, num_bits):
     array([65531, 5])
     """
 
+    if type(data) is list:
+        data = np.array(data)
+    if type(data) is np.ndarray:
+        if not np.issubdtype(data.dtype, np.integer):
+            raise TypeError(f'int_to_custom_signed data array must have dtype np.integer. Got type {data.dtype}')
+    elif not np.issubdtype(type(data), np.integer):
+        raise TypeError(f'int_to_custom_signed data must be of type int, list(int), or np.ndarray(int). Got type {type(data)}.')
+
     # If int is positive, this should cut off nothing but leading zeros. If negative, it should only cut off leading ones.
     return np.bitwise_and(data, (1 << num_bits) - 1)
 
@@ -201,20 +210,22 @@ def custom_signed_to_int(data, num_bits):
     array([-5,  5])
     """
 
-    if type(data) is np.ndarray:
-        # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
-        int_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(
-            np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1, data).astype(int)
-    elif type(data) is list:
+    if type(data) is list:
         data = np.array(data)
-        # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
-        int_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(
-            np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1, data).astype(int)
+    if type(data) is np.ndarray:
+        if np.issubdtype(data.dtype, np.integer):
+            # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
+            int_data = np.where(data & (1 << num_bits - 1), np.bitwise_and(np.bitwise_xor(
+                np.abs(data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1, data).astype(int)
+        else:
+            raise TypeError(f'custom_signed_to_int data array must have dtype np.integer. Got type {data.dtype}')
     elif np.issubdtype(type(data), np.integer):
         # Use bitwise_xor to invert bits, then add one, then use bitwise_and to keep only num_bits, allowing the rest to overflow out. Multiply by -1 to get the negative integer version.
         int_data = np.bitwise_and(np.bitwise_xor(np.abs(
             data), 2**num_bits - 1) + 1, 2 ** num_bits - 1) * -1 if data & (1 << num_bits - 1) else data
         int_data = int(int_data)
+    else:
+        raise TypeError(f'custom_signed_to_int data must be of type int, list(int), or np.ndarray(int). Got type {type(data)}.')
 
     return int_data
 
