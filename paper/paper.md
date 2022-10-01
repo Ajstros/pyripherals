@@ -56,7 +56,8 @@ Each `Register` object holds all values from the spreadsheet for the data field 
 >>> print(ABC012_regs['INPUT']) 
 0x0[0:3] 
 >>> ABC012_regs['INPUT'].__dict__ 
-{'address': 0, 'default': 15, 'bit_index_high': 3, 'bit_index_low': 0, 'bit_width': 4}
+{'address': 0, 'default': 15, 'bit_index_high': 3, 'bit_index_low': 0,
+'bit_width': 4}
 ```
 
 The `Register` abstraction of *pyripherals* allows user code to refer to data fields using only their names. The spreadsheet organization of data fields allows for user-friendly editing and sharing of data field information without the need to change user code. Specific applications include communicating with microcontrollers or development boards like Arduino as well as accessing data using SPI or I2C controllers. 
@@ -79,28 +80,31 @@ The naming convention for endpoints that contain addresses or bit indices is dem
 Addresses: 
 
 ```verilog
-`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_ADDR} {address} // bit_width={bit_width} addr_
-step={addr_step}
+`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_ADDR} {address}
+// bit_width={bit_width} addr_step={addr_step}
 ```
 
 Bit Indices: 
 
 ```verilog
-`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_BIT} {bit index} // addr={address or endpoint
-name} bit_width={bit_width} 
+`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_BIT} {bit index}
+// addr={address or endpoint name} bit_width={bit_width}
 ```
+
+*Note: the above comments must be placed on the same line as the `define. They are split here for readability.*
 
 For multiple units of the same chip, each chip class has a `create_chips` method which instantiates a specified number of chips, incrementing the endpoint addresses and bit indices according to the GEN_ADDR, GEN_BIT, bit_width, and addr_step parameters above.
 
-Once the endpoint definitions file is created, *pyripherals* reads it in with the `Endpoint.get_chip_endpoints` class method and returns a dictionary of name-Endpoint pairs. An example with the “ABC012_WRITE_IN” endpoint from earlier is shown below. 
+Once created, the user can read the endpoint definitions file with `Endpoint.get_chip_endpoints`
+which returns a dictionary of name-Endpoint pairs. An example using the “ABC012_WRITE_IN” endpoint from earlier is shown below. 
 
 ```python
 >>> ABC012_eps = Endpoint.get_chip_endpoints(chip_name='ABC012') 
 >>> print(ABC012_eps['WRITE_IN']) 
 0x4[None:None] 
 >>> ABC012_eps['WRITE_IN'].__dict__ 
-{'address': 4, 'bit_index_low': None, 'bit_index_high': None, 'bit_width': 32, 'gen_bit':
- False, 'gen_address': False, 'addr_step': 7} 
+{'address': 4, 'bit_index_low': None, 'bit_index_high': None, 'bit_width': 32,
+'gen_bit': False, 'gen_address': False, 'addr_step': 7} 
 ```
 
 Using the `Endpoint` class in *pyripherals* with a definitions file extends the capabilities of the Opal Kelly FrontPanel API by automatically linking the Python and Verilog endpoint data. With *pyripherals*, when the user changes the value of an endpoint in the definitions file the change is reflected in both the Python and Verilog code.
