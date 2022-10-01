@@ -95,8 +95,8 @@ Bit Indices:
 
 For multiple units of the same chip, each chip class has a `create_chips` method which instantiates a specified number of chips, incrementing the endpoint addresses and bit indices according to the GEN_ADDR, GEN_BIT, bit_width, and addr_step parameters above.
 
-Once created, the user can read in the endpoint definitions file with the
-`Endpoint.get_chip_endpoints` class method and returns a dictionary of name-Endpoint pairs. An example with the “ABC012_WRITE_IN” endpoint from earlier is shown below. 
+Once created, the user can read the endpoint definitions file with `Endpoint.get_chip_endpoints`
+which returns a dictionary of name-Endpoint pairs. An example using the “ABC012_WRITE_IN” endpoint from earlier is shown below. 
 
 ```python
 >>> ABC012_eps = Endpoint.get_chip_endpoints(chip_name='ABC012') 
