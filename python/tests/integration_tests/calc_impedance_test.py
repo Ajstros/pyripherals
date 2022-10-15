@@ -23,19 +23,10 @@ pytestmark = [pytest.mark.usable, pytest.mark.no_fpga]
 # Fixtures
 
 
-@pytest.fixture(scope='module')
-def ddr():
-    f = FPGA()
-    f.init_device()
-    ddr = DDR3(fpga=f)
-    yield ddr
-    # Teardown
-    f.xem.Close()
-
 # Tests
 
 
-def test_calc_impedance(ddr):
+def test_calc_impedance():
     # Works best at high frequencies
     # TODO: add more test data (loop through)
 
@@ -52,15 +43,15 @@ def test_calc_impedance(ddr):
     amp_out = 0.01
     dac80508_offset = 0x8000
     t = np.arange(0,
-              ddr.parameters['update_period'] * ddr.parameters['sample_size'],
-              ddr.parameters['update_period'])
+              DDR3.UPDATE_PERIOD * DDR3.SAMPLE_SIZE,
+              DDR3.UPDATE_PERIOD)
 
     # Input 1V amplitude at 1KHz
     amp_in_code = from_voltage(voltage=amp_in,
                             num_bits=16,
                             voltage_range=2.5,
                             with_negatives=False)
-    v_in_codes, freq_in_calc = ddr.make_sine_wave(amplitude=amp_in_code,
+    v_in_codes, freq_in_calc = DDR3.make_sine_wave(amplitude=amp_in_code,
                                                 frequency=freq,
                                                 offset=dac80508_offset)
     v_in = to_voltage(data=v_in_codes,
@@ -75,7 +66,7 @@ def test_calc_impedance(ddr):
                                 num_bits=16,
                                 voltage_range=2.5,
                                 with_negatives=False)
-    v_out_codes, freq_out_calc = ddr.make_sine_wave(amplitude=amp_out_code,
+    v_out_codes, freq_out_calc = DDR3.make_sine_wave(amplitude=amp_out_code,
                                                     frequency=freq,
                                                     offset=dac80508_offset)
     v_out = to_voltage(data=v_out_codes,
@@ -101,7 +92,7 @@ def test_calc_impedance(ddr):
     max_time = t[int(len(t) / 100)]
     num_complete_periods = max_time // period
     target_time = period * num_complete_periods
-    end_index = int(target_time / ddr.parameters['update_period'])
+    end_index = int(target_time / DDR3.UPDATE_PERIOD)
     t = t[:end_index]
     v_in = v_in[:end_index]
     v_out = v_out[:end_index]
