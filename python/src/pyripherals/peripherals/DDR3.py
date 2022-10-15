@@ -51,12 +51,12 @@ class DDR3():
     
     """
 
-    BLOCK_SIZE = 2048,  # 1/2 the incoming FIFO depth in bytes (size of the BlockPipeIn)
+    BLOCK_SIZE = 2048  # 1/2 the incoming FIFO depth in bytes (size of the BlockPipeIn)
     # number of channels that the DDR is striped between (for DACs)
-    NUM_CHANNELS = 8,
-    UPDATE_PERIOD = 400e-9,  # 2.5 MHz -- requires SCLK ~ 50 MHZ
-    PORT1_INDEX = 0x3_7f_ff_f8,
-    NUM_ADC_CHANNELS = 8,  # number of 2 byte chunks in DDR
+    NUM_CHANNELS = 8
+    UPDATE_PERIOD = 400e-9  # 2.5 MHz -- requires SCLK ~ 50 MHZ
+    PORT1_INDEX = 0x3_7f_ff_f8
+    NUM_ADC_CHANNELS = 8  # number of 2 byte chunks in DDR
     ADC_PERIOD = 200e-9
 
     # the index is the DDR address that the circular buffer stops at.
