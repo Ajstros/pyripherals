@@ -73,7 +73,7 @@ class DDR3():
         self.data_arrays = []
         for i in range(DDR3.NUM_CHANNELS):
             self.data_arrays.append(np.zeros(
-                self.parameters['sample_size']).astype(np.uint16))
+                DDR3.SAMPLE_SIZE).astype(np.uint16))
 
         self.clear_adc_debug()
 
@@ -97,7 +97,8 @@ class DDR3():
         self.fpga.clear_wire_bit(self.endpoints['ADC_DEBUG'].address,
                                  self.endpoints['ADC_DEBUG'].bit_index_low)
 
-    def make_flat_voltage(self, amplitude):
+    @staticmethod
+    def make_flat_voltage(amplitude):
         """Return a constant unit16 array of value amplitude.
 
         Array length based on the sample_size parameter. The conversion from
@@ -115,11 +116,12 @@ class DDR3():
                 to be assigned to DDR data array
         """
 
-        amplitude = np.ones(self.parameters['sample_size'])*amplitude
+        amplitude = np.ones(DDR3.SAMPLE_SIZE)*amplitude
         amplitude = amplitude.astype(np.uint16)
         return amplitude
 
-    def closest_frequency(self, freq):
+    @staticmethod
+    def closest_frequency(freq):
         """Determine closest frequency so the waveform evenly divides into the length of the DDR3
 
         Parameters
@@ -138,17 +140,18 @@ class DDR3():
         if samples_per_period <= 2:
             print('Frequency is too high for the DDR update rate')
             return None
-        total_periods = self.parameters['sample_size']/samples_per_period
+        total_periods = DDR3.SAMPLE_SIZE/samples_per_period
         # round and recalculate frequency
         round_total_periods = np.round(total_periods)
-        round_samples_per_period = self.parameters['sample_size'] / \
+        round_samples_per_period = DDR3.SAMPLE_SIZE / \
             round_total_periods
         new_frequency = 1 / \
             (DDR3.UPDATE_PERIOD * round_samples_per_period)
 
         return new_frequency
 
-    def make_sine_wave(self, amplitude, frequency,
+    @staticmethod
+    def make_sine_wave(amplitude, frequency,
                        offset=0x2000, actual_frequency=True):
         """Return a sine-wave array for writing to DDR.
 
@@ -179,9 +182,9 @@ class DDR3():
             print('Error: amplitude in sine-wave is too large')
             return -1
         if actual_frequency:
-            frequency = self.closest_frequency(frequency)
+            frequency = DDR3.closest_frequency(frequency)
 
-        t = np.arange(0, DDR3.UPDATE_PERIOD*self.parameters['sample_size'],
+        t = np.arange(0, DDR3.UPDATE_PERIOD*DDR3.SAMPLE_SIZE,
                       DDR3.UPDATE_PERIOD)
         # print('length of time axis after creation ', len(t))
         ddr_seq = (amplitude)*np.sin(t*frequency*2*np.pi) + offset
@@ -191,7 +194,8 @@ class DDR3():
         ddr_seq = ddr_seq.astype(np.uint16)
         return ddr_seq, frequency
 
-    def make_ramp(self, start, stop, step, actual_length=True):
+    @staticmethod
+    def make_ramp(start, stop, step, actual_length=True):
         """Create a ramp signal to write to the DDR.
 
         The conversion from float or int voltage to int digital (binary) code
@@ -217,17 +221,18 @@ class DDR3():
         len_ramp_seq = len(ramp_seq)
         if actual_length:
             length = int(
-                self.parameters['sample_size']/np.round(self.parameters['sample_size']/len_ramp_seq))
+                DDR3.SAMPLE_SIZE/np.round(DDR3.SAMPLE_SIZE/len_ramp_seq))
             stop = start + length*step
             ramp_seq = np.arange(start, stop, step)
-        num_tiles = self.parameters['sample_size']//len(ramp_seq)
-        extras = self.parameters['sample_size'] % len(ramp_seq)
+        num_tiles = DDR3.SAMPLE_SIZE//len(ramp_seq)
+        extras = DDR3.SAMPLE_SIZE % len(ramp_seq)
         ddr_seq = np.tile(ramp_seq, num_tiles)
         ddr_seq = np.hstack((ddr_seq, ramp_seq[0:extras]))
         ddr_seq = ddr_seq.astype(np.uint16)
         return ddr_seq
 
-    def make_step(self, low, high, length, actual_length=True, duty=50):
+    @staticmethod
+    def make_step(low, high, length, actual_length=True, duty=50):
         """Return a step signal (square wave) to write to the DDR.
 
         The conversion from float or int voltage to int digital (binary) code
@@ -254,12 +259,12 @@ class DDR3():
 
         if actual_length:
             length = int(
-                self.parameters['sample_size']/np.round(self.parameters['sample_size']/length))
+                DDR3.SAMPLE_SIZE/np.round(DDR3.SAMPLE_SIZE/length))
         l_first = int(length/100*duty)
         l_end = int(length/100*(100-duty))
         ramp_seq = np.concatenate((np.ones(l_first)*low, np.ones(l_end)*high))
-        num_tiles = self.parameters['sample_size']//len(ramp_seq)
-        extras = self.parameters['sample_size'] % len(ramp_seq)
+        num_tiles = DDR3.SAMPLE_SIZE//len(ramp_seq)
+        extras = DDR3.SAMPLE_SIZE % len(ramp_seq)
         ddr_seq = np.tile(ramp_seq, num_tiles)
         ddr_seq = np.hstack((ddr_seq, ramp_seq[0:extras]))
         ddr_seq = ddr_seq.astype(np.uint16)
@@ -514,7 +519,7 @@ class DDR3():
         """
 
         if sample_size is None:
-            data = np.zeros((self.parameters['sample_size'],), dtype=int)
+            data = np.zeros((DDR3.SAMPLE_SIZE,), dtype=int)
             data_buf = bytearray(data)
         else:
             data_buf = bytearray(sample_size)
