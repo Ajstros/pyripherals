@@ -155,6 +155,13 @@ class Endpoint:
         Returns -1 if there is a naming collision in ep_defines.v
         """
 
+        # Leave as None if there is no ep_defines.v
+        if ep_defines_path is None:
+            warn(f'No ep_defines_path set in your {config_path} file')
+            return dict()
+        elif not os.path.exists(ep_defines_path):
+            raise FileNotFoundError(f'ep_defines_path = {ep_defines_path} not found')
+
         # Get all lines
         with open(ep_defines_path, 'r') as file:
             lines = file.readlines()
