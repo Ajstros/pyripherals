@@ -51,29 +51,29 @@ class DDR3():
     
     """
 
+    BLOCK_SIZE = 2048  # 1/2 the incoming FIFO depth in bytes (size of the BlockPipeIn)
+    # number of channels that the DDR is striped between (for DACs)
+    NUM_CHANNELS = 8
+    UPDATE_PERIOD = 400e-9  # 2.5 MHz -- requires SCLK ~ 50 MHZ
+    PORT1_INDEX = 0x3_7f_ff_f8
+    NUM_ADC_CHANNELS = 8  # number of 2 byte chunks in DDR
+    ADC_PERIOD = 200e-9
+
+    # the index is the DDR address that the circular buffer stops at.
+    # need to write all the way up to this stoping point otherwise the SPI output will glitch
+    SAMPLE_SIZE = int((PORT1_INDEX + 8)/4)
+
     def __init__(self, fpga, endpoints=None, data_version='TIMESTAMPS'):
         if endpoints is None:
             endpoints = Endpoint.get_chip_endpoints('DDR3')
         self.fpga = fpga
         self.endpoints = endpoints
-        self.parameters = {'BLOCK_SIZE': 2048,  # 1/2 the incoming FIFO depth in bytes (size of the BlockPipeIn)
-                           # number of channels that the DDR is striped between (for DACs)
-                           'channels': 8,
-                           'update_period': 400e-9,  # 2.5 MHz -- requires SCLK ~ 50 MHZ
-                           'port1_index': 0x3_7f_ff_f8,
-                           'adc_channels': 8,  # number of 2 byte chunks in DDR
-                           'adc_period': 200e-9
-                           }
-
-        # the index is the DDR address that the circular buffer stops at.
-        # need to write all the way up to this stoping point otherwise the SPI output will glitch
-        self.parameters['sample_size'] = int((self.parameters['port1_index'] + 8)/4)
-        self.parameters['data_version'] = data_version  # sets deswizzling mode
+        self.data_version = data_version  # sets deswizzling mode
 
         self.data_arrays = []
-        for i in range(self.parameters['channels']):
+        for i in range(DDR3.NUM_CHANNELS):
             self.data_arrays.append(np.zeros(
-                self.parameters['sample_size']).astype(np.uint16))
+                DDR3.SAMPLE_SIZE).astype(np.uint16))
 
         self.clear_adc_debug()
 
@@ -97,7 +97,8 @@ class DDR3():
         self.fpga.clear_wire_bit(self.endpoints['ADC_DEBUG'].address,
                                  self.endpoints['ADC_DEBUG'].bit_index_low)
 
-    def make_flat_voltage(self, amplitude):
+    @staticmethod
+    def make_flat_voltage(amplitude):
         """Return a constant unit16 array of value amplitude.
 
         Array length based on the sample_size parameter. The conversion from
@@ -115,11 +116,12 @@ class DDR3():
                 to be assigned to DDR data array
         """
 
-        amplitude = np.ones(self.parameters['sample_size'])*amplitude
+        amplitude = np.ones(DDR3.SAMPLE_SIZE)*amplitude
         amplitude = amplitude.astype(np.uint16)
         return amplitude
 
-    def closest_frequency(self, freq):
+    @staticmethod
+    def closest_frequency(freq):
         """Determine closest frequency so the waveform evenly divides into the length of the DDR3
 
         Parameters
@@ -133,22 +135,23 @@ class DDR3():
             The closest possible frequency
         """
 
-        samples_per_period = (1/freq) / self.parameters['update_period']
+        samples_per_period = (1/freq) / DDR3.UPDATE_PERIOD
 
         if samples_per_period <= 2:
             print('Frequency is too high for the DDR update rate')
             return None
-        total_periods = self.parameters['sample_size']/samples_per_period
+        total_periods = DDR3.SAMPLE_SIZE/samples_per_period
         # round and recalculate frequency
         round_total_periods = np.round(total_periods)
-        round_samples_per_period = self.parameters['sample_size'] / \
+        round_samples_per_period = DDR3.SAMPLE_SIZE / \
             round_total_periods
         new_frequency = 1 / \
-            (self.parameters['update_period'] * round_samples_per_period)
+            (DDR3.UPDATE_PERIOD * round_samples_per_period)
 
         return new_frequency
 
-    def make_sine_wave(self, amplitude, frequency,
+    @staticmethod
+    def make_sine_wave(amplitude, frequency,
                        offset=0x2000, actual_frequency=True):
         """Return a sine-wave array for writing to DDR.
 
@@ -179,10 +182,10 @@ class DDR3():
             print('Error: amplitude in sine-wave is too large')
             return -1
         if actual_frequency:
-            frequency = self.closest_frequency(frequency)
+            frequency = DDR3.closest_frequency(frequency)
 
-        t = np.arange(0, self.parameters['update_period']*self.parameters['sample_size'],
-                      self.parameters['update_period'])
+        t = np.arange(0, DDR3.UPDATE_PERIOD*DDR3.SAMPLE_SIZE,
+                      DDR3.UPDATE_PERIOD)
         # print('length of time axis after creation ', len(t))
         ddr_seq = (amplitude)*np.sin(t*frequency*2*np.pi) + offset
         if any(ddr_seq < 0) or any(ddr_seq > (2**16-1)):
@@ -191,7 +194,8 @@ class DDR3():
         ddr_seq = ddr_seq.astype(np.uint16)
         return ddr_seq, frequency
 
-    def make_ramp(self, start, stop, step, actual_length=True):
+    @staticmethod
+    def make_ramp(start, stop, step, actual_length=True):
         """Create a ramp signal to write to the DDR.
 
         The conversion from float or int voltage to int digital (binary) code
@@ -217,17 +221,18 @@ class DDR3():
         len_ramp_seq = len(ramp_seq)
         if actual_length:
             length = int(
-                self.parameters['sample_size']/np.round(self.parameters['sample_size']/len_ramp_seq))
+                DDR3.SAMPLE_SIZE/np.round(DDR3.SAMPLE_SIZE/len_ramp_seq))
             stop = start + length*step
             ramp_seq = np.arange(start, stop, step)
-        num_tiles = self.parameters['sample_size']//len(ramp_seq)
-        extras = self.parameters['sample_size'] % len(ramp_seq)
+        num_tiles = DDR3.SAMPLE_SIZE//len(ramp_seq)
+        extras = DDR3.SAMPLE_SIZE % len(ramp_seq)
         ddr_seq = np.tile(ramp_seq, num_tiles)
         ddr_seq = np.hstack((ddr_seq, ramp_seq[0:extras]))
         ddr_seq = ddr_seq.astype(np.uint16)
         return ddr_seq
 
-    def make_step(self, low, high, length, actual_length=True, duty=50):
+    @staticmethod
+    def make_step(low, high, length, actual_length=True, duty=50):
         """Return a step signal (square wave) to write to the DDR.
 
         The conversion from float or int voltage to int digital (binary) code
@@ -254,12 +259,12 @@ class DDR3():
 
         if actual_length:
             length = int(
-                self.parameters['sample_size']/np.round(self.parameters['sample_size']/length))
+                DDR3.SAMPLE_SIZE/np.round(DDR3.SAMPLE_SIZE/length))
         l_first = int(length/100*duty)
         l_end = int(length/100*(100-duty))
         ramp_seq = np.concatenate((np.ones(l_first)*low, np.ones(l_end)*high))
-        num_tiles = self.parameters['sample_size']//len(ramp_seq)
-        extras = self.parameters['sample_size'] % len(ramp_seq)
+        num_tiles = DDR3.SAMPLE_SIZE//len(ramp_seq)
+        extras = DDR3.SAMPLE_SIZE % len(ramp_seq)
         ddr_seq = np.tile(ramp_seq, num_tiles)
         ddr_seq = np.hstack((ddr_seq, ramp_seq[0:extras]))
         ddr_seq = ddr_seq.astype(np.uint16)
@@ -269,10 +274,10 @@ class DDR3():
         """Write the channels as striped data to the DDR."""
 
         data = np.zeros(
-            int(len(self.data_arrays[0])*self.parameters['channels']))
+            int(len(self.data_arrays[0])*DDR3.NUM_CHANNELS))
         data = data.astype(np.uint16)
 
-        for i in range(self.parameters['channels']):
+        for i in range(DDR3.NUM_CHANNELS):
             if i % 2 == 0:  # extra order swap on the 32 bit wide pipe
                 data[(7-i - 1)::8] = self.data_arrays[i]
             else:
@@ -305,7 +310,7 @@ class DDR3():
         print('Writing to DDR...')
         time1 = time.time()
         block_pipe_return = self.fpga.xem.WriteToBlockPipeIn(epAddr=self.endpoints['BLOCK_PIPE_IN'].address,
-                                                             blockSize=self.parameters['BLOCK_SIZE'],
+                                                             blockSize=DDR3.BLOCK_SIZE,
                                                              data=buf)
         print(f'The length of the DDR write was {block_pipe_return}')
 
@@ -514,12 +519,12 @@ class DDR3():
         """
 
         if sample_size is None:
-            data = np.zeros((self.parameters['sample_size'],), dtype=int)
+            data = np.zeros((DDR3.SAMPLE_SIZE,), dtype=int)
             data_buf = bytearray(data)
         else:
             data_buf = bytearray(sample_size)
 
-        block_size = self.parameters['BLOCK_SIZE']
+        block_size = DDR3.BLOCK_SIZE
         # check block size
         if block_size % 16 != 0:
             print('Error in read adc. Block size is not a multiple of 16')
@@ -753,16 +758,16 @@ class DDR3():
         else:
             file_mode = 'w'
 
-        chunk_size = int(self.parameters["BLOCK_SIZE"] * blk_multiples / (
-            self.parameters['adc_channels']*2))  # readings per ADC
+        chunk_size = int(DDR3.BLOCK_SIZE * blk_multiples / (
+            DDR3.NUM_ADC_CHANNELS*2))  # readings per ADC
         repeat = 0
         adc_readings = chunk_size*num_repeats
         print(f'Anticipated chunk size (readings per channel) {chunk_size}')
         print(
-            f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*self.parameters["adc_period"]*1000} ms of data')
+            f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*DDR3.ADC_PERIOD*1000} ms of data')
 
         self.set_adc_read()  # enable data into the ADC reading FIFO
-        time.sleep(adc_readings*self.parameters['adc_period'])
+        time.sleep(adc_readings*DDR3.ADC_PERIOD)
 
         # Save ADC DDR data to a file
         with h5py.File(full_data_name, file_mode) as file:
@@ -774,8 +779,8 @@ class DDR3():
                 # Make space for first round of new data. Not needed when not appending because the data set is created with chunk_size space
                 data_set.resize(data_set.shape[1] + chunk_size, axis=1)
             else:
-                data_set = file.create_dataset("adc", (self.parameters['adc_channels'], chunk_size), maxshape=(
-                    self.parameters['adc_channels'], None))
+                data_set = file.create_dataset("adc", (DDR3.NUM_ADC_CHANNELS, chunk_size), maxshape=(
+                    DDR3.NUM_ADC_CHANNELS, None))
                 data_set.attrs['bitfile_version'] = self.fpga.bitfile_version
                 new_data_index = 0
 
@@ -787,11 +792,11 @@ class DDR3():
                 elif self.parameters['data_version'] == 'TIMESTAMPS':
                     chan_data = self.deswizzle(d)
 
-                if self.parameters['adc_channels'] == 4:
+                if DDR3.NUM_ADC_CHANNELS == 4:
                     chan_stack = np.vstack(
                         (chan_data[0], chan_data[1], chan_data[2], chan_data[3]))
 
-                if self.parameters['adc_channels'] == 8:
+                if DDR3.NUM_ADC_CHANNELS == 8:
                     chan_stack = np.vstack((chan_data[0], chan_data[1], chan_data[2], chan_data[3],
                                             chan_data[4], chan_data[5], chan_data[6], chan_data[7]))
 
@@ -826,7 +831,7 @@ class DDR3():
         """
 
         t, bytes_read_error = self.read_adc_block(  # just reads from the block pipe out
-            sample_size=self.parameters["BLOCK_SIZE"] * blk_multiples
+            sample_size=DDR3.BLOCK_SIZE * blk_multiples
         )
         d = np.frombuffer(t, dtype=np.uint8).astype(np.uint32)
         print(f'Bytes read: {bytes_read_error}')
@@ -838,7 +843,7 @@ class DDR3():
         This is now fixed to improve timing performance.
         """
         print('Set index is no longer used. Index is fixed to: {}'.format(
-            self.parameters['port1_index']))
+            DDR3.PORT1_INDEX))
 
     def write_setup(self, data_driven_clock=True):
         """Set up DDR for writing."""
