@@ -13,7 +13,7 @@ permissions:
   contents: read
   
 env:
-  BRANCH: ${{ github.ref_name }}
+  BRANCH: ${{ github.head_ref }}
 
 jobs:
   build:
