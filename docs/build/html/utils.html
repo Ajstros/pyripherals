@@ -206,6 +206,38 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyripherals.utils.custom_signed_to_int">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">custom_signed_to_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#custom_signed_to_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.custom_signed_to_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Python int form of a two’s complement integer in the given number of bits.</p>
+<p>For negative numbers, we invert all bits (in num_bits) and add 1 (only
+keeping num_bits) to apply two’s complement and get the positive version
+of the number. Then we multiply the number by -1 so it has the same value
+as before, but now as a 32-bit Python int.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>) or </em><em>np.ndarray</em><em>(</em><em>int</em><em>)</em>) – The binary data to apply two’s complement to.</p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – The number of bits the number is represented in. This is important
+for knowing how many bits to keep in the end.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>int_data</strong> – The two’s complement conversion of the data with num_bits.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int or np.ndarray(int)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>&gt;&gt;&gt;custom_signed_to_int(65531, 16)
+-5
+&gt;&gt;&gt;custom_signed_to_int([65531, 5], 16)
+array([-5,  5])
+&gt;&gt;&gt;custom_signed_to_int(np.array([65531, 5]), 16)
+array([-5,  5])</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyripherals.utils.from_voltage">
 <span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">from_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voltage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_negatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#from_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.from_voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the float/int voltage into binary data.</p>
@@ -215,19 +247,18 @@ find the binary data representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>voltage</strong> (<em>int</em><em> or </em><em>float</em><em> or </em><em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>) or </em><em>numpy.ndarray</em><em>(</em><em>numpy.uint16</em><em>)</em>) – The method will return the converted version of either.</p></li>
-<li><p><strong>voltage_range</strong> (<em>int</em>) – The total voltage range used for the voltage.</p></li>
+<li><p><strong>voltage</strong> (<em>np.integer</em><em> or </em><em>np.floating</em><em> or </em><em>np.ndarray of those</em>) – The voltage data to convert.</p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – The number of bits to convert the voltage data to. Maximum 64.</p></li>
+<li><p><strong>voltage_range</strong> (<em>int</em>) – The total voltage range (peak-to-peak) used for the voltage.</p></li>
 <li><p><strong>with_negatives</strong> (<em>bool</em>) – True to convert the voltage with full negative at 0x0, zero at half
 scale, and full positive at full scale, False otherwise.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>int or float or list</strong> – int -&gt; int
-float -&gt; int
-list, numpy.ndarray -&gt; list(int)</p>
+<dd class="field-even"><p><strong>np.ndarray of int or int</strong></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>voltage version of the binary data in similar form voltage was given in</p>
+<dd class="field-odd"><p>binary version of voltage data. Scalar int returned if voltage was a scalar.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -236,6 +267,37 @@ list, numpy.ndarray -&gt; list(int)</p>
 <dt class="sig sig-object py" id="pyripherals.utils.get_memory_usage">
 <span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">get_memory_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#get_memory_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.get_memory_usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a sorted list of the objects and their sizes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyripherals.utils.int_to_custom_signed">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">int_to_custom_signed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#int_to_custom_signed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.int_to_custom_signed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the given integer in two’s complement form in the given number of bits.</p>
+<p>Assuming the data fits in the given number of bits, we simply cut off any
+leading 1’s from the number being negative. Viewed as a num_bits-bit
+integer, this does not change its value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>) or </em><em>np.ndarray</em><em>(</em><em>int</em><em>)</em>) – The binary data to apply two’s complement to.</p></li>
+<li><p><strong>num_bits</strong> (<em>int</em>) – The number of bits the number is represented in. This is important
+for knowing how many bits to keep in the end.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>twos_data</strong> – The two’s complement conversion of the data with num_bits.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int or np.ndarray(int)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>&gt;&gt;&gt;int_to_custom_signed(-5, 16)
+65531
+&gt;&gt;&gt;int_to_custom_signed([-5, 5], 16)
+array([65531, 5])
+&gt;&gt;&gt;int_to_custom_signed(np.array([-5, 5]), 16)
+array([65531, 5])</p>
 </dd></dl>
 
 <dl class="py function">
@@ -251,6 +313,21 @@ list, numpy.ndarray -&gt; list(int)</p>
 <li><p><strong>num_bytes</strong> (<em>int</em>) – The number of bytes to convert the number into. None means the
 function will return the minimum number of bytes necessary to
 represent the number.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyripherals.utils.plt_uniques">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">plt_uniques</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#plt_uniques"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.plt_uniques" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot only the first and last of each group of unique data points to save time and memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Data to plot. Must be at least 1 dimensional</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – The axes to plot the data on.</p></li>
+<li><p><strong>block</strong> (<em>bool</em>) – Whether to block when showing the plot. Used in plt.show(block=block).</p></li>
 </ul>
 </dd>
 </dl>
@@ -286,6 +363,28 @@ input list</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyripherals.utils.str_bitfile_version">
+<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">str_bitfile_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitfile_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pyripherals/utils.html#str_bitfile_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.str_bitfile_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string format of the bitfile version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bitfile_version</strong> (<em>int</em>) – The bitfile version number in integer form.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The string format, decimal separated form of the bitfile version number.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">str_bitfile_version</span><span class="p">(</span><span class="mi">21301</span><span class="p">)</span>
+<span class="go">&#39;02.13.01&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyripherals.utils.to_voltage">
 <span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">to_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_twos_comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#to_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.to_voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the binary read data into a float voltage.</p>
@@ -295,26 +394,18 @@ that voltage for the total voltage.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>) or </em><em>numpy.ndarray</em><em>(</em><em>numpy.uint16</em><em>)</em>) – The method will return the converted version of either.</p></li>
-<li><p><strong>voltage_range</strong> (<em>int</em>) – The total voltage range used for the data.</p></li>
+<li><p><strong>data</strong> (<em>int</em><em> or </em><em>list</em><em>(</em><em>int</em><em>) or </em><em>np.ndarray</em><em>(</em><em>np.integer</em><em>)</em>) – The binary voltage data.</p></li>
+<li><p><strong>voltage_range</strong> (<em>int</em>) – The total voltage range (peak-to-peak) used for the data.</p></li>
 <li><p><strong>use_twos_comp</strong> (<em>bool</em>) – True if the given data is in two’s complement form, False otherwise.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>float or list</strong> – int -&gt; float
-list, numpy.ndarray -&gt; list(float)</p>
+<dd class="field-even"><p><strong>float or np.ndarray of float</strong></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>binary version of the voltage data in similar form data was given in</p>
+<dd class="field-odd"><p>voltage(s) represented by the given binary data.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyripherals.utils.twos_comp">
-<span class="sig-prename descclassname"><span class="pre">pyripherals.utils.</span></span><span class="sig-name descname"><span class="pre">twos_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/utils.html#twos_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.utils.twos_comp" title="Permalink to this definition">¶</a></dt>
-<dd><p>compute the 2’s complement of int value val
-handle an array (list or numpy)</p>
 </dd></dl>
 
 </div>
