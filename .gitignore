@@ -143,3 +143,6 @@ covg/data/*
 
 python/test_defines.v
 test_defines.v
+
+!paper/*.png
+!paper/*.svg
