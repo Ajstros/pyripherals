@@ -24,6 +24,9 @@ date: 1 August 2022
 bibliography: paper.bib
 ---
 
+# Abstract
+*pyripherals* organizes and abstracts integrated circuit (IC) registers and Opal Kelly API endpoints. These data fields are incorporated into IC classes for different chips. Those classes include communication protocol information. In the primary use-case for *pyripherals*, these classes send communication information according to Endpoints and Registers over USB to Opal Kelly FPGA boards. The Verilog HDL loaded on the FPGA is expected to have the Verilog endpoints to connect with *pyripherals* and communication controllers to ultimately communicate with the ICs connected to the FPGA.
+
 # Statement of Need
 We are developing a data acquisition system (DAQ) for real-time feedback that uses FPGA-based control of and acquisition from various electronic chips, or peripherals. Because these peripherals communicate over multiple protocols (SPI, I2C, LVDS) through an FPGA, we designed *pyripherals* to organize and abstract registers, the communication protocol, and the host computer interface to each communication controller. The software and firmware are designed for Opal Kelly FPGA modules, yet the Python developments are generally useful to organize communication with peripheral chips. 
 
@@ -33,7 +36,8 @@ This DAQ system and the *pyripherals* software are crucial components of a digit
 
 # Summary
 
-![image](JOSS_diagram.drawio.svg)
+![image](JOSS_diagram.drawio.png)
+
 *Fig. 1: On the left, the Pyripherals module abstracts registers to enable user code to easily read and write to peripherals. Pyripherals and the FPGA code share a file (ep\_defines.v) that defines the addresses of endpoints so that the transport of messages from the host computer through the FPGA and to the correct peripherals is managed. On the right, is an example hardware setup supported by Pyripherals. An FPGA module (Opal Kelly) with a Python API to the USB interface has various types of communication controllers in the FPGA logic and is wired to peripheral chips that sit on a custom circuit board. The chips include analog-to-digital converters (ADCs), digital-to-analog converters (DACs), and a unique identification chip (UID). The example user code reads the serial number of the UID chip. Pyripherals knows the address of the serial number register from the Registers.xslx spreadsheet. The message is routed to the appropriate communication controller using the controller addresses defined in the ep_defines.v file and by the user code which provides the controller/bus name at initialization of the UID instance. Pyripherals formats messages for each type of communication protocol. In the user code example, the UID chip is connected to the I2CDAQ bus and has messages routed through the I2C0 communication controller such that the UID Python class inherits from a parent I2CController class.*
 
 ## Registers
@@ -47,6 +51,13 @@ This DAQ system and the *pyripherals* software are crucial components of a digit
 | CONFIG        | 0x01        | 0xff          | 8         | 7                | 0               |
 | ID            | 0x01        | 0x0           | 8         | 15               | 8               |
 *Table 1: Each row shows a bit-field with a name and an address. This information is typically extracted from the datasheet of the peripheral chip. Addressable registers in a periperhal have multiple bits (often 16 or 32) that allow multiple data fields to be held in each register. To account for this, the location within a register is indicated by the high and low bit index columns. The default value of the register is stored to support verification of communication by checks of read-only registers.*
+
+- Name = name of the data field chosen by the user. This is how the register will be accessed in Python.
+- Hex Address = address of the register on the chip as given by its datasheet. Must be formatted as a hexadecimal number with "0x" prefix.
+- Default Value = the default value of the register as given by the chip's datasheet.
+- Bit Width = the number of bits in the data field.
+- Bit Index (High) = the bit index of the upper end of the data field in the register. Ex. in a 32-bit register where the data field is located in the last 4 bits of the register, Bit Index (High) would be 31.
+- Bit Index (Low) = the bit index of the lower end of the data field in the register. Ex. in a 32-bit register where the data field is located in the last 4 bits of the register, Bit Index (Low) would be 28.
 
 *pyripherals* then reads the spreadsheet, referred to as a register index in the documentation, and returns a dictionary of name-Register pairs using the `Register.get_chip_registers` static method. The example below retrieves the register index from the table above.
 
@@ -76,7 +87,7 @@ For our research, *pyripherals* is paired with hardware controllers instantiated
 *pyripherals* reads FrontPanel endpoint addresses and bit indices from a Verilog definition file. This Verilog file requires a [naming system](https://pyripherals.readthedocs.io/en/latest/endpoint_definitions_guide.html) described in the documentation and associates peripherals with a specific hardware controller instantiation. A complete guide to [creating an endpoint definitions file](https://pyripherals.readthedocs.io/en/latest/endpoint_definitions_guide.html) is in the documentation. Each endpoint definition has an address offset, a bit-field width, and an amount to increment the address if a second or subsequent instance is generated. The line below shows an example that defines an endpoint named “WRITE_IN” that belongs to peripheral “MYADC” with an address of 0x04 (the 8'h prefix below is Verilog syntax that indicates an 8 bit hexademical number) and a bit_width of 32 that adds 7 to the address every time it is advanced. 
 
 ```verilog
-`define MYADC_WRITE_IN 8'h04 // bit_width=32 addr_step=7
+`define MYADC_WRITE_IN_GEN_ADDR 8'h04 // bit_width=32 addr_step=7
 ```
 
 The naming convention for endpoints that contain addresses or bit indices is demonstrated below with curly brackets {} indicating placeholders to be completed by the user. Endpoint directions are from the perspective of the FPGA so *WRITE_IN* is data from the host computer into the FPGA that is destined for the ADC chip. More information on the syntax and meaning of these lines is available in the [endpoint definitions guide](https://pyripherals.readthedocs.io/en/latest/endpoint_definitions_guide.html).
@@ -84,14 +95,14 @@ The naming convention for endpoints that contain addresses or bit indices is dem
 Addresses: 
 
 ```verilog
-`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_ADDR} {address}
+`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_ADDR} {hexadecimal address}
 // bit_width={bit_width} addr_step={addr_step}
 ```
 
 Bit Indices: 
 
 ```verilog
-`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_BIT} {bit index}
+`define {CHIPNAME}_{ENDPOINT_NAME}{_GEN_BIT} {decimal bit index}
 // addr={address or endpoint name} bit_width={bit_width}
 ```
 
