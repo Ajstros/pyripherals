@@ -254,7 +254,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.i2c_read_long">
-<span class="sig-name descname"><span class="pre">i2c_read_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devAddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regAddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/I2CController.html#I2CController.i2c_read_long"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.i2c_read_long" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">i2c_read_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devAddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regAddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_transfer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wire'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/I2CController.html#I2CController.i2c_read_long"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.i2c_read_long" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read data_length bytes from regAddr on devAddr.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -262,15 +262,36 @@
 <li><p><strong>devAddr</strong> (<em>int</em>) – 8 bit address (don’t set the read bit (LSB) since this is done in this function)</p></li>
 <li><p><strong>regAddr</strong> (<em>int</em>) – Written to device (this is a list and must be even if length 1)</p></li>
 <li><p><strong>data_length</strong> (<em>int</em>) – Number of bytes expected to receive</p></li>
+<li><p><strong>data_transfer</strong> (<em>str</em>) – The form of the data transfer. Either ‘wire’ and ‘pipe’. Defaults to ‘wire’.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data or buf, e</strong> – The data or a bytearray and error code, depending on whether data_transfer was ‘wire’ or ‘pipe’.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list or bytearray, int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.I2CController.I2CController.i2c_receive">
-<span class="sig-name descname"><span class="pre">i2c_receive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wire'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/I2CController.html#I2CController.i2c_receive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.i2c_receive" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">i2c_receive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_transfer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wire'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/I2CController.html#I2CController.i2c_receive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.I2CController.I2CController.i2c_receive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take in data from the SCL and SDA lines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_length</strong> (<em>int</em>) – Number of bytes expected to receive.</p></li>
+<li><p><strong>data_transfer</strong> (<em>str</em>) – The form of the data transfer. Either ‘wire’ and ‘pipe’. Defaults to ‘wire’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data or buf, e</strong> – The data or a bytearray and error code, depending on whether data_transfer was ‘wire’ or ‘pipe’.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list or bytearray, int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1299,7 +1320,7 @@ requires a power cycle (turn it off and back on).</p>
 <span id="miscellaneous"></span><h2>Miscellaneous<a class="headerlink" href="#module-pyripherals.peripherals.DDR3" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyripherals.peripherals.DDR3.</span></span><span class="sig-name descname"><span class="pre">DDR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ADC_NO_TIMESTAMPS'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyripherals.peripherals.DDR3.</span></span><span class="sig-name descname"><span class="pre">DDR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TIMESTAMPS'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3" title="Permalink to this definition">¶</a></dt>
 <dd><p>The DDR is divided into 2 buffers. Each buffer has an incoming and outgoing FIFO.</p>
 <p><strong>1st buffer:</strong></p>
 <ul class="simple">
@@ -1388,7 +1409,7 @@ the DACs and ADC data into DDR</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.closest_frequency">
-<span class="sig-name descname"><span class="pre">closest_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.closest_frequency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.closest_frequency" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">closest_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.closest_frequency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.closest_frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine closest frequency so the waveform evenly divides into the length of the DDR3</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1405,7 +1426,7 @@ the DACs and ADC data into DDR</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.data_to_names">
-<span class="sig-name descname"><span class="pre">data_to_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chan_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.data_to_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.data_to_names" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">data_to_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chan_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitfile_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.data_to_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.data_to_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Put deswizzled data into dictionaries with names that match with the data sources.
 Complete twos complement conversion where necessary. Check timestamps for skips.
 Check the constant values for errors.</p>
@@ -1414,14 +1435,26 @@ Check the constant values for errors.</p>
 ‘TIMESTAMPS’: DDR data is numerous. AD7961, AD5453 out, ADS8686, timestamps, readcheck</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>chan_data</strong> (<em>dict of np.arrays</em>) – data from reading DDR (minimally processed into 2 byte containers)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chan_data</strong> (<em>dict of np.arrays</em>) – data from reading DDR (minimally processed into 2 byte containers)</p></li>
+<li><p><strong>bitfile_version</strong> (<em>int</em>) – The bitfile version that the .h5 file which held chan_data was created with. Defaults to the bitfile version of the FPGA</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
+<dd class="field-even"><p><ul>
 <li><p><strong>adc_data</strong> (<em>dict</em>) – fast adc data (double format &#64; 5 MSPS)</p></li>
 <li><p><strong>timestamp</strong> (<em>np.array</em>) – timestamps</p></li>
 <li><p><strong>dac_data</strong> (<em>dict</em>) – DAC output data</p></li>
 <li><p><strong>ads</strong> (<em>dict</em>) – ADS8686 ADC data (double format &#64; 1 MSPS)</p></li>
+<li><p><strong>ads_seq_cnt</strong> (<em>dict</em>) – two keys 0, 1. Each value is an array of sequence counts (counts from 0 to 23)
+the first key will have 0,2,4,6, … , 22 (or similar)
+the second key will have 1,3,5, …, 23 (or similar)</p></li>
+<li><p><strong>error</strong> (<em>boolean</em>) –</p>
+<dl class="simple">
+<dt>if True the constant read values were wrong</dt><dd><p>or the timestamp steps are not all the same</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
 </dd>
@@ -1465,7 +1498,7 @@ and combine with LSBytes. Swap channels to match ADC channel numbering.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.make_flat_voltage">
-<span class="sig-name descname"><span class="pre">make_flat_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_flat_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_flat_voltage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_flat_voltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_flat_voltage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_flat_voltage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a constant unit16 array of value amplitude.</p>
 <p>Array length based on the sample_size parameter. The conversion from
 float or int voltage to int digital (binary) code should take place
@@ -1485,7 +1518,7 @@ BEFORE this function.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.make_ramp">
-<span class="sig-name descname"><span class="pre">make_ramp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_ramp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_ramp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_ramp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_ramp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_ramp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a ramp signal to write to the DDR.</p>
 <p>The conversion from float or int voltage to int digital (binary) code
 should take place BEFORE this function.</p>
@@ -1508,7 +1541,7 @@ should take place BEFORE this function.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.make_sine_wave">
-<span class="sig-name descname"><span class="pre">make_sine_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8192</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_sine_wave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_sine_wave" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_sine_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8192</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_sine_wave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_sine_wave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a sine-wave array for writing to DDR.</p>
 <p>The conversion from float or int voltage to int digital (binary) code
 should take place BEFORE this function.</p>
@@ -1533,7 +1566,7 @@ should take place BEFORE this function.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.make_step">
-<span class="sig-name descname"><span class="pre">make_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_step" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.make_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.make_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a step signal (square wave) to write to the DDR.</p>
 <p>The conversion from float or int voltage to int digital (binary) code
 should take place BEFORE this function.</p>
@@ -1614,6 +1647,12 @@ useful.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.repeat_setup">
+<span class="sig-name descname"><span class="pre">repeat_setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.repeat_setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.repeat_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup for reading new data without writing to the DDR again.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.reset_fifo">
 <span class="sig-name descname"><span class="pre">reset_fifo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.reset_fifo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.reset_fifo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset FIFO interfaces to DDR .</p>
@@ -1629,7 +1668,7 @@ the DDR address pointers for read/write of both buffers
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.save_data">
-<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_repeats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_multiples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.save_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_repeats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_multiples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.save_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>read and save DDR data to an hdf file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1641,10 +1680,10 @@ the DDR address pointers for read/write of both buffers
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>chan_data</strong> – dictionary of data arrays (keys are channel numbers)</p>
+<dd class="field-even"><p><strong>new_data</strong> – The new data saved in the h5 file.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1705,8 +1744,8 @@ This is now fixed to improve timing performance.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_ddr_read</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.write" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.write_buf">
+<span class="sig-name descname"><span class="pre">write_buf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_ddr_read</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.write_buf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.write_buf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a bytearray to the DDR3.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1726,6 +1765,12 @@ This is now fixed to improve timing performance.</p>
 <dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.write_channels">
 <span class="sig-name descname"><span class="pre">write_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_ddr_read</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.write_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.write_channels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the channels as striped data to the DDR.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyripherals.peripherals.DDR3.DDR3.write_setup">
+<span class="sig-name descname"><span class="pre">write_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_driven_clock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyripherals/peripherals/DDR3.html#DDR3.write_setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyripherals.peripherals.DDR3.DDR3.write_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up DDR for writing.</p>
 </dd></dl>
 
 </dd></dl>
