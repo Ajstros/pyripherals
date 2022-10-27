@@ -24,9 +24,6 @@ date: 1 August 2022
 bibliography: paper.bib
 ---
 
-# Abstract
-*pyripherals* organizes and abstracts integrated circuit (IC) registers and Opal Kelly API endpoints. These data fields are incorporated into IC classes for different chips. Those classes include communication protocol information. In the primary use-case for *pyripherals*, these classes send communication information according to Endpoints and Registers over USB to Opal Kelly FPGA boards. The Verilog HDL loaded on the FPGA is expected to have the Verilog endpoints to connect with *pyripherals* and communication controllers to ultimately communicate with the ICs connected to the FPGA.
-
 # Statement of Need
 We are developing a data acquisition system (DAQ) for real-time feedback that uses FPGA-based control of and acquisition from various electronic chips, or peripherals. Because these peripherals communicate over multiple protocols (SPI, I2C, LVDS) through an FPGA, we designed *pyripherals* to organize and abstract registers, the communication protocol, and the host computer interface to each communication controller. The software and firmware are designed for Opal Kelly FPGA modules, yet the Python developments are generally useful to organize communication with peripheral chips. 
 
