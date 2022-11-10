@@ -1,4 +1,5 @@
 [![Documentation Status](https://readthedocs.org/projects/pyripherals/badge/?version=latest)](https://pyripherals.readthedocs.io/en/latest/?badge=latest)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.04762/status.svg)](https://doi.org/10.21105/joss.04762)
 
 `pyripherals` is a Python package for communicating with peripheral electronic devices. It has a `Register` class to keep track of internal registers, but is most useful when used with a FrontPanel compatible Opal Kelly FPGA. With that, `pyripherals` makes use of the FrontPanel API for Python and Verilog to communicate more easily on common interfaces such as I2C and SPI.
 
