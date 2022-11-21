@@ -420,6 +420,78 @@ class Endpoint:
                 endpoint.address += advance_num * endpoint.addr_step
         return endpoints_dict
 
+    @classmethod
+    def check_duplicates(cls, endpoints_dict=endpoints_from_defines, print_output=True):
+        '''Check for duplicate Endpoints.
+
+        Parameters
+        ----------
+        endpoints_dict : dict
+            The dictionary of (str, Endpoint) pairs to check for duplicates
+            in. (str, dict) pairs are also allowed for nested dictionaries.
+            Defaults to Endpoint.endpoints_from_defines.
+        print_output : bool
+            Whether to print the discovered duplicate Endpoints.
+        
+        Returns
+        -------
+        dict : A new dictionary of (str(Endpoint), str) pairs.
+        '''
+
+        # Flatten the dictionary so all Endpoints appear as values.
+
+        def flatten_dict(d, prefix=''):
+            '''Make all values of subdictionaries values of a new single dictionary.
+            
+            Keys are dictionary keys separated by '/' as we go down subdictionaries.
+            
+            Parameters
+            ----------
+            d : dict
+                The dictionary to flatten.
+            prefix : str
+                The prefix for the new dictionary keys. Used recursively.
+            '''
+
+            dn = {}
+            for i in d:
+                    k = prefix + str(i)
+                    if type(d[i]) is dict:
+                            dn.update(flatten_dict(d[i], prefix=k + '/'))
+                    else:
+                            dn[k] = d[i]
+            return dn
+
+        flat_eps = flatten_dict(endpoints_dict)
+
+        # Now create a dictionary of (str(Endpoint), str) pairs for any duplicate Endpoints.
+        dup_eps = {}
+        prev_k = set()
+        for k in flat_eps:
+                v = flat_eps[k]
+                prev_k.add(k)
+                for k2 in flat_eps:
+                        if k2 in prev_k:
+                                continue
+                        else:
+                                v2 = flat_eps[k2]
+                                if v == v2:
+                                        try:
+                                                dup_eps[str(v)].append(k2)
+                                        except KeyError:
+                                                dup_eps[str(v)] = [k, k2]
+
+        # Print the output if desired
+        if print_output:
+            print(f'{len(dup_eps)} duplicate Endpoints found.')
+            for k in dup_eps:
+                print(k)
+                for i in dup_eps[k]:
+                        print('\t', i)
+
+        return dup_eps
+
+
 # Class for the FPGA itself. Handles FPGA configuration, setting wire values,
 # and other FPGA specific functions.
 
