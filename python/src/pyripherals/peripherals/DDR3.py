@@ -572,7 +572,7 @@ class DDR3():
         chan_data_swz = {}  # this data is swizzled
 
         # first version of ADC data before DACs + timestamps are stored
-        if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
+        if self.data_version == 'ADC_NO_TIMESTAMPS':
             for i in range(4):
                 chan_data_swz[i] = (d[(0 + i * 2):: 8] << 0) + \
                     (d[(1 + i * 2):: 8] << 8)
@@ -587,7 +587,7 @@ class DDR3():
                     chan_data[i] = custom_signed_to_int(chan_data[i], bits)
 
         # first version of ADC data before DACs + timestamps are stored
-        if self.parameters['data_version'] == 'TIMESTAMPS':
+        if self.data_version == 'TIMESTAMPS':
             for i in range(8):
                 chan_data_swz[i] = (d[(0 + i * 2):: 16] << 0) + \
                     (d[(1 + i * 2):: 16] << 8)
@@ -653,7 +653,7 @@ class DDR3():
                 bitfile_version = self.fpga.bitfile_version
 
         # first version of ADC data before DACs + timestamps are stored
-        if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
+        if self.data_version == 'ADC_NO_TIMESTAMPS':
             adc_data = chan_data
             timestamp = np.nan
             read_check = np.nan
@@ -661,7 +661,7 @@ class DDR3():
             ads = np.nan
 
         # first version of ADC data before DACs + timestamps are stored
-        if self.parameters['data_version'] == 'TIMESTAMPS':
+        if self.data_version == 'TIMESTAMPS':
 
             adc_data = {}
             for i in range(4):
@@ -786,10 +786,10 @@ class DDR3():
 
             while repeat < num_repeats:
                 d, bytes_read_error = self.read_adc(blk_multiples)
-                if self.parameters['data_version'] == 'ADC_NO_TIMESTAMPS':
+                if self.data_version == 'ADC_NO_TIMESTAMPS':
                     chan_data = self.deswizzle(d)
 
-                elif self.parameters['data_version'] == 'TIMESTAMPS':
+                elif self.data_version == 'TIMESTAMPS':
                     chan_data = self.deswizzle(d)
 
                 if DDR3.NUM_ADC_CHANNELS == 4:
