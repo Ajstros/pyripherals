@@ -24,6 +24,7 @@ class ADS8686(SPIController, ADCDATA):
         self.ranges = [5]*16  # voltage ranges of all 16 channels
         self.num_bits = 16
         self.name = 'ADS8686'
+        self.sequencer_setup = None
 
     def write(self, msg, reg_name):
         """Write to an internal register on the chip."""
@@ -207,6 +208,10 @@ class ADS8686(SPIController, ADCDATA):
                    'seq' + str(len(codes) - 1))
         # enable the sequencer
         self.write(base_creg | 0x20, 'config')
+
+        # Store sequencer setup in attribute so it can be accessed later for data processing
+        self.sequencer_setup = chan_list
+
         return codes
 
     def hw_reset(self, val=True):
