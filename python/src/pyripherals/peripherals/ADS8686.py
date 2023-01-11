@@ -25,6 +25,7 @@ class ADS8686(SPIController, ADCDATA):
         self.num_bits = 16
         self.name = 'ADS8686'
         self.sequencer_setup = None
+        self.lpf = None
 
     def write(self, msg, reg_name):
         """Write to an internal register on the chip."""
@@ -134,8 +135,9 @@ class ADS8686(SPIController, ADCDATA):
             print('-'*40)
         else:
             self.write(ADS8686.lpf_khz[lpf], 'lpf')  # 376 khZ
+            self.lpf = lpf
 
-    def setup_sequencer(self, chan_list=[('FIXED', 'FIXED'), ('0', 'FIXED')], voltage_range=5, lpf=376):
+    def setup_sequencer(self, chan_list=[('FIXED', 'FIXED'), ('0', 'FIXED')]):
         """Start the sequencer looping through the given channels.
 
         Parameters
@@ -146,10 +148,6 @@ class ADS8686(SPIController, ADCDATA):
                 AVDD
                 ALDO
                 FIXED (0xAAAA, 0x5555)
-        voltage_range : int
-            Voltage range of the channels, positive and negative.
-        lpf : int
-            Low pass frequency in kHz.
         """
         named_chans = {
             'AVDD': 0b1000,
@@ -191,9 +189,6 @@ class ADS8686(SPIController, ADCDATA):
         #  this is over-written by sequencer anyways
         # TODO: if this is over-written anyways, do we need it?
         self.write((0xb | (0xb << 4)), 'chan_sel')
-        # set the range of all channels to +/-5V
-        self.set_range(voltage_range)  # sets all channels to +/-5V
-        self.set_lpf(lpf)
         # setup the sequencer
         # sequence0: fixed values and then continue
         #   8 SSREN; 7-4 CHSEL_B; 3-0 CHSEL_A
