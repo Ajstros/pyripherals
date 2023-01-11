@@ -101,7 +101,7 @@ class ADS8686(SPIController, ADCDATA):
         lsb = (self.ranges[chan_num]*2)/2**16
         return val*lsb
 
-    def write_reg_bridge(self, clk_div=1000):
+    def write_reg_bridge(self, clk_div=200):
         """Set clk divider and spi_controller to continuously read ADC data."""
 
         # Configures the clock divider to determine the CONVST frequency
