@@ -694,13 +694,15 @@ class DDR3():
             dac_data[2] = chan_data[5][0::2]
             dac_data[3] = chan_data[5][1::2]
             # dac channels 4,5 are available but not every sample. skip for now. TODO: add channels 4,5
-
+            dac_data[4] = chan_data[6][2::5] # observer at 1 MSPS 
+            dac_data[5] = chan_data[6][3::5] # observer at 1 MSPS - shifted by 200 ns 
+            dac_data[6] = chan_data[6][4::5] # observer sampled at 1 MSPS - shifted by 200 ns twice 
             ads = {}
             ads['A'] = custom_signed_to_int(chan_data[7][0::5], 16)
             if bitfile_version < 2: # 00.00.02 -> 2
                 ads['B'] = custom_signed_to_int(chan_data[7][1::5], 16)
             else:
-                ads['B'] = custom_signed_to_int(chan_data[6][0::5], 16)
+                ads['B'] = custom_signed_to_int(chan_data[6][0::5], 16) # cycle cnt 9 and 4
             error = False
             # check that the constant values are constant
             constant_values = {0: 0xaa55, 1: (0x28b<<5), 2: 0x77bb, 3: (0x28c<<5)}
@@ -767,7 +769,7 @@ class DDR3():
             f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*DDR3.ADC_PERIOD*1000} ms of data')
 
         self.set_adc_read()  # enable data into the ADC reading FIFO
-        time.sleep(adc_readings*DDR3.ADC_PERIOD)
+        #time.sleep(adc_readings*DDR3.ADC_PERIOD)
 
         # Save ADC DDR data to a file
         with h5py.File(full_data_name, file_mode) as file:
@@ -810,7 +812,7 @@ class DDR3():
                     data_set.resize(data_set.shape[1] + chunk_size, axis=1)
             new_data = data_set[:, new_data_index:]
 
-        print(f'Done with DDR reading: saved as {full_data_name}')
+        print(f'Done with DDR reading (test!): saved as {full_data_name}')
         return new_data
 
     def read_adc(self, blk_multiples=2048):
