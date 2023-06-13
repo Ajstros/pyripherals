@@ -23,7 +23,7 @@ To use an FPGA and peripherals:
 4. Create config.yaml with create_yaml and edit fields as needed
 
 ```python
->>> from interfaces.utils import create_yaml
+>>> from pyripherals.utils import create_yaml
 >>> create_yaml()
 YAML created at C:/Users/username/.pyripherals
 ```
