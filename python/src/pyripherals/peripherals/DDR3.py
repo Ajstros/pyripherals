@@ -121,29 +121,35 @@ class DDR3():
         return amplitude
 
     @staticmethod
-    def closest_frequency(freq):
+    def closest_frequency(freq, sample_size=None):
         """Determine closest frequency so the waveform evenly divides into the length of the DDR3
 
         Parameters
         ----------
         freq : float
             Desired frequency
-
+        sample_size : int 
+            length of the array to populate 
+            almost always use None so that sample_size = DDR3.SAMPLE_SIZE
+            
         Returns
         -------
         new_frequency : float 
             The closest possible frequency
         """
 
+        if sample_size is None:
+            sample_size = DDR3.SAMPLE_SIZE
+
         samples_per_period = (1/freq) / DDR3.UPDATE_PERIOD
 
         if samples_per_period <= 2:
             print('Frequency is too high for the DDR update rate')
             return None
-        total_periods = DDR3.SAMPLE_SIZE/samples_per_period
+        total_periods = sample_size/samples_per_period
         # round and recalculate frequency
         round_total_periods = np.round(total_periods)
-        round_samples_per_period = DDR3.SAMPLE_SIZE / \
+        round_samples_per_period = sample_size / \
             round_total_periods
         new_frequency = 1 / \
             (DDR3.UPDATE_PERIOD * round_samples_per_period)
@@ -193,6 +199,68 @@ class DDR3():
             return -1
         ddr_seq = ddr_seq.astype(np.uint16)
         return ddr_seq, frequency
+
+    @staticmethod
+    def make_chirp(amplitude, frequencies, periods,
+                       offset=0x2000, actual_frequency=True):
+        """Return a chirp multiple sine-wave frequencies array for writing to DDR.
+
+        The conversion from float or int voltage to int digital (binary) code
+        should take place BEFORE this function.
+
+        Parameters
+        ----------
+        amplitude : int
+            Digital (binary) value of the sine wave.
+        frequencies : np.array (floats)
+            Desired frequencies in Hz.
+        periods : int or np.array (of ints)
+            Number of periods for all frequencies. or one for each
+        offset : int
+            Digital (binary) value offset.
+        actual_frequency : bool
+            Decide whether closest frequency that fits an integer number of periods is used.
+
+        Returns
+        -------
+        ddr_seq : numpy.ndarray 
+            to be assigned to DDR data array  
+
+        frequencies : np.array (floats)
+            actual frequencies after closest_frequency
+        """
+        ddr_seq = np.zeros((1,DDR3.SAMPLE_SIZE))
+
+        if (amplitude) > offset:
+            print('Error: amplitude in sine-wave is too large')
+            return -1
+        
+        if type(periods) == int:
+            periods = [periods]*len(frequencies)
+        if len(periods) != len(frequencies):
+            print('Error length of periods must match frequencies')
+
+        idx_left = 0
+        for frequency, period in zip(frequencies, periods):
+            if frequency != frequencies[-1]
+                chirp_length = int(period*(1/frequency)/DDR3.UPDATE_PERIOD)
+            else:
+                chirp_length = DDR3.SAMPLE_SIZE - idx_left
+
+            if actual_frequency:
+                frequency = DDR3.closest_frequency(frequency, chirp_length)
+
+            t = np.arange(0, DDR3.UPDATE_PERIOD*chirp_length,
+                        DDR3.UPDATE_PERIOD)
+            # print('length of time axis after creation ', len(t))
+            ddr_seq = (amplitude)*np.sin(t*frequency*2*np.pi) + offset
+            if any(ddr_seq < 0) or any(ddr_seq > (2**16-1)):
+                print('Error: Uint16 overflow in make sine wave')
+                return -1
+            ddr_seq[idx_left:len(t)] = ddr_seq.astype(np.uint16)
+            idx_left = idx_left + len(t)
+            return ddr_seq, frequency
+
 
     @staticmethod
     def make_ramp(start, stop, step, actual_length=True):
