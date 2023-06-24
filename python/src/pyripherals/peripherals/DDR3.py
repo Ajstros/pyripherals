@@ -249,6 +249,7 @@ class DDR3():
 
             if actual_frequency:
                 frequency = DDR3.closest_frequency(frequency, chirp_length)
+            frequency_out.append(frequency)
 
             t = np.arange(0, DDR3.UPDATE_PERIOD*chirp_length,
                         DDR3.UPDATE_PERIOD)
@@ -259,7 +260,7 @@ class DDR3():
                 return -1
             ddr_seq[idx_left:len(t)] = ddr_seq_tmp.astype(np.uint16)
             idx_left = idx_left + len(t)
-            return ddr_seq, frequency
+        return ddr_seq, frequency_out
 
 
     @staticmethod
