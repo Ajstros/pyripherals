@@ -253,11 +253,11 @@ class DDR3():
             t = np.arange(0, DDR3.UPDATE_PERIOD*chirp_length,
                         DDR3.UPDATE_PERIOD)
             # print('length of time axis after creation ', len(t))
-            ddr_seq = (amplitude)*np.sin(t*frequency*2*np.pi) + offset
+            ddr_seq_tmp = (amplitude)*np.sin(t*frequency*2*np.pi) + offset
             if any(ddr_seq < 0) or any(ddr_seq > (2**16-1)):
                 print('Error: Uint16 overflow in make sine wave')
                 return -1
-            ddr_seq[idx_left:len(t)] = ddr_seq.astype(np.uint16)
+            ddr_seq[idx_left:len(t)] = ddr_seq_tmp.astype(np.uint16)
             idx_left = idx_left + len(t)
             return ddr_seq, frequency
 
