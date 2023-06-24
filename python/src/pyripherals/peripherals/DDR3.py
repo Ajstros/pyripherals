@@ -241,6 +241,8 @@ class DDR3():
             print('Error length of periods must match frequencies')
 
         idx_left = 0
+        frequency_out = []
+
         for frequency, period in zip(frequencies, periods):
             if frequency != frequencies[-1]:
                 chirp_length = int(period*(1/frequency)/DDR3.UPDATE_PERIOD)
