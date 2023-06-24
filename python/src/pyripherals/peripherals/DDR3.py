@@ -242,7 +242,7 @@ class DDR3():
 
         idx_left = 0
         for frequency, period in zip(frequencies, periods):
-            if frequency != frequencies[-1]
+            if frequency != frequencies[-1]:
                 chirp_length = int(period*(1/frequency)/DDR3.UPDATE_PERIOD)
             else:
                 chirp_length = DDR3.SAMPLE_SIZE - idx_left
