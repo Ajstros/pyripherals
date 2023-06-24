@@ -229,7 +229,7 @@ class DDR3():
         frequencies : np.array (floats)
             actual frequencies after closest_frequency
         """
-        ddr_seq = np.zeros((1,DDR3.SAMPLE_SIZE))
+        ddr_seq = np.zeros(DDR3.SAMPLE_SIZE)
 
         if (amplitude) > offset:
             print('Error: amplitude in sine-wave is too large')
