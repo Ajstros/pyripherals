@@ -260,7 +260,7 @@ class DDR3():
             if any(ddr_seq_tmp < 0) or any(ddr_seq_tmp > (2**16-1)):
                 print('Error: Uint16 overflow in make sine wave')
                 return -1
-            ddr_seq[idx_left:len(t)] = ddr_seq_tmp.astype(np.uint16)
+            ddr_seq[idx_left:(idx_left + len(t))] = ddr_seq_tmp.astype(np.uint16)
             idx_left = idx_left + len(t)
         return ddr_seq, frequency_out
 
