@@ -242,6 +242,7 @@ class DDR3():
 
         idx_left = 0
         frequency_out = []
+        indices = []
 
         for frequency, period in zip(frequencies, periods):
             if frequency != frequencies[-1]:
@@ -251,7 +252,7 @@ class DDR3():
 
             if actual_frequency:
                 frequency = DDR3.closest_frequency(frequency, chirp_length)
-            frequency_out.append(frequency)
+            
 
             t = np.arange(0, DDR3.UPDATE_PERIOD*chirp_length,
                         DDR3.UPDATE_PERIOD)
@@ -261,8 +262,11 @@ class DDR3():
                 print('Error: Uint16 overflow in make sine wave')
                 return -1
             ddr_seq[idx_left:(idx_left + len(t))] = ddr_seq_tmp.astype(np.uint16)
+            frequency_out.append(frequency)
+            indices.append((idx_left, idx_left + len(t)))
+
             idx_left = idx_left + len(t)
-        return ddr_seq, frequency_out
+        return ddr_seq, frequency_out, indices
 
 
     @staticmethod
