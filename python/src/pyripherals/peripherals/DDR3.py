@@ -911,7 +911,7 @@ class DDR3():
             sample_size=DDR3.BLOCK_SIZE * blk_multiples
         )
         d = np.frombuffer(t, dtype=np.uint8).astype(np.uint32)
-        print(f'Bytes read: {bytes_read_error}')
+        # print(f'Bytes read: {bytes_read_error}')
         return d, bytes_read_error
 
     def set_index(self, factor, factor2=None):
