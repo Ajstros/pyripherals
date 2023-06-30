@@ -839,7 +839,7 @@ class DDR3():
             DDR3.NUM_ADC_CHANNELS*2))  # readings per ADC
         repeat = 0
         adc_readings = chunk_size*num_repeats
-        print(f'Anticipated chunk size (readings per channel) {chunk_size}')
+        # print(f'Anticipated chunk size (readings per channel) {chunk_size}')
         print(
             f'Reading {adc_readings*2/1024} kB per ADC channel for a total of {adc_readings*DDR3.ADC_PERIOD*1000} ms of data')
 
