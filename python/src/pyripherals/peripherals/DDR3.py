@@ -887,7 +887,7 @@ class DDR3():
                     data_set.resize(data_set.shape[1] + chunk_size, axis=1)
             new_data = data_set[:, new_data_index:]
 
-        print(f'Done with DDR reading (test!): saved as {full_data_name}')
+        print(f'Done with DDR reading: saved as {full_data_name}')
         return new_data
 
     def read_adc(self, blk_multiples=2048):

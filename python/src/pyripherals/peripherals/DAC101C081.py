@@ -20,7 +20,7 @@ class DAC101C081(I2CController):
         used to differentiate between different instances using the ADDR pins.
     """
 
-    ADDRESS_HEADER = (0b000_1101 << 1)  # ADR0=Gnd -- Bath Clamp. ADR0 to GND
+    ADDRESS_HEADER = (0b000_1100 << 1)  # ADR0=Gnd -- Bath Clamp. ADR0 to GND  # 0b000_1100 if ADR0 = Floating; 0b000_1110 if ADR0 = VA 
     # The device address table in the data sheet is strange
     # see here:
     #   https://e2e.ti.com/support/data-converters-group/data-converters/f/data-converters-forum/955893/dac101c081-dac101c081-i2c-address-selection
